@@ -1,0 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ZedShop.DataLayer.Entities
+{
+    public class ProductCategory
+    {
+        [Key]
+        [ForeignKey("Product")]
+        public int ProductId { get; set; }
+
+        [Key]
+        [ForeignKey("Category")]
+        public int CategoryId { get; set; }
+
+        public Category Category { get; set; }
+
+        public Product Product { get; set; }
+
+
+    }
+}

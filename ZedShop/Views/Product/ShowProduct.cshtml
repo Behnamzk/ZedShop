@@ -1,0 +1,43 @@
+﻿@model ZedShop.Core.DTOs.Product.ProductViewModel
+@{
+    ViewData["Title"] = "دیدن محصول";
+}
+<div class="mspcardp">
+    <form asp-controller="Order" asp-action="BuyProduct" method="post">
+        <figure>
+            <img src="/Products/image/@Model.ProductImageName" alt="Image" class="img-fluid">
+        </figure>
+        <input type="hidden" asp-for="ProductId" value="@Model.ProductId" />
+        <h1>@Model.Name</h1>
+        <div calss="rtldetail">
+            <p class="price">قیمت کالا: @Model.SellPrice تومان</p>
+            <p clsss="textproduct">توضیحات کالا: @Model.Description</p>
+            <p clsss="textproduct">تعداد کالا موجود: @Model.Count</p>
+
+            <label style="color:#666666;"> تعداد کالا: </label>
+            @* <input type="number" asp-for="Count" class="pcount" name="overs" step="1" value="1"> *@
+
+            <input type="number" asp-for="Count" class="pcount" step="1" id="overs" value="1">
+        </div>
+
+
+        <p><button class="button-submit" type="submit">افزودن به سبد خرید</button></p>
+        @* <p><button type="button" onclick="location.href='@Url.Action("BuyProduct", "Order", new { id = @Model.ProductId })'">افزودن به سبد خرید</button></p> *@
+    </form>
+</div>
+
+
+
+<script>
+    var input = document.querySelector("[id='overs']");
+
+    input.addEventListener("input", function () {
+        var value = this.value;
+        if (value < 1) {
+            this.value = 1;
+        }
+        if (value > @Model.Count){
+            this.value = @Model.Count;
+        }
+    })
+</script>

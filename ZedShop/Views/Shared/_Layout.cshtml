@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html class="no-js" dir="rtl" lang="fa-IR">
+<head>
+    <meta charset="UTF-8">
+    <title> Zed Shop | @ViewData["Title"] </title>
+    <partial name="_MetaTags" />
+    <partial name="_Styles" />
+
+    <script src="/js/jquery.min.js"></script>
+
+</head>
+<body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+    <script src="/js/modernizr-custom.js"></script>
+
+    <div class="site-wrap">
+
+        <header class="site-navbar py-4 bg-white site-navbar-target" role="banner">
+
+            <div class="container">
+                <div class="row align-items-center">
+
+
+                    <div class="col-6 col-xl-2">
+
+                        <figure>
+                            <img src="/images/ZedShop1rbg.png" alt="Image" class="img-fluid">
+                        </figure>
+                        <h3 class="mb-0 site-logo"><a href="index.html" class="text-black mb-0">فروشگاه آنلاین</a></h3>
+                    </div>
+                    <div class="col-12 col-md-10 d-none d-xl-block">
+                        <nav class="site-navigation position-relative text-right" role="navigation">
+
+                            <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block" style="position: relative;  top: 55px;">
+                                <li><a href="#home-section" class="nav-link">خانه</a></li>
+                                <li><a href="#products-section" class="nav-link">محصولات</a></li>
+                                <li><a href="#special-section" class="nav-link">فروش ویژه</a></li>
+                                <li><a href="#testimonials-section" class="nav-link">نظرات</a></li>
+                                <li><a href="#blog-section" class="nav-link">بلاگ</a></li>
+                                <li><a href="#about-section" class="nav-link">درباره ما</a></li>
+                                @if(User.Identity.IsAuthenticated)
+                                {
+                                    <li><a href="#" class="nav-link" style="padding: 2px;">@User.Identity.Name ، خوش آمدید</a>/<a href="/Logout" class="nav-link" style="padding: 2px;">خروج</a><a href="/MyOrders" class="nav-link" style="padding-right: 35px;">سبد خرید</a></li>
+                                }
+                                else
+                                {
+                                    <li><a href="/Login" class="nav-link" style="padding: 2px;">ورود</a>/<a href="/Register" class="nav-link" style="padding: 2px;">ثبت‌نام</a></li>
+                                }
+
+                            </ul>
+                        </nav>
+                    </div>
+
+
+                    <div class="col-6 d-inline-block d-xl-none ml-md-0 py-3" style="position: relative; top: 3px;">
+                        <a href="#" class="site-menu-toggle js-menu-toggle text-black float-right">
+                            <span class="icon-menu h3"></span>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </header>
+
+
+        <!-- main manu -->
+        @* <partial name="_MainMenu" /> *@
+        <!-- /main manu -->
+        <!-- content -->
+        @RenderBody()
+        <!-- /content -->
+        <!-- footer -->
+        <partial name="_footer" /> 
+
+        <!-- /footer -->
+        </div>
+        <script src="/js/jquery-3.3.1.min.js"></script>
+        <script src="/js/jquery-migrate-3.0.1.min.js"></script>
+        <script src="/js/jquery-ui.js"></script>
+        <script src="/js/popper.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        <script src="/js/owl.carousel.min.js"></script>
+        <script src="/js/jquery.stellar.min.js"></script>
+        <script src="/js/jquery.countdown.min.js"></script>
+        <script src="/js/bootstrap-datepicker.min.js"></script>
+        <script src="/js/jquery.easing.1.3.js"></script>
+        <script src="/js/aos.js"></script>
+        <script src="/js/jquery.fancybox.min.js"></script>
+        <script src="/js/jquery.sticky.js"></script>
+        <script src="/js/main.js"></script>
+</body>
+</html>

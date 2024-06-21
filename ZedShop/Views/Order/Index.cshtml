@@ -1,0 +1,74 @@
+﻿@using ZedShop.Core.DTOs.Order
+@model OPTableViewModel
+@{
+    ViewData["Title"] = "سفارشات";
+}
+<v class="orders-div">
+    <h2>سبد خرید شما</h2>
+<div class="orders-grid-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>تصویر کالا</th>
+                    <th>نام کالا</th>
+                    <th>تعداد</th>
+                    <th>قیمت</th>
+                    <th>حذف</th>
+                </tr>
+            </thead>
+            <tbody id="cart-items">
+                @foreach (var item in Model.items)
+                {
+                    <tr>
+                        <td><img src="/Products/Image/@item.ProductImageName" alt="Product Image"></td>
+                        <td>@item.ProductName</td>
+                        <td>@item.ProdcutCount</td>
+                        <td>@item.SellPrice</td>
+                        <td><button id="updateButton" onclick="updateTableData(@item.OrderId, @item.ProductId)">×</button></td>
+                    </tr>
+                }
+
+
+            </tbody>
+        </table>
+        <p class="p-total-price" id="total-price">مجموع: <span id="total-value">@Model.total_price</span> تومان</p>
+        <button class="button-submit" type="button" onclick="location.href='@Url.Action("BuyProduct", "Order", new { id = 1 })'">تکمیل خرید و پرداخت</button>
+
+        <script>
+            function updateTableData(id1, id2) {
+
+                const url = "/MyOrders/delete/"+id1+"/"+id2; // Add IDs to URL
+
+                const xhr = new XMLHttpRequest();
+                xhr.open("GET", url, true);
+
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+
+                        const receivedData = JSON.parse(xhr.responseText); // Parse JSON data
+
+                        // Update table body with parsed data
+                        let tableBodyContent = "";
+
+
+                        for (const model of receivedData.items) {
+                            tableBodyContent += `<tr><td><img src="/Products/Image/${model.productImageName}" alt="Product Image"></td> <td>${model.productName}</td><td>${model.prodcutCount}</td> <td>${model.sellPrice}</td> <td><button id="updateButton" onclick="updateTableData(${model.orderId}, ${model.productId} )">×</button></td></td></tr>`;
+                        }
+                        document.getElementById("total-price").innerHTML = `مجموع: ${receivedData.total_price} تومان`;
+                        document.getElementById("cart-items").innerHTML = tableBodyContent;
+                    } else {
+                        // Handle errors (optional)
+                        console.error("Error fetching data:", xhr.statusText);
+                    }
+                };
+
+                xhr.send();
+            }
+
+        </script>
+
+
+        <script src="script.js"></script>
+</div>
+
+  

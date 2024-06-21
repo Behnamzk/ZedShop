@@ -1,0 +1,76 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ZedShop.Core.Convertors;
+using ZedShop.Core.DTOs;
+using ZedShop.Core.Generator;
+using ZedShop.Core.Security;
+using ZedShop.Core.Services.Interface;
+using ZedShop.DataLayer.Context;
+using ZedShop.DataLayer.Entities;
+
+namespace ZedShop.Core.Services
+{
+    public class UserService : IUserService
+    {
+
+        private ZedShopContext _context;
+        public UserService(ZedShopContext context)
+        {
+            _context = context;
+        }
+
+        public bool ActiveAccount(string ActiveCode)
+        {
+            //var user = _context.Users.SingleOrDefault(u => u.ActiveCode == activeCode);
+
+            //if (user == null || user.IsActive)
+            //{
+            //    return false;
+            //}
+
+            //user.IsActive = true;
+            //// change user activation code for security 
+            //// to bazyabi kalame obor niazesh darim
+            //user.ActiveCode = NameGanarator.GenerateUniqueCode();
+            //_context.SaveChanges();
+
+            return true;
+
+        }
+
+        public int AddUser(User user)
+        {
+            _context.Users.Add(user);
+            _context.SaveChanges();
+
+            return user.UserId;
+        }
+
+        public bool IsExistEmail(string email)
+        {
+            return _context.Users.Any(User => User.Email == email);
+        }
+
+        public User GetUserByUserName(string user_name)
+        {
+            return _context.Users.SingleOrDefault(User => User.UserName == user_name);
+        }
+
+        public bool IsExistUserName(string userName)
+        {
+            return _context.Users.Any(User => User.UserName == userName);
+        }
+
+        public User LoginUser(LoginViewModel loginViewModel)
+        {
+            string password = PasswordHelper.EncodePasswordMd5(loginViewModel.Password);
+            string email = FixText.FixEmail(loginViewModel.Email);
+
+            return _context.Users.Single(User => User.Email == email && User.Password == password);
+
+        }
+    }
+}

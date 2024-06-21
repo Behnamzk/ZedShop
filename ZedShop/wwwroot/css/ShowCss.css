@@ -1,0 +1,71 @@
+﻿.orders-div {
+    margin: auto;
+    text-align: center;
+}
+
+    .orders-div div[class=orders-grid-container] {
+        padding: 20px 5% 20px 5%;
+    }
+
+    .orders-div p[class=p-total-price] {
+        color: black;
+        font-weight: bold;
+        font-size: 18px;
+    }
+    .orders-div button[class=button-submit] {
+        border: none;
+        outline: 0;
+        padding: 12px;
+        color: white;
+        background-color: #1f9ede;
+        text-align: center;
+        cursor: pointer;
+        width: 20%;
+        font-size: 18px;
+    }
+table {
+    width: 100%;
+
+    border-collapse: collapse;
+    background-color: #f8f8f8;
+}
+
+    table th, table td {
+        padding: 10px;
+        font-size: 17px;
+        border: 1px solid #ddd;
+    }
+
+    table img {
+        width: 150px;
+        height: 100px; /* Adjust width and height as needed */
+    }
+
+#cart-items tr {
+    text-align: center;
+}
+
+#cart-items button {
+    background-color: #ddd;
+    border: none;
+    cursor: pointer;
+    width:30px;
+    height:30px;
+    position: center; /* Needed for icon positioning */
+
+}
+
+    #cart-items button:hover {
+        background-color: #ccc;
+    }
+
+    #cart-items button::after {
+        font-size: 22px;
+        position: center;
+        transform: translateY(-50%); /* Center icon vertically */
+        color: #333;
+    }
+#total-price {
+    margin-top: 20px;
+}
+

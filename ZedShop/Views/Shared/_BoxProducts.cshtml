@@ -1,0 +1,30 @@
+﻿@model ZedShop.Core.DTOs.Product.ProductViewModel 
+<!-- col -->
+
+<div class="col-lg-4 col-md-6 mb-5">
+    <div class="product-item">
+        <figure>
+            <img src="Products/image/@Model.ProductImageName" alt="Image" class="img-fluid">
+        </figure>
+        <div class="px-4">
+            <h3><a href="#">@Model.Name</a></h3>
+            <div class="mb-3">
+                <span class="meta-icons mr-3">
+                    <a href="#" class="mr-2">
+                        <span class="icon-star text-warning"></span>
+                    </a> 5.0
+                </span>
+                <span class="meta-icons wishlist">
+                    <a href="#" class="mr-2">
+                        <span class="icon-heart"></span>
+                    </a> 29
+                </span>
+            </div>
+            <p class="mb-4">@Model.SellPrice</p>
+            <div>
+                <a href="ShowProduct/@Model.ProductId" class="btn btn-black btn-outline-black ml-1 rounded-0">مشاهده محصول</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /col -->
