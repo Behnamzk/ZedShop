@@ -14,8 +14,8 @@ namespace ZedShop.Web.Controllers
    
     public class OrderController : Controller
     {
-        private IOrderService _orderService;
-        private IProductService _productService;
+        private readonly IOrderService _orderService;
+        private readonly IProductService _productService;
 
         public OrderController(IOrderService orderService, IProductService productService)
         {

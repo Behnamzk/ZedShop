@@ -1,0 +1,70 @@
+﻿@model ZedShop.Core.DTOs.Account.ProfileEditViewModel
+@{
+    ViewData["Title"] = "ویرایش پروفایل";
+}
+
+
+<main class="client-page">
+    <div class="container-content">
+
+        <header><h2> ویرایش پروفایل </h2></header>
+
+        <div class="form-layer">
+
+            <form asp-controller="Account" asp-action="EditProfile" method="post" enctype="multipart/form-data">
+
+                <input type="hidden" asp-for="OldUserName" value="@Model.UserName" />
+
+                <div class="form-group">
+                    <label>انتخاب تصویر</label>
+                    <input asp-for="ProfileFile" type="file">
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon" id="username"><i class="zmdi zmdi-account"></i></span>
+                    <input asp-for="UserName" value="@Model.UserName" type="text" class="form-control" placeholder="نام کاربری" aria-describedby="username">
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon" id="email-address"><i class="zmdi zmdi-email"></i></span>
+                    <input asp-for="Email" value="@Model.Email" type="text" class="form-control" placeholder="ایمیل" aria-describedby="email-address">
+                </div>
+
+                <div class="input-group">
+                    <!-- Rounded switch -->
+                    <p>جنسیت:</p>
+                    <input asp-for="Gender" type="radio" class="form-control-radio" value="مرد" name="Gender" id="Male" checked>
+                    <label for="Male">مرد</label>
+                    <input asp-for="Gender" type="radio" class="form-control-radio" value="زن" name="Gender" id="Female">
+                    <label for="Female">زن</label>
+                    <input asp-for="Gender" type="radio" class="form-control-radio" value="سایر" name="Gender" id="Others">
+                    <label for="Others">سایر</label>
+                </div>
+
+                <div asp-validation-summary="All" class="text-danger">
+                </div>
+                <div class="btn-inner">
+                    <button class="btn btn-success"> ویراش </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</main>
+<script>
+    function readURL(input) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#imgCourse').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#imgProfileUp").change(function () {
+        readURL(this);
+    });
+</script>

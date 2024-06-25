@@ -15,12 +15,13 @@ namespace ZedShop.DataLayer.Entities
 
         [Required]
         [MaxLength(300)]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [ForeignKey("Category")]
-        public int ParentId { get; set; }
+        public int? ParentId { get; set; }
 
-        public ICollection<ProductCategory> ProductCategories { get; set; }
+		public bool? IsRoot { get; set; }
+		public ICollection<ProductCategory> ProductCategories { get; set; }
         public ICollection<Category> ChildCategories { get; set; }
     }
 }

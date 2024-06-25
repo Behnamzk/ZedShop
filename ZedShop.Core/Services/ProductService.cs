@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -65,7 +66,7 @@ namespace ZedShop.Core.Services
         }
         public Product GetProduct(int product_id)
         {
-            return context.Products.SingleOrDefault(c => c.ProductId == product_id);
+            return context.Products.Include(c=>c.ProductCategories).ThenInclude(o=>o.Category).SingleOrDefault(c => c.ProductId == product_id);
 
         }
     }

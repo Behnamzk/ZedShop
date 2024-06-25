@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZedShop.Core.DTOs;
+using ZedShop.Core.DTOs.Account;
 using ZedShop.DataLayer.Entities;
 
 namespace ZedShop.Core.Services.Interface
@@ -21,6 +22,8 @@ namespace ZedShop.Core.Services.Interface
         public bool ActiveAccount(string ActiveCode);
 
         public User GetUserByUserName(string user_name);
+
+        public bool UpdateUser(User user, IFormFile imgProfile);
 
     }
 }
