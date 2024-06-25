@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ZedShop.Core.Convertors;
-using ZedShop.Core.DTOs;
+using ZedShop.Core.DTOs.Account;
 using ZedShop.Core.Generator;
 using ZedShop.Core.Security;
 using ZedShop.Core.Services.Interface;
@@ -69,8 +71,36 @@ namespace ZedShop.Core.Services
             string password = PasswordHelper.EncodePasswordMd5(loginViewModel.Password);
             string email = FixText.FixEmail(loginViewModel.Email);
 
-            return _context.Users.Single(User => User.Email == email && User.Password == password);
+            return _context.Users.SingleOrDefault(User => User.Email == email && User.Password == password);
 
+        }
+
+        public bool UpdateUser(User user, IFormFile imgProfile)
+        {
+            if(user == null) return false;
+
+
+            if(imgProfile != null && imgProfile.IsImage())
+            {
+                if (user.UserAvatar != "Defult.jpg")
+                {
+                    string deleteimagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/UserAvatar", user.UserAvatar);
+                    if (File.Exists(deleteimagePath))
+                    {
+                        File.Delete(deleteimagePath);
+                    }
+                }
+                user.UserAvatar = NameGenerator.GenerateUniqueCode() + Path.GetExtension(imgProfile.FileName);
+
+                ImageConvertor imgResizer = new ImageConvertor();
+                string thumbPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/UserAvatar", user.UserAvatar);
+
+                imgResizer.ResizeImage(imgProfile, thumbPath, 250);
+            }
+
+            _context.Users.Update(user);
+            _context.SaveChanges();
+            return true;
         }
     }
 }

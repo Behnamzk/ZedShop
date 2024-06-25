@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ZedShop.Core.Generator
 {
-    public class NameGanarator
+    public class NameGenerator
     {
 
         // GenerateUniqueCode return unique code for user activition code 
