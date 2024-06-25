@@ -39,7 +39,7 @@
                                 <li><a href="#about-section" class="nav-link">درباره ما</a></li>
                                 @if(User.Identity.IsAuthenticated)
                                 {
-                                    <li><a href="#" class="nav-link" style="padding: 2px;">@User.Identity.Name ، خوش آمدید</a>/<a href="/Logout" class="nav-link" style="padding: 2px;">خروج</a><a href="/MyOrders" class="nav-link" style="padding-right: 35px;">سبد خرید</a></li>
+                                    <li><a href="/Profile/@User.Identity.Name" class="nav-link" style="padding-left: 5px;">@User.Identity.Name ، حساب من</a>/<a href="/Logout" class="nav-link" style="padding-right: 5px;">خروج</a><a href="/MyOrders" class="nav-link" style="padding-right: 10px;">سبد خرید</a></li>
                                 }
                                 else
                                 {

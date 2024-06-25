@@ -60,5 +60,5 @@ namespace ZedShop.DataLayer.Entities
         public ICollection<Order> Orders { get; set; }
     }
 
-    public enum GenderTypes { Male, Female, Others }
+    public enum GenderTypes { مرد, زن, سایر }
 }

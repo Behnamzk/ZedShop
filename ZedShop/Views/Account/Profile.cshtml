@@ -1,0 +1,20 @@
+﻿@model ZedShop.Core.DTOs.Account.ProfileViewModel
+@{
+    ViewData["Title"] = "پروفایل";
+}
+
+<div class="profilecard">
+
+    <figure>
+        <img src="/UserAvatar/@Model.UserAvatar" alt="Image" class="img-fluid">
+    </figure>
+
+    <h1>@Model.UserName</h1>
+    <div calss="rtldetail">
+        <p class="price">ایمیل: @Model.Email</p>
+        <p clsss="textproduct">جنسیت: @Model.Gender.ToString()</p>
+    </div>
+
+    <p><button type="button" onclick="location.href='@Url.Action("EditProfile", "Account")'">ویرایش</button></p>
+
+</div>

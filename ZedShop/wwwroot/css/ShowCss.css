@@ -69,3 +69,45 @@ table {
     margin-top: 20px;
 }
 
+.profilecard {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 800px;
+    margin: auto;
+    text-align: center;
+    font-weight: 400;
+    padding: 10px 20px 10px 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-family: "B Yekan";
+}
+
+    .profilecard img[class = img-fluid] {
+        width: 300px;
+        height: 200px;
+    }
+
+    .profilecard div {
+        text-align: center;
+        width: 100%;
+    }
+
+    .profilecard input[class=pcount] {
+        text-align: center;
+        width: 100px;
+    }
+
+    .profilecard button {
+        border: none;
+        outline: 0;
+        padding: 12px;
+        color: white;
+        background-color: #1f9ede;
+        text-align: center;
+        cursor: pointer;
+        width: 20%;
+        font-size: 18px;
+    }
+
+        .profilecard button:hover {
+            opacity: 0.7;
+        }
