@@ -12,8 +12,8 @@ using ZedShop.DataLayer.Context;
 namespace ZedShop.DataLayer.Migrations
 {
     [DbContext(typeof(ZedShopContext))]
-    [Migration("20240613142927_new_new")]
-    partial class new_new
+    [Migration("20240626101638_comments2")]
+    partial class comments2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -100,12 +100,15 @@ namespace ZedShop.DataLayer.Migrations
                     b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
+                    b.Property<bool?>("IsRoot")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
-                    b.Property<int>("ParentId")
+                    b.Property<int?>("ParentId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -113,6 +116,37 @@ namespace ZedShop.DataLayer.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("ZedShop.DataLayer.Entities.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CommentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CommentText")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Order", b =>
@@ -418,6 +452,25 @@ namespace ZedShop.DataLayer.Migrations
                         .HasForeignKey("CategoryId");
                 });
 
+            modelBuilder.Entity("ZedShop.DataLayer.Entities.Comment", b =>
+                {
+                    b.HasOne("ZedShop.DataLayer.Entities.Product", "Product")
+                        .WithMany("Comments")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ZedShop.DataLayer.Entities.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Order", b =>
                 {
                     b.HasOne("ZedShop.DataLayer.Entities.User", "User")
@@ -549,6 +602,8 @@ namespace ZedShop.DataLayer.Migrations
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Product", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("OrderProducts");
 
                     b.Navigation("ProductCategories");
@@ -566,6 +621,8 @@ namespace ZedShop.DataLayer.Migrations
             modelBuilder.Entity("ZedShop.DataLayer.Entities.User", b =>
                 {
                     b.Navigation("Admin");
+
+                    b.Navigation("Comments");
 
                     b.Navigation("Orders");
 

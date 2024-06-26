@@ -2511,7 +2511,7 @@ h1, h2, h3, h4, h5,
 
 .mspcardp {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    max-width: 800px;
+    max-width: 750px;
     margin: auto;
     text-align: center;
     font-weight: 400;
@@ -2531,7 +2531,7 @@ h1, h2, h3, h4, h5,
         width: 100px;
     }
 
-    .mspcardp button {
+    .mspcardp button[class=button-submit] {
         border: none;
         outline: 0;
         padding: 12px;
@@ -2539,10 +2539,95 @@ h1, h2, h3, h4, h5,
         background-color: #1f9ede;
         text-align: center;
         cursor: pointer;
-        width: 100%;
+        width: 30%;
         font-size: 18px;
     }
 
-        .mspcardp button:hover {
-            opacity: 0.7;
-        }
+    .mspcardp button:hover {
+        opacity: 0.7;
+    }
+
+    .mspcardp div[class=all-comments] {
+        text-align: right;
+        width: 100%;
+    }
+
+    .mspcardp a[class=add-comment] {
+        display: inline-block;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        text-decoration: none;
+        color: #42b6f5;
+        font-weight: bold;
+    }
+
+    .mspcardp a[add-comment]:hover {
+        background-color: #eee;
+        cursor: pointer;
+    }
+
+    .mspcardp div[class=comment-container] {
+        display: flex;
+        align-items: start;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+    }
+
+    .mspcardp img[class=user-avatar] {
+        width: 50px;
+        height: 50px;
+        top: 0px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .mspcardp div[class=comment-content] {
+        flex: 1;
+        padding-right: 10px;
+    }
+
+    .mspcardp h4[class=comment-author] {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .mspcardp p[class=comment-text] {
+        line-height: 1.5;
+        width: 80%;
+    }
+
+    .mspcardp span[class=comment-date] {
+        color: #aaa;
+        font-size: 12px;
+    }
+
+
+    .mspcardp div[class=rating] {
+        display: flex;
+        justify-content: space-between;
+        width: 50%
+    }
+
+    .mspcardp label {
+        cursor: pointer;
+    }
+
+    .mspcardp input[type="radio"] {
+        display: none; /* Hide radio buttons */
+    }
+
+    .mspcardp span[class=icon-star] {
+        color: gray;
+        font-size: 20px;
+    }
+    .mspcardp label[class=stars] {
+        margin-top: 5px;
+
+
+    }
+
+    .mspcardp input:checked ~ .icon-star {
+        color: orange; /* Change color on selection */
+    }
