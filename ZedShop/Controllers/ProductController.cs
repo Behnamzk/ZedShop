@@ -29,6 +29,8 @@ namespace ZedShop.Web.Controllers
                 return NotFound();
             }
 
+
+
             ProductViewModel proVM = new ProductViewModel()
                 {
                     Name = product.Name,
@@ -38,7 +40,8 @@ namespace ZedShop.Web.Controllers
                     IsActivate = product.IsActivate,
                     ProductId = product.ProductId,
                     ProductImageName = product.ProductImageName,
-                    SellPrice = Convert.ToDouble(product.SellPrice)
+                    SellPrice = Convert.ToDouble(product.SellPrice),
+                    ProductCategories = product.ProductCategories.ToList()
                 };
 
 

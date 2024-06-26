@@ -2511,7 +2511,7 @@ h1, h2, h3, h4, h5,
 
 .mspcardp {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    max-width: 800px;
+    max-width: 750px;
     margin: auto;
     text-align: center;
     font-weight: 400;
@@ -2531,7 +2531,7 @@ h1, h2, h3, h4, h5,
         width: 100px;
     }
 
-    .mspcardp button {
+    .mspcardp button[class=button-submit] {
         border: none;
         outline: 0;
         padding: 12px;
@@ -2539,10 +2539,10 @@ h1, h2, h3, h4, h5,
         background-color: #1f9ede;
         text-align: center;
         cursor: pointer;
-        width: 100%;
+        width: 30%;
         font-size: 18px;
     }
 
-        .mspcardp button:hover {
-            opacity: 0.7;
-        }
+    .mspcardp button:hover {
+        opacity: 0.7;
+    }

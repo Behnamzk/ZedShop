@@ -12,8 +12,8 @@ using ZedShop.DataLayer.Context;
 namespace ZedShop.DataLayer.Migrations
 {
     [DbContext(typeof(ZedShopContext))]
-    [Migration("20240613135715_test")]
-    partial class test
+    [Migration("20240625112513_addcategory")]
+    partial class addcategory
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -100,12 +100,15 @@ namespace ZedShop.DataLayer.Migrations
                     b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
+                    b.Property<bool?>("IsRoot")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
-                    b.Property<int>("ParentId")
+                    b.Property<int?>("ParentId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
