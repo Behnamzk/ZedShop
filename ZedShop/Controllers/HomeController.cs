@@ -3,19 +3,18 @@ using System.Diagnostics;
 using ZedShop.Core.DTOs.Product;
 using ZedShop.Core.Services;
 using ZedShop.Core.Services.Interface;
+using ZedShop.DataLayer.Entities;
 using ZedShop.Models;
 
 namespace ZedShop.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
 
-        private IProductService _productService;
+        private readonly IProductService _productService;
 
-        public HomeController(ILogger<HomeController> logger, IProductService productService)
+        public HomeController(IProductService productService)
         {
-            _logger = logger;
             _productService = productService;
         }
 
@@ -30,16 +29,17 @@ namespace ZedShop.Controllers
 
             foreach(var p in products)
             {
+                float rating = _productService.GetAVGRateOfProduct(p.ProductId);
+
                 productViewModels.Add(new ProductViewModel()
                 {
                     Name = p.Name,
                     Description = p.Description,
-                    Count = p.Count,
-                    DisCount = p.Count,
                     IsActivate = p.IsActivate,
                     ProductId = p.ProductId,
                     ProductImageName = p.ProductImageName,
-                    SellPrice = Convert.ToDouble(p.SellPrice)   
+                    SellPrice = Convert.ToDouble(p.SellPrice),
+                    Rating = rating
                 });
 
                 // remove this part if fix the service

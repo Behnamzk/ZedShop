@@ -16,13 +16,11 @@ namespace ZedShop.Core.DTOs.Product
 
 		public string Description { get; set; } = string.Empty;
 
-		public int Count { get; set; }
-
         public bool IsActivate { get; set; }
 
-        public double DisCount { get; set; }
-
         public double SellPrice { get; set; }
+
+        public float Rating { get; set; } = 1;
 
         public string ProductImageName { get; set; } = string.Empty;
 

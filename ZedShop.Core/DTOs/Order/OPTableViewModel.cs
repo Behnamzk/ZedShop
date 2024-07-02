@@ -8,8 +8,8 @@ namespace ZedShop.Core.DTOs.Order
 {
     public class OPTableViewModel
     {
-        public List<OrderProductViewModel> items {  get; set; }
+        public List<OrderProductViewModel> Items {  get; set; }
 
-        public double total_price { get; set; } = 0;
+        public double TotalPrice { get; set; } = 0;
     }
 }

@@ -19,9 +19,9 @@ namespace ZedShop.Core.Services.Interface
 
         public User LoginUser(LoginViewModel loginViewModel);
 
-        public bool ActiveAccount(string ActiveCode);
+        public bool ActiveAccount(string activeCode);
 
-        public User GetUserByUserName(string user_name);
+        public User GetUserByUserName(string userName);
 
         public bool UpdateUser(User user, IFormFile imgProfile);
 

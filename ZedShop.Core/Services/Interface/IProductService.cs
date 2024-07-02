@@ -10,22 +10,17 @@ namespace ZedShop.Core.Services.Interface
 {
     public interface IProductService
     {
-        Product GetProduct(int product_id);
+        Product GetProduct(int productId);
         List<Product> GetAllProducts();
         List<Product> GetAllProducts(int count);
-
-		IQueryable<Comment> GetAllProductsComment(int product_id);
-
+		IQueryable<Comment> GetAllProductsComment(int productId);
         bool AddRateToProduct(RateViewModel rateViewModel);
         bool UpdateRateOfUser(ProductRate productRate);
-        float GetAVGRateOfProduct(int prodcut_id);
-        ProductRate GetRateOfUser(int user_id, int product_id);
-        
-
+        float GetAVGRateOfProduct(int prodcutId);
+        ProductRate GetRateOfUser(int userId, int prodcutId);
         bool AddCommentToProduct(CommentViewModel commentViewModel);
-        bool DecreaseProductCount(int product_id, int count);
-        bool IncreaseProductCount(int product_id, int count);
-
+        bool DecreaseProductCount(int prodcutId, int count);
+        bool IncreaseProductCount(int prodcutId, int count);
 
     }
 }
