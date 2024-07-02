@@ -58,7 +58,10 @@ namespace ZedShop.DataLayer.Entities
         public Wallet? Wallet { get; set; }
 
         public ICollection<Order> Orders { get; set; }
-    }
 
-    public enum GenderTypes { مرد, زن, سایر }
+		public ICollection<Comment> Comments { get; set; }
+
+	}
+
+	public enum GenderTypes { مرد, زن, سایر }
 }
