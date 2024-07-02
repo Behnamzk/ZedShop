@@ -19,7 +19,7 @@ namespace ZedShop.DataLayer.Entities
         public int OrdrId { get; set; }
 
         [Required]
-        public double price { get; set; }
+        public double Price { get; set; }
 
         [Required]
         public int Count { get; set; }

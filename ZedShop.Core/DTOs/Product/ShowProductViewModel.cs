@@ -26,7 +26,7 @@ namespace ZedShop.Core.DTOs.Product
 
         public string ProductImageName { get; set; } = string.Empty;
 
-        public CommentViewModel commentViewModel { get; set; }
+        public CommentViewModel? CommentViewModel { get; set; }
         public int Rating { get; set; } = 0;
         public List<ProductCategory>? ProductCategories { get; set; }
         public List<DataLayer.Entities.Comment>? ProductComments { get; set; }
