@@ -30,7 +30,7 @@ namespace ZedShop.Web.Controllers
             var username = User.Identity.Name;
             if (!string.IsNullOrEmpty(username))
             {
-                Order order = _orderService.getOpenOrder(username);
+                Order order = _orderService.GetOpenOrder(username);
 
                 List<OrderProductViewModel> OrderProductList= new List<OrderProductViewModel>();
 
@@ -73,9 +73,9 @@ namespace ZedShop.Web.Controllers
 
             var orderProduct = _orderService.GetOrderProduct(order_id, product_id);
 
-            if (_orderService.deleteProductFromOrder(order_id, product_id))
+            if (_orderService.DeleteProductFromOrder(order_id, product_id))
             {
-                var data = _orderService.getProductsOfOrder(order_id);
+                var data = _orderService.GetProductsOfOrder(order_id);
                 
                 foreach ( var item in data)
                 {
@@ -119,7 +119,7 @@ namespace ZedShop.Web.Controllers
 
             Product product = _productService.GetProduct(orderViewModel.ProductId);
 
-            Order order = _orderService.getOpenOrder(username);
+            Order order = _orderService.GetOpenOrder(username);
 
             if (order == null)
             {

@@ -31,7 +31,7 @@ namespace ZedShop.Core.Services.Interface
         /// if all things ok return an object of order 
         /// else return null
         /// </returns>
-        Order getOpenOrder(string userName);
+        Order GetOpenOrder(string userName);
 
         /// <summary>
         /// get user and return open order of user else retrun null
@@ -41,19 +41,18 @@ namespace ZedShop.Core.Services.Interface
         /// if all things ok return an object of order 
         /// else return null
         /// </returns>
-        Order getOpenOrder(User user);
+        Order GetOpenOrder(User user);
 
-        Order getOrderById(int orderId);
+        Order GetOrderById(int orderId);
         void AddProductToOrder(OrderProduct orderProduct);
 
-        void IncreaseProductCountOfOrder(int ProductId, int OrderId, int Count);
+        void IncreaseProductCountOfOrder(int productId, int orderId, int count);
 
-        bool deleteProductFromOrder(int orderId, int productId);
+        bool DeleteProductFromOrder(int orderId, int productId);
 
         OrderProduct GetOrderProduct(int orderId, int productId);
 
-
-        List<OrderProduct> getProductsOfOrder(int orderId);
+        List<OrderProduct> GetProductsOfOrder(int orderId);
 
     }
 }

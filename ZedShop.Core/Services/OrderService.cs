@@ -12,9 +12,9 @@ namespace ZedShop.Core.Services
 {
     public class OrderService : IOrderService
     {
-        private ZedShopContext _context;
+        private readonly ZedShopContext _context;
 
-        private IUserService _userService;
+        private readonly IUserService _userService;
 
         public OrderService(ZedShopContext context, IUserService userService)
         {
@@ -27,7 +27,7 @@ namespace ZedShop.Core.Services
 
             if (user != null) 
             {
-                if (getOpenOrder(user) == null)
+                if (GetOpenOrder(user) == null)
                 {
                     Order order = new Order()
                     {
@@ -55,13 +55,13 @@ namespace ZedShop.Core.Services
             _context.SaveChanges();
         }
 
-        public void IncreaseProductCountOfOrder(int ProductId, int OrderId, int Count)
+        public void IncreaseProductCountOfOrder(int productId, int orderId, int count)
         {
-            var orderProduct = GetOrderProduct(OrderId, ProductId);
+            var orderProduct = GetOrderProduct(orderId, productId);
 
             if(orderProduct != null)
             {
-                orderProduct.Count += Count;
+                orderProduct.Count += count;
                 _context.OrderProducts.Update(orderProduct);
                 _context.SaveChanges();
             }
@@ -72,10 +72,9 @@ namespace ZedShop.Core.Services
             return _context.OrderProducts.SingleOrDefault(o => o.OrdrId == orderId && o.ProductId == productId);
         }
 
-        public bool deleteProductFromOrder(int orderId, int productId)
+        public bool DeleteProductFromOrder(int orderId, int productId)
         {
             var data = GetOrderProduct(orderId, productId);
-
 
             if (data != null)
             {
@@ -86,26 +85,23 @@ namespace ZedShop.Core.Services
             return false;
         }
 
-        public Order getOpenOrder(string userName)
+        public Order GetOpenOrder(string userName)
         {
-                            
             User user = _userService.GetUserByUserName(userName);
-            var data = _context.Orders.Include(p=>p.OrderProducts).SingleOrDefault(c => c.UserId == user.UserId && c.Status == false);
-            return data;
+            return _context.Orders.Include(p => p.OrderProducts).SingleOrDefault(c => c.UserId == user.UserId && c.Status == false);
         }
 
-        public Order getOpenOrder(User user)
+        public Order GetOpenOrder(User user)
         {
-            var data = _context.Orders.Include(p => p.OrderProducts).SingleOrDefault(c => c.UserId == user.UserId && c.Status == false);
-            return data;
+            return _context.Orders.Include(p => p.OrderProducts).SingleOrDefault(c => c.UserId == user.UserId && c.Status == false);
         }
 
-        public Order getOrderById(int orderId)
+        public Order GetOrderById(int orderId)
         {
             return _context.Orders.SingleOrDefault(c=>c.Id == orderId);
         }
 
-        public List<OrderProduct> getProductsOfOrder(int orderId)
+        public List<OrderProduct> GetProductsOfOrder(int orderId)
         {
             return _context.OrderProducts.Include(p=>p.Product).Where(o=>o.OrdrId == orderId).ToList();
         }

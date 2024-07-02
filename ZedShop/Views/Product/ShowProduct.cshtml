@@ -1,4 +1,6 @@
-﻿@model ZedShop.Core.DTOs.Product.ProductViewModel
+﻿@* @model Tuple<ZedShop.Core.DTOs.Product.ShowProductViewModel, ZedShop.Core.DTOs.Product.CommentViewModel> *@
+
+@model ZedShop.Core.DTOs.Product.ShowProductViewModel
 @{
     ViewData["Title"] = "مشاهده محصول";
 }
@@ -34,12 +36,88 @@
             <input type="number" asp-for="Count" class="pcount" step="1" id="overs" value="1">
 
             <p clsss="textproduct">توضیحات کالا: @Model.Description</p>
+
+
+
         </div>
 
 
-        <button class="button-submit" type="submit">افزودن به سبد خرید</button>
+
+        <button class="button-submit" type="submit">افزودن به سبد خرید <span class="icon-shopping-basket"></span></button>
         @* <p><button type="button" onclick="location.href='@Url.Action("BuyProduct", "Order", new { id = @Model.ProductId })'">افزودن به سبد خرید</button></p> *@
     </form>
+
+    <br />
+
+    <form asp-controller="Product" asp-action="AddRating" method="post">
+        <input type="hidden" asp-for="ProductId" value="@Model.ProductId" />
+        <div class="rating">
+            <p style="margin-top:5px">امتیاز کالا:</p>
+            <label for="star-1" class="stars">
+                <input type="radio" id="star-1" name="rating" value="1">
+                <span class="icon-star" id="icon-star-1"></span>
+            </label>
+            <label for="star-2" class="stars">
+                <input type="radio" id="star-2" name="rating" value="2">
+                <span class="icon-star" id="icon-star-2"></span>
+            </label>
+            <label for="star-3" class="stars">
+                <input type="radio" id="star-3" name="rating" value="3">
+                <span class="icon-star" id="icon-star-3"></span>
+            </label>
+            <label for="star-4" class="stars">
+                <input type="radio" id="star-4" name="rating" value="4">
+                <span class="icon-star" id="icon-star-4"></span>
+            </label>
+            <label for="star-5" class="stars">
+                <input type="radio" id="star-5" name="rating" value="5">
+                <span class="icon-star" id="icon-star-5"></span>
+            </label>
+
+            <input type="hidden" asp-for="@Model.Rating">
+            <button type="submit" class="btn btn-outline-info" style="height:20%">ثبت امتیاز ✓</button>
+
+        </div>
+    </form>
+
+    <div class="all-comments">
+        <br />
+        <h3>دیدگاه‌های کاربران:</h3>
+        <br />
+        @* <a href="#" class="add-comment">افزودن نظر جدید ✏️</a> *@
+
+        @Html.Partial("_CommentPopUp")
+
+        <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#commentModal">
+            افزودن دیدگاه جدید ✏️
+        </button>
+        <br />
+        <br />
+
+
+
+
+        @if (Model.ProductComments != null)
+        {
+            @foreach (var item in Model.ProductComments)
+            {
+                <div class="comment-container">
+                    <img src="/UserAvatar/@item.User.UserAvatar" alt="User Avatar" class="user-avatar">
+                    <div class="comment-content">
+                        <h4 class="comment-author">@item.User.UserName</h4>
+                        <p class="comment-text">@item.CommentText</p>
+                        <span class="comment-date">@item.CommentDate</span>
+                    </div>
+                </div>
+            }
+        }
+
+
+
+
+
+    </div>
+
 </div>
 
 
@@ -56,4 +134,35 @@
             this.value = @Model.Count;
         }
     })
+</script>
+
+<script>
+
+    $(document).ready(function () {
+        $('input[type="radio"]').click(function () {
+            let val = this.value;
+            
+            for (let i = 1; i <= val; i++) {
+                document.getElementById("icon-star-" + i).style.color = 'gold';
+            }
+
+            for (let i = 5; i > val; i--) {
+                document.getElementById("icon-star-" + i).style.color = 'gray';
+            }
+            
+        });
+
+    });
+
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#commentModal').on('hidden.bs.modal', function (e) {
+            // Clear the comment form after modal is closed (optional)
+            $(this).find('form').trigger("reset");
+        });
+    });
+
 </script>
