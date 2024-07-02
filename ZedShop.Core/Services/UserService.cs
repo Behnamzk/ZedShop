@@ -18,13 +18,13 @@ namespace ZedShop.Core.Services
     public class UserService : IUserService
     {
 
-        private ZedShopContext _context;
+        private readonly ZedShopContext _context;
         public UserService(ZedShopContext context)
         {
             _context = context;
         }
 
-        public bool ActiveAccount(string ActiveCode)
+        public bool ActiveAccount(string activeCode)
         {
             //var user = _context.Users.SingleOrDefault(u => u.ActiveCode == activeCode);
 
@@ -56,9 +56,9 @@ namespace ZedShop.Core.Services
             return _context.Users.Any(User => User.Email == email);
         }
 
-        public User GetUserByUserName(string user_name)
+        public User GetUserByUserName(string userName)
         {
-            return _context.Users.SingleOrDefault(User => User.UserName == user_name);
+            return _context.Users.SingleOrDefault(User => User.UserName == userName);
         }
 
         public bool IsExistUserName(string userName)
@@ -77,10 +77,10 @@ namespace ZedShop.Core.Services
 
         public bool UpdateUser(User user, IFormFile imgProfile)
         {
-            if(user == null) return false;
+            if (user == null) { return false; }
 
 
-            if(imgProfile != null && imgProfile.IsImage())
+            if (imgProfile != null && imgProfile.IsImage())
             {
                 if (user.UserAvatar != "Defult.jpg")
                 {

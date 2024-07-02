@@ -17,7 +17,7 @@
                 </tr>
             </thead>
             <tbody id="cart-items">
-                @foreach (var item in Model.items)
+                @foreach (var item in Model.Items)
                 {
                     <tr>
                         <td><img src="/Products/Image/@item.ProductImageName" alt="Product Image"></td>
@@ -31,7 +31,7 @@
 
             </tbody>
         </table>
-        <p class="p-total-price" id="total-price">مجموع: <span id="total-value">@Model.total_price</span> تومان</p>
+        <p class="p-total-price" id="total-price">مجموع: <span id="total-value">@Model.TotalPrice</span> تومان</p>
         <button class="button-submit" type="button" onclick="location.href='@Url.Action("BuyProduct", "Order", new { id = 1 })'">تکمیل خرید و پرداخت</button>
 
         <script>

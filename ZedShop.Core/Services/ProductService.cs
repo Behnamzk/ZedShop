@@ -13,18 +13,18 @@ namespace ZedShop.Core.Services
 {
     public class ProductService : IProductService
     {
-        private ZedShopContext context;
-        private IUserService userService;
+        private readonly ZedShopContext _context;
+        private readonly IUserService _userService;
 
-        public ProductService(ZedShopContext _context, IUserService _userService)
+        public ProductService(ZedShopContext context, IUserService userService)
         {
-            context = _context;
-            userService = _userService;
+            _context = context;
+            _userService = userService;
         }
 
         public List<Product> GetAllProducts()
         {
-            return context.Products.ToList();
+            return _context.Products.ToList();
 
         }
 
@@ -35,47 +35,47 @@ namespace ZedShop.Core.Services
             throw new NotImplementedException();
         }
 
-        public bool DecreaseProductCount(int product_id, int count)
+        public bool DecreaseProductCount(int productId, int count)
         {
 
-            Product product = GetProduct(product_id);
+            Product product = GetProduct(productId);
 
             if (product != null)
             {
                 if (product.Count - count > 0)
                 {
                     product.Count -= count;
-                    context.Products.Update(product);
-                    context.SaveChanges();
+                    _context.Products.Update(product);
+                    _context.SaveChanges();
                     return true;
                 }
             }
             return false;
         }
 
-        public bool IncreaseProductCount(int product_id, int count)
+        public bool IncreaseProductCount(int prodcutId, int count)
         {
-            Product product = GetProduct(product_id);
+            Product product = GetProduct(prodcutId);
 
             if (product != null)
             {
                 product.Count += count;
-                context.Products.Update(product);
-                context.SaveChanges();
+                _context.Products.Update(product);
+                _context.SaveChanges();
                 return true;
             }
 
             return false;
         }
-        public Product GetProduct(int product_id)
+        public Product GetProduct(int productId)
         {
-            return context.Products.Include(c=>c.ProductCategories).ThenInclude(o=>o.Category).SingleOrDefault(c => c.ProductId == product_id);
+            return _context.Products.Include(c=>c.ProductCategories).ThenInclude(o=>o.Category).SingleOrDefault(c => c.ProductId == productId);
 
         }
 
-        public IQueryable<Comment> GetAllProductsComment(int product_id)
+        public IQueryable<Comment> GetAllProductsComment(int productId)
         {
-            return context.Comments.Include(c=>c.User).Where(c=>c.ProductId == product_id);
+            return _context.Comments.Include(c=>c.User).Where(c=>c.ProductId == productId);
 
 		}
 
@@ -95,8 +95,8 @@ namespace ZedShop.Core.Services
                
             };
 
-            context.Comments.Add(comment);
-            context.SaveChanges();
+            _context.Comments.Add(comment);
+            _context.SaveChanges();
             return true;
         }
 
@@ -115,8 +115,8 @@ namespace ZedShop.Core.Services
                 Rate = rateViewModel.Rate
             };
 
-            context.Rates.Add(rate);
-            context.SaveChanges();
+            _context.Rates.Add(rate);
+            _context.SaveChanges();
 
             return true;
         }
@@ -124,20 +124,20 @@ namespace ZedShop.Core.Services
         public bool UpdateRateOfUser(ProductRate productRate)
         {
 
-            context.Rates.Update(productRate);
-            context.SaveChanges();
+            _context.Rates.Update(productRate);
+            _context.SaveChanges();
 
             return true;
         }
 
-        public float GetAVGRateOfProduct(int prodcut_id)
+        public float GetAVGRateOfProduct(int productId)
         {
-            return (float)context.Rates.Where(u=>u.ProductId == prodcut_id).Average(r => r.Rate);
+            return (float)_context.Rates.Where(u=>u.ProductId == productId).Average(r => r.Rate);
         }
 
-        public ProductRate GetRateOfUser(int user_id, int product_id)
+        public ProductRate GetRateOfUser(int userId, int productId)
         {
-           return context.Rates.SingleOrDefault(u => u.UserId == user_id && u.ProductId == product_id);
+           return _context.Rates.SingleOrDefault(u => u.UserId == userId && u.ProductId == productId);
 
         }
         #endregion

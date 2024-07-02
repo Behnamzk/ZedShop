@@ -43,19 +43,19 @@ namespace ZedShop.Web.Controllers
                     {
                         OrderId = order.Id,
                         ProdcutCount = item.Count,
-                        SellPrice = item.price * item.Count,
+                        SellPrice = item.Price * item.Count,
                         ProductId = pro.ProductId,
                         ProductName = pro.Name,
                         ProductImageName = pro.ProductImageName
                     };
-                    total_price += item.price * item.Count;
+                    total_price += item.Price * item.Count;
                     OrderProductList.Add(model);
                 }
 
                 OPTableViewModel oPTable = new OPTableViewModel()
                 {
-                    items = OrderProductList,
-                    total_price = total_price
+                    Items = OrderProductList,
+                    TotalPrice = total_price
                 };
 
                 return View(oPTable);
@@ -83,12 +83,12 @@ namespace ZedShop.Web.Controllers
                     {
                         OrderId = item.OrdrId,
                         ProdcutCount = item.Count,
-                        SellPrice = item.price * item.Count,
+                        SellPrice = item.Price * item.Count,
                         ProductId = item.ProductId,
                         ProductName = item.Product.ProductImageName,
                         ProductImageName = item.Product.ProductImageName
                     };
-                    total_price += item.price * item.Count;
+                    total_price += item.Price * item.Count;
                     OrderProductList.Add(model);
                 }
                 _productService.IncreaseProductCount(product_id, orderProduct.Count);
@@ -97,8 +97,8 @@ namespace ZedShop.Web.Controllers
 
             OPTableViewModel oPTable = new OPTableViewModel()
             {
-                items = OrderProductList,
-                total_price = total_price
+                Items = OrderProductList,
+                TotalPrice = total_price
             };
 
 
@@ -115,7 +115,7 @@ namespace ZedShop.Web.Controllers
                 return RedirectToAction("Index", "Home");
             }
             
-            int order_id = -1;
+            int orderId = -1;
 
             Product product = _productService.GetProduct(orderViewModel.ProductId);
 
@@ -123,11 +123,11 @@ namespace ZedShop.Web.Controllers
 
             if (order == null)
             {
-                order_id = _orderService.AddOrder(username);
+                orderId = _orderService.AddOrder(username);
             }
             else
             {
-                order_id = order.Id;
+                orderId = order.Id;
                 
                 // check if product is exist in Order or not 
                 if(order.OrderProducts.Any(o => o.ProductId == orderViewModel.ProductId))
@@ -137,19 +137,19 @@ namespace ZedShop.Web.Controllers
                     // else return false
                     if (_productService.DecreaseProductCount(product.ProductId, orderViewModel.Count))
                     {
-                        _orderService.IncreaseProductCountOfOrder(product.ProductId, order_id, orderViewModel.Count);
+                        _orderService.IncreaseProductCountOfOrder(product.ProductId, orderId, orderViewModel.Count);
                     }
                 }
                 else
                 {
-                    if (order_id != -1 && product != null)
+                    if (orderId != -1 && product != null)
                     {
                         OrderProduct orderProduct = new OrderProduct()
                         {
-                            OrdrId = order_id,
+                            OrdrId = orderId,
                             ProductId = product.ProductId,
                             Count = orderViewModel.Count,
-                            price = product.SellPrice
+                            Price = product.SellPrice
                         };
 
                         // if we have enough products decrease count and
