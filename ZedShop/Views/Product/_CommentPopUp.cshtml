@@ -11,12 +11,12 @@
             </div>
             <div class="modal-body">
                 <form asp-action="AddComment" asp-controller="Product">
-                    <input type="hidden" asp-for="@Model.commentViewModel.UserId" value="@Model.commentViewModel.UserId" />
-                    <input type="hidden" asp-for="@Model.commentViewModel.PoroductId" value="@Model.commentViewModel.PoroductId" />
+                    <input type="hidden" asp-for="@Model.CommentViewModel.UserId" value="@Model.CommentViewModel.UserId" />
+                    <input type="hidden" asp-for="@Model.CommentViewModel.PoroductId" value="@Model.CommentViewModel.PoroductId" />
 
                     <div class="form-group">
-                        <label asp-for="@Model.commentViewModel.Content">دیدگاه</label>
-                        <textarea class="form-control" asp-for="@Model.commentViewModel.Content" rows="5"></textarea>
+                        <label asp-for="@Model.CommentViewModel.Content">دیدگاه</label>
+                        <textarea class="form-control" asp-for="@Model.CommentViewModel.Content" rows="5"></textarea>
                     </div>
                     <div style="width:100%; text-align:center;">
                         <button type="submit" class="btn btn-info">ارسال دیدگاه</button>

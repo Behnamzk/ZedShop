@@ -9,13 +9,13 @@ namespace ZedShop.Web.Controllers
 {
     public class ProductController : Controller
     {
-        private IProductService productService;
-        private IUserService userService;
+        private readonly IProductService _productService;
+        private readonly IUserService _userService;
 
-        public ProductController(IProductService _productService, IUserService _userService)
+        public ProductController(IProductService productService, IUserService userService)
         {
-            productService = _productService;
-            userService = _userService;
+            _productService = productService;
+            _userService = userService;
         }
 
         public IActionResult Index()
@@ -26,14 +26,14 @@ namespace ZedShop.Web.Controllers
         [Route("ShowProduct/{id}")]
         public IActionResult ShowProduct(int id)
         {
-            var product = productService.GetProduct(id);
+            var product = _productService.GetProduct(id);
 
             if (product == null)
             {
                 return NotFound();
             }
 
-            var comments = productService.GetAllProductsComment(product.ProductId);
+            var comments = _productService.GetAllProductsComment(product.ProductId);
 
             List<Comment> pComments = comments.ToList();
 
@@ -42,7 +42,7 @@ namespace ZedShop.Web.Controllers
             var username = User.Identity.Name;
             if (!string.IsNullOrEmpty(username))
             {
-                User user = userService.GetUserByUserName(username);
+                User user = _userService.GetUserByUserName(username);
 
                 commentViewModel.PoroductId = product.ProductId;
                 commentViewModel.UserId = user.UserId;
@@ -61,7 +61,7 @@ namespace ZedShop.Web.Controllers
                 SellPrice = Convert.ToDouble(product.SellPrice),
                 ProductCategories = product.ProductCategories.ToList(),
                 ProductComments = pComments,
-                commentViewModel = commentViewModel
+                CommentViewModel = commentViewModel
             };
 
             return View(proVM);
@@ -71,14 +71,14 @@ namespace ZedShop.Web.Controllers
         [Authorize]
         public IActionResult AddComment(ShowProductViewModel showProductViewModel)
         {
-            CommentViewModel commentViewModel = showProductViewModel.commentViewModel;
+            CommentViewModel commentViewModel = showProductViewModel.CommentViewModel;
 
             if (commentViewModel == null)
             {
                 return RedirectToAction("Index");
             }
 
-            productService.AddCommentToProduct(commentViewModel);
+            _productService.AddCommentToProduct(commentViewModel);
 
             return RedirectToAction("ShowProduct", new { id = commentViewModel.PoroductId });
         }
@@ -98,27 +98,28 @@ namespace ZedShop.Web.Controllers
             var username = User.Identity.Name;
             if (!string.IsNullOrEmpty(username))
             {
-                User user = userService.GetUserByUserName(username);
+                User user = _userService.GetUserByUserName(username);
 
                 if(user != null) {
-                    ProductRate OldRate = productService.GetRateOfUser(user.UserId, showProductViewModel.ProductId);
+                    ProductRate OldRate = _productService.GetRateOfUser(user.UserId, showProductViewModel.ProductId);
 
                     if(OldRate != null)
                     {
                         // update old rate
                         OldRate.Rate = rate;
-                        productService.UpdateRateOfUser(OldRate);
+                        _productService.UpdateRateOfUser(OldRate);
                     }
                     else
                     {
+                        //add new rate
                         RateViewModel rateViewModel = new RateViewModel()
                         {
                             UserId = user.UserId,
                             PoroductId = showProductViewModel.ProductId,
                             Rate = rate
                         };
-                        productService.AddRateToProduct(rateViewModel);
-                        //add new rate
+                        _productService.AddRateToProduct(rateViewModel);
+
                     }
                 }
 

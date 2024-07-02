@@ -15,7 +15,7 @@ namespace ZedShop.Web.Controllers.Account
 {
     public class AccountController : Controller
     {
-        private IUserService _service;
+        private readonly IUserService _service;
 
         public AccountController(IUserService service)
         {
@@ -113,9 +113,8 @@ namespace ZedShop.Web.Controllers.Account
 
             GenderTypes genderType = (GenderTypes)Enum.Parse(typeof(GenderTypes), registerViewModel.Gender, true);
 
-            var type = genderType;
 
-            User user = new User
+            User user = new User()
             {
                 ActiveCode = NameGenerator.GenerateUniqueCode(),
                 Email = FixText.FixEmail(registerViewModel.Email),
@@ -211,9 +210,6 @@ namespace ZedShop.Web.Controllers.Account
             if (User.Identity != null)
             {
                 var currentuser = User.Identity.Name;
-
-
-                var data = profile.ProfileFile;
 
                 if (currentuser != null)
                 {

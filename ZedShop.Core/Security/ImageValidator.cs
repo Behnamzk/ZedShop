@@ -13,7 +13,6 @@ namespace ZedShop.Core.Security
         {
             try
             {
-                
                 var img = System.Drawing.Bitmap.FromStream(file.OpenReadStream());
                 return true;
             }

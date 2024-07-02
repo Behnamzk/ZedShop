@@ -12,44 +12,44 @@ namespace ZedShop.Core.Convertors
 {
     public class ImageConvertor
     {
-        public void ResizeImage(string input_Image_Path, string output_Image_Path, int new_Width)
+        public void ResizeImage(string inputImagePath, string outputImagePath, int newWidth)
         {
 
             const long quality = 50L;
 
-            Bitmap source_Bitmap = new Bitmap(input_Image_Path);
+            Bitmap sourceBitmap = new Bitmap(inputImagePath);
 
 
 
-            double dblWidth_origial = source_Bitmap.Width;
+            double dblWidthOrigial = sourceBitmap.Width;
 
-            double dblHeigth_origial = source_Bitmap.Height;
+            double dblHeigthOrigial = sourceBitmap.Height;
 
-            double relation_heigth_width = dblHeigth_origial / dblWidth_origial;
+            double relationHeigthWidth = dblHeigthOrigial / dblWidthOrigial;
 
-            int new_Height = (int)(new_Width * relation_heigth_width);
+            int newHeight = (int)(newWidth * relationHeigthWidth);
 
 
 
             //< create Empty Drawarea >
 
-            var new_DrawArea = new Bitmap(new_Width, new_Height);
+            var newDrawArea = new Bitmap(newWidth, newHeight);
 
             //</ create Empty Drawarea >
 
 
 
-            using (var graphic_of_DrawArea = Graphics.FromImage(new_DrawArea))
+            using (var graphicOfDrawArea = Graphics.FromImage(newDrawArea))
 
             {
 
                 //< setup >
 
-                graphic_of_DrawArea.CompositingQuality = CompositingQuality.HighSpeed;
+                graphicOfDrawArea.CompositingQuality = CompositingQuality.HighSpeed;
 
-                graphic_of_DrawArea.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphicOfDrawArea.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
-                graphic_of_DrawArea.CompositingMode = CompositingMode.SourceCopy;
+                graphicOfDrawArea.CompositingMode = CompositingMode.SourceCopy;
 
                 //</ setup >
 
@@ -59,7 +59,7 @@ namespace ZedShop.Core.Convertors
 
                 //*imports the image into the drawarea
 
-                graphic_of_DrawArea.DrawImage(source_Bitmap, 0, 0, new_Width, new_Height);
+                graphicOfDrawArea.DrawImage(sourceBitmap, 0, 0, newWidth, newHeight);
 
                 //</ draw into placeholder >
 
@@ -67,7 +67,7 @@ namespace ZedShop.Core.Convertors
 
                 //--< Output as .Jpg >--
 
-                using (var output = System.IO.File.Open(output_Image_Path, FileMode.Create))
+                using (var output = System.IO.File.Open(outputImagePath, FileMode.Create))
 
                 {
 
@@ -87,7 +87,7 @@ namespace ZedShop.Core.Convertors
 
                     var codec = ImageCodecInfo.GetImageDecoders().FirstOrDefault(c => c.FormatID == ImageFormat.Jpeg.Guid);
 
-                    new_DrawArea.Save(output, codec, encoderParameters);
+                    newDrawArea.Save(output, codec, encoderParameters);
 
                     //resized_Bitmap.Dispose ();
 
@@ -99,11 +99,11 @@ namespace ZedShop.Core.Convertors
 
                 //--</ Output as .Jpg >--
 
-                graphic_of_DrawArea.Dispose();
+                graphicOfDrawArea.Dispose();
 
             }
 
-            source_Bitmap.Dispose();
+            sourceBitmap.Dispose();
 
             //---------------</ Image_resize() >---------------
 
@@ -111,44 +111,44 @@ namespace ZedShop.Core.Convertors
 
 
 
-        public void ResizeImage(IFormFile input_File, string output_Image_Path, int new_Width)
+        public void ResizeImage(IFormFile inputFile, string outputImagePath, int newWidth)
         {
 
             const long quality = 50L;
 
-            Bitmap source_Bitmap = new Bitmap(input_File.OpenReadStream());
+            Bitmap sourceBitmap = new Bitmap(inputFile.OpenReadStream());
 
 
 
-            double dblWidth_origial = source_Bitmap.Width;
+            double dblWidthOrigial = sourceBitmap.Width;
 
-            double dblHeigth_origial = source_Bitmap.Height;
+            double dblHeigthOrigial = sourceBitmap.Height;
 
-            double relation_heigth_width = dblHeigth_origial / dblWidth_origial;
+            double relationHeigthWidth = dblHeigthOrigial / dblWidthOrigial;
 
-            int new_Height = (int)(new_Width * relation_heigth_width);
+            int newHeight = (int)(newWidth * relationHeigthWidth);
 
 
 
             //< create Empty Drawarea >
 
-            var new_DrawArea = new Bitmap(new_Width, new_Height);
+            var newDrawArea = new Bitmap(newWidth, newHeight);
 
             //</ create Empty Drawarea >
 
 
 
-            using (var graphic_of_DrawArea = Graphics.FromImage(new_DrawArea))
+            using (var graphicOfDrawArea = Graphics.FromImage(newDrawArea))
 
             {
 
                 //< setup >
 
-                graphic_of_DrawArea.CompositingQuality = CompositingQuality.HighSpeed;
+                graphicOfDrawArea.CompositingQuality = CompositingQuality.HighSpeed;
 
-                graphic_of_DrawArea.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphicOfDrawArea.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
-                graphic_of_DrawArea.CompositingMode = CompositingMode.SourceCopy;
+                graphicOfDrawArea.CompositingMode = CompositingMode.SourceCopy;
 
                 //</ setup >
 
@@ -158,7 +158,7 @@ namespace ZedShop.Core.Convertors
 
                 //*imports the image into the drawarea
 
-                graphic_of_DrawArea.DrawImage(source_Bitmap, 0, 0, new_Width, new_Height);
+                graphicOfDrawArea.DrawImage(sourceBitmap, 0, 0, newWidth, newHeight);
 
                 //</ draw into placeholder >
 
@@ -166,7 +166,7 @@ namespace ZedShop.Core.Convertors
 
                 //--< Output as .Jpg >--
 
-                using (var output = System.IO.File.Open(output_Image_Path, FileMode.Create))
+                using (var output = System.IO.File.Open(outputImagePath, FileMode.Create))
 
                 {
 
@@ -186,7 +186,7 @@ namespace ZedShop.Core.Convertors
 
                     var codec = ImageCodecInfo.GetImageDecoders().FirstOrDefault(c => c.FormatID == ImageFormat.Jpeg.Guid);
 
-                    new_DrawArea.Save(output, codec, encoderParameters);
+                    newDrawArea.Save(output, codec, encoderParameters);
 
                     //resized_Bitmap.Dispose ();
 
@@ -198,11 +198,11 @@ namespace ZedShop.Core.Convertors
 
                 //--</ Output as .Jpg >--
 
-                graphic_of_DrawArea.Dispose();
+                graphicOfDrawArea.Dispose();
 
             }
 
-            source_Bitmap.Dispose();
+            sourceBitmap.Dispose();
 
             //---------------</ Image_resize() >---------------
 

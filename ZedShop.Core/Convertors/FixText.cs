@@ -6,9 +6,9 @@ namespace ZedShop.Core.Convertors
 {
     public class FixText
     {
-        public static string FixEmail(string Email)
+        public static string FixEmail(string email)
         {
-            return Email.Trim().ToLower();
+            return email.Trim().ToLower();
         }
     }
 }
