@@ -132,7 +132,15 @@ namespace ZedShop.Core.Services
 
         public float GetAVGRateOfProduct(int productId)
         {
-            return (float)_context.Rates.Where(u=>u.ProductId == productId).Average(r => r.Rate);
+            var rates =  _context.Rates.Where(u => u.ProductId == productId);
+            if (rates.Any())
+            {
+                return (float)rates.Average(r=>r.Rate);
+            }
+            else
+            {
+                return 1.0F;
+            }
         }
 
         public ProductRate GetRateOfUser(int userId, int productId)

@@ -29,16 +29,17 @@ namespace ZedShop.Controllers
 
             foreach(var p in products)
             {
+                float rating = _productService.GetAVGRateOfProduct(p.ProductId);
+
                 productViewModels.Add(new ProductViewModel()
                 {
                     Name = p.Name,
                     Description = p.Description,
-                    Count = p.Count,
-                    DisCount = p.Count,
                     IsActivate = p.IsActivate,
                     ProductId = p.ProductId,
                     ProductImageName = p.ProductImageName,
-                    SellPrice = Convert.ToDouble(p.SellPrice)   
+                    SellPrice = Convert.ToDouble(p.SellPrice),
+                    Rating = rating
                 });
 
                 // remove this part if fix the service
