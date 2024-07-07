@@ -1,0 +1,11 @@
+﻿@using ZedShop.Core.DTOs.Product
+@model List<ZedShop.Core.DTOs.Product.ProductViewModel>
+
+@{
+    List<ProductViewModel> products = Model;
+
+    foreach (var item in products)
+    {
+        <partial name="_BoxProducts" model="@item" />
+    }
+}

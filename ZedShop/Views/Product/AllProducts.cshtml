@@ -1,0 +1,123 @@
+﻿@model List<ZedShop.Core.DTOs.Product.ProductViewModel>
+@{
+    ViewData["Title"] = "مشاهده محصول";
+}
+
+<div class="search-container">
+    <input type="text" id="product-search" placeholder="Search Products">
+    <button type="button" disabled> <i class="icon-search" style="font-size: 20px;"></i></button>
+    <select id="category-select" onclick="loadAllProducts(1)">
+        <option value="">All Categories</option>
+        <option value="electronics">Electronics</option>
+        <option value="clothing">Clothing</option>
+        <option value="home">Home Goods</option>
+        <option value="toys">Toys & Games</option>
+    </select>
+</div>
+
+
+<div class="site-section" id="products-section">
+    <div class="container">
+        <div class="row mb-5 justify-content-center">
+            <div class="col-md-6 text-center">
+                <h2 class="section-title mb-3">محصولات ما</h2>
+            </div>
+        </div>
+        <div class="row">
+            @{
+                List<ZedShop.Core.DTOs.Product.ProductViewModel> products = Model;
+
+                foreach (var item in products)
+                {
+                    <partial name="_BoxProducts" model="@item" />
+                    <partial name="_BoxProducts" model="@item" />
+                    <partial name="_BoxProducts" model="@item" />
+                    <partial name="_BoxProducts" model="@item" />
+                    <partial name="_BoxProducts" model="@item" />
+                    <partial name="_BoxProducts" model="@item" />
+                    <partial name="_BoxProducts" model="@item" />
+                }
+            }
+
+            <script>
+
+                function loadAllProducts(id1) {
+                    console.log("heerere", "msg");
+                    $.ajax({
+                        url: '/AllProduct/', // Replace with your controller and action
+                        data: { categoryId: id1 }, // Send the product ID as a parameter
+                        dataType: 'html',
+                        success: function (data) {
+                            console.log("heerere", data);
+                            $('#product-details-container').html(data); // Insert the received HTML into the container
+                        }
+                    });
+                }
+
+
+                // function updateTableData(id1) {
+                //     const url = "/AllProduct/" + id1; // Add IDs to URL
+
+                //     const xhr = new XMLHttpRequest();
+                //     xhr.open("GET", url, true);
+
+                //     xhr.onload = function () {
+                //         if (xhr.status === 200) {
+
+                //             const receivedData = JSON.parse(xhr.responseText); // Parse JSON data
+
+
+                //             console.log("Daaaaaaaatttttaaaaaaa", receivedData);
+                //             // Update table body with parsed data
+                //             let tableBodyContent = "";
+
+
+                //             for (const model of receivedData.items) {
+                //                 ProductViewModel
+                //                 //tableBodyContent += `<tr><td><img src="/Products/Image/${model.productImageName}" alt="Product Image"></td> <td>${model.productName}</td><td>${model.prodcutCount}</td> <td>${model.sellPrice}</td> <td><button id="updateButton" onclick="updateTableData(${model.orderId}, ${model.productId} )">×</button></td></td></tr>`;
+                //             }
+                //             // document.getElementById("total-price").innerHTML = `مجموع: ${receivedData.total_price} تومان`;
+                //             // document.getElementById("cart-items").innerHTML = tableBodyContent;
+                //         } else {
+                //             // Handle errors (optional)
+                //             //console.error("Error fetching data:", xhr.statusText);
+                //         }
+                //     };
+
+                //     xhr.send();
+
+                // }
+
+
+                // $(document).ready(function () {
+                //     $.ajax({
+                //         url: '/AllProduct/1',
+                //         dataType: 'json',
+                //         success: function (data) {
+                //             var parsedData = JSON.parse(data);
+                           
+
+                //             console.log("Daaaaaaaatttttaaaaaaa", parsedData);
+
+                //             // Loop through the parsed data and populate the list
+                //             // parsedData.forEach(function (item) {
+                //             //     dataList.append('<li>' + item.property1 + ': ' + item.property2 + '</li>');
+                //             // });
+                //         }
+                //     });
+                // });
+            </script>
+
+@*             @{
+                List<ProductViewModel> products = Model;
+
+                foreach (var item in products)
+                {
+                    <partial name="_BoxProducts" model="@item" />
+                }
+            } *@
+
+        </div>
+    </div>
+</div>
+

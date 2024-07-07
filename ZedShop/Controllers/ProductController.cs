@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Net.Http.Json;
 using ZedShop.Core.DTOs.Product;
 using ZedShop.Core.Services.Interface;
 using ZedShop.DataLayer.Context;
@@ -21,6 +23,81 @@ namespace ZedShop.Web.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+
+        [Route("AllProduct/{categoryId}")]
+        public IActionResult AllProducts(int? categoryId)
+        {
+            int NumberOfProducts = 6;
+            int temp_count = 0;
+
+            var products = _productService.GetAllProducts();
+            List<ProductViewModel> productViewModels = new List<ProductViewModel>();
+
+            foreach (var p in products)
+            {
+                float rating = _productService.GetAVGRateOfProduct(p.ProductId);
+
+                productViewModels.Add(new ProductViewModel()
+                {
+                    Name = p.Name,
+                    Description = p.Description,
+                    IsActivate = p.IsActivate,
+                    ProductId = p.ProductId,
+                    ProductImageName = p.ProductImageName,
+                    SellPrice = Convert.ToDouble(p.SellPrice),
+                    Rating = rating
+                });
+
+                // remove this part if fix the service
+                temp_count += 1;
+                if (temp_count >= NumberOfProducts)
+                {
+                    break;
+                }
+            }
+
+            AllProductsJsonViewModel viewModel = new AllProductsJsonViewModel()
+            {
+                ProductViewModels = productViewModels
+            };
+            return PartialView("_BoxProductsContainer", viewModel);
+        }
+
+        [Route("AllProduct")]
+        public IActionResult AllProducts()
+        {
+            int NumberOfProducts = 6;
+            int temp_count = 0;
+
+            var products = _productService.GetAllProducts();
+            List<ProductViewModel> productViewModels = new List<ProductViewModel>();
+
+            foreach (var p in products)
+            {
+                float rating = _productService.GetAVGRateOfProduct(p.ProductId);
+
+                productViewModels.Add(new ProductViewModel()
+                {
+                    Name = p.Name,
+                    Description = p.Description,
+                    IsActivate = p.IsActivate,
+                    ProductId = p.ProductId,
+                    ProductImageName = p.ProductImageName,
+                    SellPrice = Convert.ToDouble(p.SellPrice),
+                    Rating = rating
+                });
+
+                // remove this part if fix the service
+                temp_count += 1;
+                if (temp_count >= NumberOfProducts)
+                {
+                    break;
+                }
+            }
+
+            return View(productViewModels);
         }
 
         [Route("ShowProduct/{id}")]
@@ -100,10 +177,11 @@ namespace ZedShop.Web.Controllers
             {
                 User user = _userService.GetUserByUserName(username);
 
-                if(user != null) {
+                if (user != null)
+                {
                     ProductRate OldRate = _productService.GetRateOfUser(user.UserId, showProductViewModel.ProductId);
 
-                    if(OldRate != null)
+                    if (OldRate != null)
                     {
                         // update old rate
                         OldRate.Rate = rate;

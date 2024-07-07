@@ -2622,12 +2622,42 @@ h1, h2, h3, h4, h5,
         color: gray;
         font-size: 20px;
     }
+
     .mspcardp label[class=stars] {
         margin-top: 5px;
-
-
     }
 
     .mspcardp input:checked ~ .icon-star {
         color: orange; /* Change color on selection */
     }
+
+
+
+.search-container {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+    .search-container input,
+    .search-container select {
+        padding: 10px;
+        border: 1px solid #ccc;
+        margin-right: 10px;
+    }
+
+    .search-container button {
+        background-color: #ccc;
+        border: none;
+        padding: 5px 10px;
+        cursor: default; /* Indicate non-clickable behavior */
+    }
+
+        .search-container button:hover {
+            background-color: #ddd;
+        }
+
+.products-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
