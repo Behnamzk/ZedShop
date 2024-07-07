@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Net.Http.Json;
 using ZedShop.Core.DTOs.Product;
 using ZedShop.Core.Services.Interface;
 using ZedShop.DataLayer.Context;
@@ -21,6 +23,101 @@ namespace ZedShop.Web.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+
+        [HttpGet]
+        public IActionResult AllProductsUserSearch(string userInput = "")
+        {
+
+            var products = _productService.GetAllProductsBySearchName(userInput);
+
+            List<ProductViewModel> productViewModels = new List<ProductViewModel>();
+
+            foreach (var p in products)
+            {
+                float rating = _productService.GetAVGRateOfProduct(p.ProductId);
+
+                productViewModels.Add(new ProductViewModel()
+                {
+                    Name = p.Name,
+                    Description = p.Description,
+                    IsActivate = p.IsActivate,
+                    ProductId = p.ProductId,
+                    ProductImageName = p.ProductImageName,
+                    SellPrice = Convert.ToDouble(p.SellPrice),
+                    Rating = rating
+                });
+
+
+            }
+
+            return PartialView("_BoxProductsContainer", productViewModels);
+        }
+
+        [HttpGet]
+        public IActionResult AllProductsPartial(int? categoryId)
+        {
+
+            List<Product> products = new List<Product>();   
+            if(categoryId == -1)
+            {
+                products = _productService.GetAllProducts();
+            }
+            else
+            {
+                products = _productService.GetAllProductsOfCategory(categoryId ?? 0);
+            }
+
+            
+            List<ProductViewModel> productViewModels = new List<ProductViewModel>();
+
+            foreach (var p in products)
+            {
+                float rating = _productService.GetAVGRateOfProduct(p.ProductId);
+
+                productViewModels.Add(new ProductViewModel()
+                {
+                    Name = p.Name,
+                    Description = p.Description,
+                    IsActivate = p.IsActivate,
+                    ProductId = p.ProductId,
+                    ProductImageName = p.ProductImageName,
+                    SellPrice = Convert.ToDouble(p.SellPrice),
+                    Rating = rating
+                });
+
+            }
+
+            return PartialView("_BoxProductsContainer", productViewModels);
+        }
+
+        [Route("AllProduct")]
+        public IActionResult AllProducts()
+        {
+            // select top 6 products
+            var products = _productService.GetAllProducts(6);
+            List<ProductViewModel> productViewModels = new List<ProductViewModel>();
+
+            foreach (var p in products)
+            {
+                float rating = _productService.GetAVGRateOfProduct(p.ProductId);
+
+                productViewModels.Add(new ProductViewModel()
+                {
+                    Name = p.Name,
+                    Description = p.Description,
+                    IsActivate = p.IsActivate,
+                    ProductId = p.ProductId,
+                    ProductImageName = p.ProductImageName,
+                    SellPrice = Convert.ToDouble(p.SellPrice),
+                    Rating = rating
+                });
+            }
+
+            ViewBag.Categories = _productService.GetAllCategory();
+
+            return View(productViewModels);
         }
 
         [Route("ShowProduct/{id}")]
@@ -100,10 +197,11 @@ namespace ZedShop.Web.Controllers
             {
                 User user = _userService.GetUserByUserName(username);
 
-                if(user != null) {
+                if (user != null)
+                {
                     ProductRate OldRate = _productService.GetRateOfUser(user.UserId, showProductViewModel.ProductId);
 
-                    if(OldRate != null)
+                    if (OldRate != null)
                     {
                         // update old rate
                         OldRate.Rate = rate;

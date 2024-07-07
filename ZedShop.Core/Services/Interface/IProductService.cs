@@ -13,6 +13,10 @@ namespace ZedShop.Core.Services.Interface
         Product GetProduct(int productId);
         List<Product> GetAllProducts();
         List<Product> GetAllProducts(int count);
+        List<Product> GetAllProductsOfCategory(int categoryId);
+        List<Product> GetAllProductsBySearchName(string userInput);
+
+        List<Category> GetAllCategory();
 		IQueryable<Comment> GetAllProductsComment(int productId);
         bool AddRateToProduct(RateViewModel rateViewModel);
         bool UpdateRateOfUser(ProductRate productRate);

@@ -28,11 +28,20 @@ namespace ZedShop.Core.Services
 
         }
 
+        public List<Product> GetAllProductsOfCategory(int categoryId)
+        {
+            return _context.Products.Include(p => p.ProductCategories).Where(p => p.ProductCategories.Any(pc => pc.CategoryId == categoryId)).ToList();
+
+        }
+
         public List<Product> GetAllProducts(int count)
         {
-            //TODO
+            return _context.Products.Take(count).ToList();
+        }
 
-            throw new NotImplementedException();
+        public List<Product> GetAllProductsBySearchName(string userInput)
+        {
+            return _context.Products.Where(p=> EF.Functions.Like(p.Name, "N'%" + userInput + "%'")).ToList();
         }
 
         public bool DecreaseProductCount(int productId, int count)
@@ -69,19 +78,19 @@ namespace ZedShop.Core.Services
         }
         public Product GetProduct(int productId)
         {
-            return _context.Products.Include(c=>c.ProductCategories).ThenInclude(o=>o.Category).SingleOrDefault(c => c.ProductId == productId);
+            return _context.Products.Include(c => c.ProductCategories).ThenInclude(o => o.Category).SingleOrDefault(c => c.ProductId == productId);
 
         }
 
         public IQueryable<Comment> GetAllProductsComment(int productId)
         {
-            return _context.Comments.Include(c=>c.User).Where(c=>c.ProductId == productId);
+            return _context.Comments.Include(c => c.User).Where(c => c.ProductId == productId);
 
-		}
+        }
 
         public bool AddCommentToProduct(CommentViewModel commentViewModel)
         {
-            if(commentViewModel == null)
+            if (commentViewModel == null)
             {
                 return false;
             }
@@ -91,8 +100,8 @@ namespace ZedShop.Core.Services
                 CommentText = commentViewModel.Content,
                 ProductId = commentViewModel.PoroductId,
                 UserId = commentViewModel.UserId,
-                CommentDate=DateTime.Now
-               
+                CommentDate = DateTime.Now
+
             };
 
             _context.Comments.Add(comment);
@@ -103,7 +112,7 @@ namespace ZedShop.Core.Services
         #region Rate
         public bool AddRateToProduct(RateViewModel rateViewModel)
         {
-            if(rateViewModel  == null)
+            if (rateViewModel == null)
             {
                 return false;
             }
@@ -132,10 +141,10 @@ namespace ZedShop.Core.Services
 
         public float GetAVGRateOfProduct(int productId)
         {
-            var rates =  _context.Rates.Where(u => u.ProductId == productId);
+            var rates = _context.Rates.Where(u => u.ProductId == productId);
             if (rates.Any())
             {
-                return (float)rates.Average(r=>r.Rate);
+                return (float)rates.Average(r => r.Rate);
             }
             else
             {
@@ -145,9 +154,18 @@ namespace ZedShop.Core.Services
 
         public ProductRate GetRateOfUser(int userId, int productId)
         {
-           return _context.Rates.SingleOrDefault(u => u.UserId == userId && u.ProductId == productId);
+            return _context.Rates.SingleOrDefault(u => u.UserId == userId && u.ProductId == productId);
 
         }
+
+        public List<Category> GetAllCategory()
+        {
+            return _context.Categories.ToList();
+        }
+
+
+
+
         #endregion
     }
 }

@@ -1,0 +1,79 @@
+﻿@model List<ZedShop.Core.DTOs.Product.ProductViewModel>
+@{
+    ViewData["Title"] = "مشاهده محصول";
+}
+
+<div class="search-container">
+    <input type="text" id="product-search" placeholder="جستجو محصولات">
+    <button type="button" disabled> <i class="icon-search" style="font-size: 20px;"></i></button>
+    <select id="category-select" onclick="loadAllProducts()">
+        <option value="-1">همه محصولات</option>
+        @foreach (var item in ViewBag.Categories)
+        {
+            <option value="@item.Id">@item.Name</option>
+        }
+
+    </select>
+</div>
+
+
+<div class="site-section" id="products-section">
+    <div class="container">
+        <div class="row mb-5 justify-content-center">
+            <div class="col-md-6 text-center">
+                <h2 class="section-title mb-3">محصولات ما</h2>
+            </div>
+        </div>
+        <div class="row" id="product-details-container">
+            @{
+                List<ZedShop.Core.DTOs.Product.ProductViewModel> products = Model;
+
+                foreach (var item in products)
+                {
+                    <partial name="_BoxProducts" model="@item" />
+                }
+            }
+
+            <script>
+                $(document).ready(function () {
+                    $("#product-search").on("keyup", function () {
+                        var searchTerm = $(this).val().toLowerCase();  // Get search term and convert to lowercase
+
+                        console.log("heeeree", searchTerm);
+
+                        $.ajax({
+                            url: '/Product/AllProductsPartial/', // Replace with your controller and action
+                            data: { userInput: searchTerm }, // Send the product ID as a parameter
+                            dataType: 'html',
+                            success: function (data) {
+                                $('#product-details-container').html(data); // Insert the received HTML into the container
+                            }
+                        });
+                    });
+                });
+
+
+
+                function loadAllProducts() {
+                    var selectElement = document.getElementById("category-select");
+                    let id1 = selectElement.value;
+
+                    $.ajax({
+                        url: '/Product/AllProductsPartial/', // Replace with your controller and action
+                        data: { categoryId: id1 }, // Send the product ID as a parameter
+                        dataType: 'html',
+                        success: function (data) {
+                            $('#product-details-container').html(data); // Insert the received HTML into the container
+                        }
+                    });
+
+
+                }
+
+            </script>
+
+
+        </div>
+    </div>
+</div>
+
