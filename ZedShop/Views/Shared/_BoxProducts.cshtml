@@ -7,7 +7,7 @@
             <img src="Products/image/@Model.ProductImageName" alt="Image" class="img-fluid">
         </figure>
         <div class="px-4">
-            <h3><a href="#">@Model.Name</a></h3>
+            <h3><a href="ShowProduct/@Model.ProductId">@Model.Name</a></h3>
             <div class="mb-3">
                 <span class="meta-icons mr-3">
                     <a href="#" class="mr-2">
@@ -20,7 +20,7 @@
                     </a> 29
                 </span> *@
             </div>
-            <p class="mb-4">@Model.SellPrice</p>
+            <p class="mb-4">@Model.SellPrice.ToString("N0") تومان</p>
             <div>
                 <a href="ShowProduct/@Model.ProductId" class="btn btn-black btn-outline-black ml-1 rounded-0">مشاهده محصول</a>
             </div>

@@ -15,11 +15,10 @@
                     <div class="col-md-7">
                         <h1>خرید با اطمینان از ما</h1>
                         <p class="mb-5 lead">
-                            لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده
-                            از طراحان گرافیک است
+                            ما بهترین محصولات را از تامین کنندگان معتبر تهیه می‌کنیم و اطمینان حاصل می‌کنیم که مشتریان ما اقلامی با ارزش و دوام استثنایی دریافت می‌کنند.
                         </p>
                         <div>
-                            <a href="#"
+                            <a id="onlineshopping"
                                class="btn btn-white btn-outline-white py-3 px-5 rounded-0 mb-lg-0 mb-2 d-block d-sm-inline-block">
                                 خرید
                                 انلاین
@@ -41,11 +40,9 @@
     <div class="container">
         <div class="row mb-5 justify-content-center">
             <div class="col-md-6 text-center">
-                <h3 class="section-sub-title">محصولات مردم</h3>
                 <h2 class="section-title mb-3">محصولات ما</h2>
                 <p>
-                    لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است،
-                    چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است
+                    در زدشاپ، متعهد به ارائه یک تجربه خرید بی‌نظیر به مشتریان ارزشمند خود هستیم که فراتر از انتظارات است. ما به ارائه طیف گسترده‌ای از محصولات باکیفیت که با دقت برای برآورده کردن نیازها و ترجیحات متنوع شما انتخاب شده‌اند، افتخار می‌کنیم.
                 </p>
             </div>
         </div>
@@ -65,19 +62,18 @@
 </div>
 
 <div class="site-blocks-cover inner-page-cover overlay get-notification"
-     style="background-image: url(images/hero_2.jpg); background-attachment: fixed;" data-aos="fade">
+     style="background-image: url(images/banner.jpg); background-attachment: fixed;" data-aos="fade">
     <div class="container">
 
         <div class="row align-items-center justify-content-center">
             <form class="col-md-7" method="post">
-                <h2>لورم ایپسوم متن ساختگی با تولید سادگی </h2>
+                <h2>کالای خود را جستجو کنید</h2>
                 <div class="d-flex mb-4">
-                    <input type="text" class="form-control rounded-0" placeholder="آدرس ایمیل خود را وارد کنید">
-                    <input type="submit" class="btn btn-white btn-outline-white rounded-0" value="عضویت">
+                    <input type="text" class="form-control rounded-0" placeholder="نام یا دسته‌بندی کالای خود را وارد کنید">
+                    <input type="submit" class="btn btn-white btn-outline-white rounded-0" value="جستجو">
                 </div>
                 <p>
-                    لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است،
-                    چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است
+                    با جستجوی پیشرفته تجریه، خرید متفاوتی را تجربه کنید...
                 </p>
             </form>
         </div>
@@ -91,7 +87,6 @@
     <div class="container">
         <div class="row mb-5">
             <div class="col-12 text-center">
-                <h3 class="section-sub-title">گفته مشتریان</h3>
                 <h2 class="section-title mb-3">بخشی از نظرات کاربران در مورد ما</h2>
             </div>
         </div>
@@ -266,3 +261,17 @@
         </div>
     </div>
 </div>
+
+<script>
+    const h1 = document.getElementById("onlineshopping");
+    const targetPosition = document.getElementById("products-section").offsetTop; // Get Y position of target element
+
+    h1.addEventListener("click", function () {
+        window.scrollTo({
+            top: targetPosition,
+            behavior: "smooth" // Enables smooth scrolling animation
+        });
+    });
+</script>
+
+
