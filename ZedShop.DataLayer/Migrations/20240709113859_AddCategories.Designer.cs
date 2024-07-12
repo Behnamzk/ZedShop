@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZedShop.DataLayer.Context;
 
@@ -11,9 +12,10 @@ using ZedShop.DataLayer.Context;
 namespace ZedShop.DataLayer.Migrations
 {
     [DbContext(typeof(ZedShopContext))]
-    partial class ZedShopContextModelSnapshot : ModelSnapshot
+    [Migration("20240709113859_AddCategories")]
+    partial class AddCategories
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -569,7 +571,7 @@ namespace ZedShop.DataLayer.Migrations
             modelBuilder.Entity("ZedShop.DataLayer.Entities.ProductRate", b =>
                 {
                     b.HasOne("ZedShop.DataLayer.Entities.Product", "Product")
-                        .WithMany("ProductRates")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -652,8 +654,6 @@ namespace ZedShop.DataLayer.Migrations
                     b.Navigation("ProductCategories");
 
                     b.Navigation("ProductOldPrices");
-
-                    b.Navigation("ProductRates");
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Role", b =>

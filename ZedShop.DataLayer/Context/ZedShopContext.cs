@@ -21,6 +21,7 @@ namespace ZedShop.DataLayer.Context
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderProduct> OrderProducts { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Category> Categories { get; set; }
         public DbSet<ProductRate> Rates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

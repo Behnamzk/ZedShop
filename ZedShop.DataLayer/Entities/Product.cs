@@ -44,6 +44,7 @@ namespace ZedShop.DataLayer.Entities
         public ICollection<ProductOldPrice> ProductOldPrices { get; set; }
         public ICollection<OrderProduct> OrderProducts { get; set; }
         public ICollection<Comment> Comments { get; set; }
+        public ICollection<ProductRate> ProductRates { get; set; }
 
 
     }
