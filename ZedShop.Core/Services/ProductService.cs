@@ -24,25 +24,26 @@ namespace ZedShop.Core.Services
 
         public List<Product> GetAllProducts()
         {
-            return _context.Products.ToList();
+            return _context.Products.Include(p => p.ProductRates).ToList();
 
         }
 
         public List<Product> GetAllProductsOfCategory(int categoryId)
         {
-            return _context.Products.Include(p => p.ProductCategories).Where(p => p.ProductCategories.Any(pc => pc.CategoryId == categoryId)).ToList();
+            return _context.Products.Include(p => p.ProductCategories).Include(p => p.ProductRates).Where(p => p.ProductCategories.Any(pc => pc.CategoryId == categoryId)).ToList();
 
         }
 
         public List<Product> GetAllProducts(int count)
         {
-            return _context.Products.Take(count).ToList();
+            return _context.Products.Include(p => p.ProductRates).Take(count).ToList();
         }
 
         public List<Product> GetAllProductsBySearchName(string userInput)
         {
-            return _context.Products.Where(p=> EF.Functions.Like(p.Name, "N'%" + userInput + "%'")).ToList();
+            return _context.Products.Include(p => p.ProductRates).Where(p => p.Name.Contains(userInput)).ToList();
         }
+
 
         public bool DecreaseProductCount(int productId, int count)
         {
@@ -162,6 +163,8 @@ namespace ZedShop.Core.Services
         {
             return _context.Categories.ToList();
         }
+
+
 
 
 

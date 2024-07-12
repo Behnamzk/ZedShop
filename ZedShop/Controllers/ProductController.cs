@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Net.Http.Json;
 using ZedShop.Core.DTOs.Product;
@@ -29,14 +31,21 @@ namespace ZedShop.Web.Controllers
         [HttpGet]
         public IActionResult AllProductsUserSearch(string userInput = "")
         {
+            List<Product> products = new List<Product>();
 
-            var products = _productService.GetAllProductsBySearchName(userInput);
+            if (string.IsNullOrEmpty(userInput))
+            {
+                products = _productService.GetAllProducts();
+            }
+            else
+            {
+                products = _productService.GetAllProductsBySearchName(userInput);
+            }
 
             List<ProductViewModel> productViewModels = new List<ProductViewModel>();
 
             foreach (var p in products)
             {
-                float rating = _productService.GetAVGRateOfProduct(p.ProductId);
 
                 productViewModels.Add(new ProductViewModel()
                 {
@@ -46,7 +55,7 @@ namespace ZedShop.Web.Controllers
                     ProductId = p.ProductId,
                     ProductImageName = p.ProductImageName,
                     SellPrice = Convert.ToDouble(p.SellPrice),
-                    Rating = rating
+                    Rating = getAvgValue(p.ProductRates.ToList())
                 });
 
 
@@ -56,7 +65,7 @@ namespace ZedShop.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult AllProductsPartial(int? categoryId)
+        public IActionResult AllProductsPartial(int? categoryId, int? orderId)
         {
 
             List<Product> products = new List<Product>();   
@@ -69,13 +78,44 @@ namespace ZedShop.Web.Controllers
                 products = _productService.GetAllProductsOfCategory(categoryId ?? 0);
             }
 
-            
+            switch (orderId)
+            {
+                case 1:
+                    // cheap
+                    products = products.OrderBy(p => p.SellPrice).ToList();
+                    break; 
+
+                case 2:
+                    // expensive
+                    products = products.OrderByDescending(p => p.SellPrice).ToList();
+                    break;
+
+                case 3:
+                    // high rate
+                    products = products.OrderByDescending(p =>
+                    {
+                        if (p.ProductRates == null || !p.ProductRates.Any())
+                        {
+                            return 1; // Default value for products without rates
+                        }
+                        else
+                        {
+                            return p.ProductRates.Average(r => r.Rate);
+                        }
+
+                    }).ToList();
+                    break;
+
+                default:
+                    break;
+
+            }
+
+
             List<ProductViewModel> productViewModels = new List<ProductViewModel>();
 
             foreach (var p in products)
             {
-                float rating = _productService.GetAVGRateOfProduct(p.ProductId);
-
                 productViewModels.Add(new ProductViewModel()
                 {
                     Name = p.Name,
@@ -84,13 +124,26 @@ namespace ZedShop.Web.Controllers
                     ProductId = p.ProductId,
                     ProductImageName = p.ProductImageName,
                     SellPrice = Convert.ToDouble(p.SellPrice),
-                    Rating = rating
+                    Rating = getAvgValue(p.ProductRates.ToList())
                 });
 
             }
 
             return PartialView("_BoxProductsContainer", productViewModels);
         }
+
+        private float getAvgValue(List<ProductRate> rates)
+        {
+            if(rates.Any()) {
+                return (float)rates.Select(r => r.Rate).Average();
+            }
+            else
+            {
+                return 1.0F;
+            }
+            
+        }
+
 
         [Route("AllProduct")]
         public IActionResult AllProducts()
@@ -101,8 +154,6 @@ namespace ZedShop.Web.Controllers
 
             foreach (var p in products)
             {
-                float rating = _productService.GetAVGRateOfProduct(p.ProductId);
-
                 productViewModels.Add(new ProductViewModel()
                 {
                     Name = p.Name,
@@ -111,11 +162,23 @@ namespace ZedShop.Web.Controllers
                     ProductId = p.ProductId,
                     ProductImageName = p.ProductImageName,
                     SellPrice = Convert.ToDouble(p.SellPrice),
-                    Rating = rating
+                    Rating = getAvgValue(p.ProductRates.ToList())
                 });
             }
 
             ViewBag.Categories = _productService.GetAllCategory();
+
+            #region SelectOrder
+
+            List<SearchOrderProducts> allOrdersSelect = new List<SearchOrderProducts>();
+
+            allOrdersSelect.Add(new SearchOrderProducts(1, "ارزان‌ترین"));
+            allOrdersSelect.Add(new SearchOrderProducts(2, "گران‌ترین"));
+            allOrdersSelect.Add(new SearchOrderProducts(3, "پرامتیازترین"));
+
+            ViewBag.SelectOrder = allOrdersSelect;
+
+            #endregion
 
             return View(productViewModels);
         }

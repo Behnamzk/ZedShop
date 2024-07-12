@@ -4,9 +4,9 @@
 }
 
 <div class="search-container">
-    <input type="text" id="product-search" placeholder="جستجو محصولات">
+    <input type="text" id="product-search" style="margin-right:2%" placeholder="جستجو محصولات">
     <button type="button" disabled> <i class="icon-search" style="font-size: 20px;"></i></button>
-    <select id="category-select" onclick="loadAllProducts()">
+    <select id="category-select" style="margin-right:2%; width:15%" onclick="LoadAllProducts()">
         <option value="-1">همه محصولات</option>
         @foreach (var item in ViewBag.Categories)
         {
@@ -14,28 +14,27 @@
         }
 
     </select>
+
+    <select id="order-select" style="margin-right:2%; width:15%" onclick="LoadAllProducts()">
+        <option value="-1">مرتب‌سازی بر اساس</option>
+        @foreach (var item in ViewBag.SelectOrder)
+        {
+            <option value="@item.Id">@item.Name</option>
+        }
+
+    </select>
+
 </div>
 
 
 <div class="site-section" id="products-section">
     <div class="container">
-        <div class="row mb-5 justify-content-center">
-            <div class="col-md-6 text-center">
-                <h2 class="section-title mb-3">محصولات ما</h2>
-            </div>
-        </div>
         <div class="row" id="product-details-container">
             @{
                 List<ZedShop.Core.DTOs.Product.ProductViewModel> products = Model;
 
                 foreach (var item in products)
                 {
-                    <partial name="_BoxProducts" model="@item" />
-                    <partial name="_BoxProducts" model="@item" />
-                    <partial name="_BoxProducts" model="@item" />
-                    <partial name="_BoxProducts" model="@item" />
-                    <partial name="_BoxProducts" model="@item" />
-                    <partial name="_BoxProducts" model="@item" />
                     <partial name="_BoxProducts" model="@item" />
                 }
             }
@@ -48,7 +47,7 @@
                         console.log("heeeree", searchTerm);
 
                     $.ajax({
-                            url: '/Product/AllProductsPartial/', // Replace with your controller and action
+                            url: '/Product/AllProductsUserSearch/', // Replace with your controller and action
                             data: { userInput: searchTerm }, // Send the product ID as a parameter
                         dataType: 'html',
                         success: function (data) {
@@ -60,43 +59,24 @@
                 });
 
 
-                // function updateTableData(id1) {
-                //     const url = "/AllProduct/" + id1; // Add IDs to URL
-
-                function loadAllProducts() {
+                function LoadAllProducts() {
                     var selectElement = document.getElementById("category-select");
                     let id1 = selectElement.value;
+                    var selectElement2 = document.getElementById("order-select");
+                    let id2 = selectElement2.value;
 
                     $.ajax({
                         url: '/Product/AllProductsPartial/', // Replace with your controller and action
-                        data: { categoryId: id1 }, // Send the product ID as a parameter
+                        data: { categoryId: id1, orderId: id2 }, // Send the product ID as a parameter
                         dataType: 'html',
                         success: function (data) {
                             $('#product-details-container').html(data); // Insert the received HTML into the container
                         }
                     });
-                           
-
                 }
 
-                //             // Loop through the parsed data and populate the list
-                //             // parsedData.forEach(function (item) {
-                //             //     dataList.append('<li>' + item.property1 + ': ' + item.property2 + '</li>');
-                //             // });
-                //         }
-                //     });
-                // });
+
             </script>
-
-@*             @{
-                List<ProductViewModel> products = Model;
-
-                foreach (var item in products)
-                {
-                    <partial name="_BoxProducts" model="@item" />
-                }
-            } *@
-
         </div>
     </div>
 </div>
