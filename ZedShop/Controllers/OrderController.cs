@@ -36,20 +36,24 @@ namespace ZedShop.Web.Controllers
 
                 double total_price = 0;
                 
-                foreach ( var item in order.OrderProducts)
+                if(order != null)
                 {
-                    var pro = _productService.GetProduct(item.ProductId);
-                    OrderProductViewModel model = new OrderProductViewModel()
+                    foreach (var item in order.OrderProducts)
                     {
-                        OrderId = order.Id,
-                        ProdcutCount = item.Count,
-                        SellPrice = item.Price * item.Count,
-                        ProductId = pro.ProductId,
-                        ProductName = pro.Name,
-                        ProductImageName = pro.ProductImageName
-                    };
-                    total_price += item.Price * item.Count;
-                    OrderProductList.Add(model);
+                        var pro = _productService.GetProduct(item.ProductId);
+                        OrderProductViewModel model = new OrderProductViewModel()
+                        {
+                            OrderId = order.Id,
+                            ProdcutCount = item.Count,
+                            SellPrice = item.Price * item.Count,
+                            ProductId = pro.ProductId,
+                            ProductName = pro.Name,
+                            ProductImageName = pro.ProductImageName
+                        };
+                        total_price += item.Price * item.Count;
+                        OrderProductList.Add(model);
+                    }
+
                 }
 
                 OPTableViewModel oPTable = new OPTableViewModel()
@@ -59,6 +63,7 @@ namespace ZedShop.Web.Controllers
                 };
 
                 return View(oPTable);
+
             }
             return RedirectToAction("Index", "Home");
         }
