@@ -53,6 +53,11 @@ namespace ZedShop.Controllers
             return View(productViewModels);
         }
 
+        [Route("/AboutUs")]
+        public IActionResult ABoutUs()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();
