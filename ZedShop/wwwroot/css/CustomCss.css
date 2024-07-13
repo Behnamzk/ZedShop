@@ -269,12 +269,5 @@ main .terms-items .term-col article i {
         font-family: "B Yekan";
         font-size: 18px;
         color: black;
-    }
-
-    .about-text a {
-        background: #b5a7f8;
-        color: #fff;
-        padding: 7px 15px;
-        display: inline-block;
-        margin-top: 20px;
+        text-align: justify;
     }
