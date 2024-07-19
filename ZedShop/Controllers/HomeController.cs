@@ -58,6 +58,37 @@ namespace ZedShop.Controllers
         {
             return View();
         }
+
+        [Route("/SiteGuide")]
+        public IActionResult SiteGuide()
+        {
+            return View();
+        }
+
+        [Route("/EarningIncome")]
+        public IActionResult EarningIncome()
+        {
+            return View();
+        }
+
+        [Route("/Informations")]
+        public IActionResult Informations()
+        {
+            return View();
+        }
+
+        [Route("/SiteRoles")]
+        public IActionResult SiteRoles()
+        {
+            return View();
+        }
+
+        [Route("/WorkWithUs")]
+        public IActionResult WorkWithUs()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();
