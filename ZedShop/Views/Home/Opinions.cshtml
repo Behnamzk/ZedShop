@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "نظرات کاربران";
+}
+<div class="row">
+    <div class="column left" style="width: 20%;"> </div>
+    <div class="column middle" style="width: 60%;">
+
+        <div class="all-comments">
+            <br />
+            <h3>نظرات کاربران:</h3>
+            <br />
+            @* <a href="#" class="add-comment">افزودن نظر جدید ✏️</a> *@
+
+            @Html.Partial("_OpinionPopUp")
+
+            <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#commentModal">
+                افزودن نظر جدید ✏️
+            </button>
+            <br />
+            <br />
+
+
+
+
+            @if (ViewBag.Opinions != null)
+            {
+                @foreach (var item in ViewBag.Opinions)
+                {
+                    <div class="comment-container">
+                        <img src="/UserAvatar/@item.UserAvatar" alt="User Avatar" class="user-avatar">
+                        <div class="comment-content">
+                            <h4 class="comment-author">@item.UserName</h4>
+                            <p class="comment-text">@item.Content</p>
+                            <span class="comment-date">@item.Date</span>
+                        </div>
+                    </div>
+                }
+            }
+
+
+
+
+
+        </div>
+    </div>
+    <div class="column right" style="width: 20%;"> </div>
+</div>

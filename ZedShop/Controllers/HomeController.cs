@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using ZedShop.Core.DTOs.Home;
 using ZedShop.Core.DTOs.Product;
 using ZedShop.Core.Services;
 using ZedShop.Core.Services.Interface;
@@ -12,10 +13,12 @@ namespace ZedShop.Controllers
     {
 
         private readonly IProductService _productService;
+        private readonly IHomeService _homeService;
 
-        public HomeController(IProductService productService)
+        public HomeController(IProductService productService, IHomeService homeService)
         {
             _productService = productService;
+            _homeService = homeService;
         }
 
         public IActionResult Index()
@@ -53,11 +56,13 @@ namespace ZedShop.Controllers
             return View(productViewModels);
         }
 
+
         [Route("/AboutUs")]
         public IActionResult ABoutUs()
         {
             return View();
         }
+
 
         [Route("/SiteGuide")]
         public IActionResult SiteGuide()
@@ -65,11 +70,13 @@ namespace ZedShop.Controllers
             return View();
         }
 
+
         [Route("/EarningIncome")]
         public IActionResult EarningIncome()
         {
             return View();
         }
+
 
         [Route("/Informations")]
         public IActionResult Informations()
@@ -83,9 +90,37 @@ namespace ZedShop.Controllers
             return View();
         }
 
+
         [Route("/WorkWithUs")]
         public IActionResult WorkWithUs()
         {
+            return View();
+        }
+
+
+        [Route("/Opinions")]
+        public IActionResult Opinions()
+        {
+            int numberOfOpinions = 10;
+            var opinions = _homeService.GetOpinions(numberOfOpinions);
+
+            List<OpinionViewModel> opinionViewModels = new List<OpinionViewModel>();
+
+            foreach(var opinion in opinions)
+            {
+                
+                opinionViewModels.Add(new OpinionViewModel()
+                {
+                    Content = opinion.OpinionText,
+                    Date = opinion.OpinionDate,
+                    UserName = opinion.User.UserName,
+                    UserAvatar = opinion.User.UserAvatar
+
+                });
+            }
+
+            ViewBag.Opinions = opinionViewModels;
+
             return View();
         }
 
