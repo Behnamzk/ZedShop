@@ -5,11 +5,10 @@
     <div class="column left" style="width: 20%;"> </div>
     <div class="column middle" style="width: 60%;">
 
-        <div class="all-comments">
+        <div class="all-opinions">
             <br />
             <h3>نظرات کاربران:</h3>
             <br />
-            @* <a href="#" class="add-comment">افزودن نظر جدید ✏️</a> *@
 
             @Html.Partial("_OpinionPopUp")
 
@@ -26,12 +25,12 @@
             {
                 @foreach (var item in ViewBag.Opinions)
                 {
-                    <div class="comment-container">
+                    <div class="opinions-container">
                         <img src="/UserAvatar/@item.UserAvatar" alt="User Avatar" class="user-avatar">
-                        <div class="comment-content">
-                            <h4 class="comment-author">@item.UserName</h4>
-                            <p class="comment-text">@item.Content</p>
-                            <span class="comment-date">@item.Date</span>
+                        <div class="opinions-content">
+                            <h4 class="opinions-author">@item.UserName</h4>
+                            <p class="opinions-text">@item.Content</p>
+                            <span class="opinions-date">@item.Date</span>
                         </div>
                     </div>
                 }

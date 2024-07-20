@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using ZedShop.Core.DTOs.Home;
 using ZedShop.Core.DTOs.Product;
@@ -14,11 +15,13 @@ namespace ZedShop.Controllers
 
         private readonly IProductService _productService;
         private readonly IHomeService _homeService;
+        private readonly IUserService _userService;
 
-        public HomeController(IProductService productService, IHomeService homeService)
+        public HomeController(IProductService productService, IHomeService homeService, IUserService userService)
         {
             _productService = productService;
             _homeService = homeService;
+            _userService = userService;
         }
 
         public IActionResult Index()
@@ -52,6 +55,23 @@ namespace ZedShop.Controllers
                     break;
                 }
             }
+
+            var opinions = _homeService.GetOpinions(5);
+
+            List<OpinionViewModel> opinionViewModels = new List<OpinionViewModel>();
+
+            foreach(var opinion in opinions)
+            {
+                opinionViewModels.Add(new OpinionViewModel()
+                {
+                    Content = opinion.OpinionText,
+                    UserAvatar = opinion.User.UserAvatar,
+                    UserName = opinion.User.UserName,
+                    Date = opinion.OpinionDate
+                });
+            }
+
+            ViewBag.Opinions = opinionViewModels;
 
             return View(productViewModels);
         }
@@ -121,8 +141,42 @@ namespace ZedShop.Controllers
 
             ViewBag.Opinions = opinionViewModels;
 
-            return View();
+            OpinionViewModel opinionView = new OpinionViewModel();
+
+            var username = User.Identity.Name;
+            if (!string.IsNullOrEmpty(username))
+            {
+                User user = _userService.GetUserByUserName(username);
+
+                opinionView.UserId = user.UserId;
+            }
+            else
+            {
+                // set invalid userId 
+                opinionView.UserId = -1;
+            }
+
+            
+
+            return View(opinionView);
         }
+
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult AddOpinion(OpinionViewModel opinionView)
+        {
+
+            if (opinionView.UserId == -1)
+            {
+                return RedirectToAction("Index");
+            }
+
+            _homeService.AddOpinion(opinionView);
+
+            return RedirectToAction("Opinions");
+        }
+
 
         public IActionResult Privacy()
         {

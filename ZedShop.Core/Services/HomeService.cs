@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZedShop.Core.DTOs.Home;
+using ZedShop.Core.DTOs.Product;
 using ZedShop.Core.Services.Interface;
 using ZedShop.DataLayer.Context;
 using ZedShop.DataLayer.Entities;
@@ -17,6 +19,32 @@ namespace ZedShop.Core.Services
         public HomeService(ZedShopContext context)
         {
             _context = context;
+        }
+
+        public bool AddOpinion(OpinionViewModel opinionViewModel)
+        {
+            if (opinionViewModel == null)
+            {
+                return false;
+            }
+
+            if (opinionViewModel.UserId == -1)
+            {
+                return false;
+            }
+
+            Opinion opinion = new Opinion()
+            {
+                OpinionText = opinionViewModel.Content,
+                UserId = opinionViewModel.UserId,
+                OpinionDate = DateTime.Now,
+                IsBan = false
+
+            };
+
+            _context.Opinions.Add(opinion);
+            _context.SaveChanges();
+            return true;
         }
 
         public List<Opinion> GetOpinions()

@@ -1,29 +1,28 @@
-﻿@model ZedShop.Core.DTOs.Product.ShowProductViewModel
+﻿@model ZedShop.Core.DTOs.Home.OpinionViewModel
 
-@* <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="commentModal" style="z-index:9999;" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" >
         <div class="modal-content">
             <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center;">
-                <h5 class="modal-title" id="commentModalLabel">افزودن دیدگاه جدید</h5>
+                <h5 class="modal-title" id="commentModalLabel">افزودن نظر جدید</h5>
                 <button style="margin-right:55%" type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form asp-action="AddComment" asp-controller="Product">
-                    <input type="hidden" asp-for="@Model.CommentViewModel.UserId" value="@Model.CommentViewModel.UserId" />
-                    <input type="hidden" asp-for="@Model.CommentViewModel.PoroductId" value="@Model.CommentViewModel.PoroductId" />
+                <form asp-action="AddOpinion" asp-controller="Home">
+                    <input type="hidden" asp-for="@Model.UserId" value="@Model.UserId" />
 
                     <div class="form-group">
-                        <label asp-for="@Model.CommentViewModel.Content">دیدگاه</label>
-                        <textarea class="form-control" asp-for="@Model.CommentViewModel.Content" rows="5"></textarea>
+                        <label asp-for="@Model.Content">نظر</label>
+                        <textarea class="form-control" asp-for="@Model.Content" rows="5"></textarea>
                     </div>
                     <div style="width:100%; text-align:center;">
-                        <button type="submit" class="btn btn-info">ارسال دیدگاه</button>
+                        <button type="submit" class="btn btn-info">ارسال نظر</button>
                     </div>
 
                 </form>
             </div>
         </div>
     </div>
-</div> *@
+</div> 
