@@ -69,11 +69,12 @@
             <form class="col-md-7" method="post">
                 <h2>کالای خود را جستجو کنید</h2>
                 <div class="d-flex mb-4">
-                    <input type="text" class="form-control rounded-0" placeholder="نام یا دسته‌بندی کالای خود را وارد کنید">
+                    <input type="text" id="searchInput" class="form-control rounded-0" placeholder="نام یا دسته‌بندی کالای خود را وارد کنید">
                     <input type="submit" class="btn btn-white btn-outline-white rounded-0" value="جستجو">
                 </div>
+                <div class="searchResults" id="searchResults"></div>
                 <p>
-                    با جستجوی پیشرفته تجریه، خرید متفاوتی را تجربه کنید..
+                    با جستجوی پیشرفته تجریه، خرید متفاوتی را تجربه کنید...
                 </p>
             </form>
         </div>
@@ -118,6 +119,7 @@
     </div>
 </div>
 
+
 <div class="site-section bg-light" id="services-section">
     <div class="container">
         <div class="row mb-5">
@@ -132,7 +134,9 @@
                     <div>
                         <h3>تنوع محصولات</h3>
                         <p style="text-align:justify">
+
                             در این فروشگاه در تلاشیم با ارائه طیف وسیعی از محصولات به نیازمندی شما پاسخ دهیم. 
+
                         </p>
                     </div>
                 </div>
@@ -167,7 +171,7 @@
                     <div>
                         <h3>پرداخت امن</h3>
                         <p style="text-align:justify">
-                            جهت اطمینان خاطر مشتریان عزیزمان تمامی پرداخت‌ها از طریق درگاه‌های معتبر بانکی انجام می‌شود.
+                            جهت اطمینان خاطر مشتریان تمامی پرداخت‌ها از طریق درگاه‌های معتبر بانکی انجام می‌شود.
                         </p>
                     </div>
                 </div>
@@ -189,7 +193,7 @@
                     <div>
                         <h3>پشتیبانی سریع</h3>
                         <p style="text-align:justify">
-                            در صورت بروز مشکل در فرایند خرید شما به راحتی می‌توانید با همکاران ما ارتباط برقرار کنید
+                            در صورت بروز مشکل در فرایند خرید به راحتی می‌توانید با همکاران ما ارتباط برقرار کنید.
                         </p>
                     </div>
                 </div>
@@ -211,4 +215,38 @@
     });
 </script>
 
+<script>
 
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+
+    searchInput.addEventListener('keyup', () => {
+        const searchTerm = searchInput.value;
+
+
+        let results = '';
+
+        if (searchTerm) {
+            // Simulate search results based on the first letter of the search term
+            switch (searchTerm[0]) {
+                case 'a':
+                    results = '<p class="pResaults">سیب</p><p class="pResaults">مورچه</p><p class="pResaults">مورچه</p><p class="pResaults">مورچه</p><p class="pResaults">مورچه</p><p class="pResaults">مورچه</p>';
+                    break;
+                case 'b':
+                    results = '<p>Banana</p><p>Book</p>';
+                    break;
+                case 'c':
+                    results = '<p>Cat</p><p>Car</p>';
+                    break;
+                default:
+                    results = '<p>No results found.</p>';
+            }
+        } else {
+            results = ''; // Clear results when search term is empty
+        }
+
+        // Update search results container
+        searchResults.innerHTML = results; // Replace with actual results
+        searchResults.style.display = 'block';
+    });
+</script>

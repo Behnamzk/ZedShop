@@ -2704,3 +2704,22 @@ h1, h2, h3, h4, h5,
         color: #aaa;
         font-size: 12px;
     }
+
+.searchResults {
+    display: none;
+    position: absolute;
+    background-color: #ffffffbb;
+    color: black;
+    max-height: 150px;
+    width: 84%;
+    overflow-y: scroll;
+    text-align:right;
+    /* other styles for results container */
+}
+
+    .searchResults p[class=pResaults] {
+        color: black;
+        margin-top:5px;
+        margin-right:10px;
+        font-family:"B Yekan";
+    }
