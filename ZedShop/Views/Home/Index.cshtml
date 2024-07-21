@@ -92,78 +92,28 @@
         </div>
     </div>
     <div class="slide-one-item home-slider owl-carousel" dir="ltr">
-        <div>
-            <div class="testimonial">
-                <figure class="mb-4 d-block align-items-center justify-content-center">
-                    <div><img src="images/person_3.jpg" alt="Image" class="w-100 img-fluid mb-3"></div>
-                </figure>
-                <blockquote class="mb-3">
-                    <p>
-                        &ldquo;لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان
-                        گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط
-                        فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.&rdquo;
-                    </p>
-                </blockquote>
-                <p class="text-black"><strong>نام و نام خانوادگی</strong></p>
+
+        @foreach (var item in ViewBag.Opinions)
+        {
+            <div>
+                <div class="testimonial">
+                    <figure class="mb-4 d-block align-items-center justify-content-center">
+                        <div><img src="/UserAvatar/@item.UserAvatar" alt="Image" class="w-100 img-fluid mb-3"></div>
+                    </figure>
+                    <blockquote class="mb-3">
+                        <p>
+                            @item.Content
+                        </p>
+                    </blockquote>
+                    <br/>
+                    <p class="text-black"><strong>@item.UserName</strong></p>
+                    <p class="text-black">@item.Date</p>
 
 
+                </div>
             </div>
-        </div>
-        <div>
-            <div class="testimonial">
-
-                <figure class="mb-4 d-block align-items-center justify-content-center">
-                    <div><img src="images/person_2.jpg" alt="Image" class="w-100 img-fluid mb-3"></div>
-                </figure>
-                <blockquote class="mb-3">
-                    <p>
-                        &ldquo;لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان
-                        گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط
-                        فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.&rdquo;
-                    </p>
-                </blockquote>
-                <p class="text-black"><strong>نام و نام خانوادگی</strong></p>
-
-
-            </div>
-        </div>
-
-        <div>
-            <div class="testimonial">
-                <figure class="mb-4 d-block align-items-center justify-content-center">
-                    <div><img src="images/person_4.jpg" alt="Image" class="w-100 img-fluid mb-3"></div>
-                </figure>
-                <blockquote class="mb-3">
-                    <p>
-                        &ldquo;لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان
-                        گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط
-                        فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.&rdquo;
-                    </p>
-                </blockquote>
-                <p class="text-black"><strong>نام و نام خانوادگی</strong></p>
-
-            </div>
-
-        </div>
-
-        <div>
-            <div class="testimonial">
-                <figure class="mb-4 d-block align-items-center justify-content-center">
-                    <div><img src="images/person_1.jpg" alt="Image" class="w-100 img-fluid mb-3"></div>
-                </figure>
-                <blockquote class="mb-3">
-                    <p>
-                        &ldquo;لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان
-                        گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط
-                        فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.&rdquo;
-                    </p>
-                </blockquote>
-                <p class="text-black"><strong>نام و نام خانوادگی</strong></p>
-
-
-            </div>
-
-        </div>
+        }
+       
 
     </div>
 </div>

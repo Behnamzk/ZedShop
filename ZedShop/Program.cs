@@ -18,6 +18,7 @@ builder.Services.AddDbContext<ZedShopContext>(options =>
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<IOrderService, OrderService>();
+builder.Services.AddTransient<IHomeService, HomeService>();
 #endregion
 
 #region Authentication

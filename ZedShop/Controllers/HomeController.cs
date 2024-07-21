@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using ZedShop.Core.DTOs.Home;
 using ZedShop.Core.DTOs.Product;
 using ZedShop.Core.Services;
 using ZedShop.Core.Services.Interface;
@@ -12,10 +14,14 @@ namespace ZedShop.Controllers
     {
 
         private readonly IProductService _productService;
+        private readonly IHomeService _homeService;
+        private readonly IUserService _userService;
 
-        public HomeController(IProductService productService)
+        public HomeController(IProductService productService, IHomeService homeService, IUserService userService)
         {
             _productService = productService;
+            _homeService = homeService;
+            _userService = userService;
         }
 
         public IActionResult Index()
@@ -50,8 +56,26 @@ namespace ZedShop.Controllers
                 }
             }
 
+            var opinions = _homeService.GetOpinions(5);
+
+            List<OpinionViewModel> opinionViewModels = new List<OpinionViewModel>();
+
+            foreach(var opinion in opinions)
+            {
+                opinionViewModels.Add(new OpinionViewModel()
+                {
+                    Content = opinion.OpinionText,
+                    UserAvatar = opinion.User.UserAvatar,
+                    UserName = opinion.User.UserName,
+                    Date = opinion.OpinionDate
+                });
+            }
+
+            ViewBag.Opinions = opinionViewModels;
+
             return View(productViewModels);
         }
+
 
         [Route("/AboutUs")]
         public IActionResult ABoutUs()
@@ -59,17 +83,20 @@ namespace ZedShop.Controllers
             return View();
         }
 
+
         [Route("/SiteGuide")]
         public IActionResult SiteGuide()
         {
             return View();
         }
 
+
         [Route("/EarningIncome")]
         public IActionResult EarningIncome()
         {
             return View();
         }
+
 
         [Route("/Informations")]
         public IActionResult Informations()
@@ -83,11 +110,73 @@ namespace ZedShop.Controllers
             return View();
         }
 
+
         [Route("/WorkWithUs")]
         public IActionResult WorkWithUs()
         {
             return View();
         }
+
+
+        [Route("/Opinions")]
+        public IActionResult Opinions()
+        {
+            int numberOfOpinions = 10;
+            var opinions = _homeService.GetOpinions(numberOfOpinions);
+
+            List<OpinionViewModel> opinionViewModels = new List<OpinionViewModel>();
+
+            foreach(var opinion in opinions)
+            {
+                
+                opinionViewModels.Add(new OpinionViewModel()
+                {
+                    Content = opinion.OpinionText,
+                    Date = opinion.OpinionDate,
+                    UserName = opinion.User.UserName,
+                    UserAvatar = opinion.User.UserAvatar
+
+                });
+            }
+
+            ViewBag.Opinions = opinionViewModels;
+
+            OpinionViewModel opinionView = new OpinionViewModel();
+
+            var username = User.Identity.Name;
+            if (!string.IsNullOrEmpty(username))
+            {
+                User user = _userService.GetUserByUserName(username);
+
+                opinionView.UserId = user.UserId;
+            }
+            else
+            {
+                // set invalid userId 
+                opinionView.UserId = -1;
+            }
+
+            
+
+            return View(opinionView);
+        }
+
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult AddOpinion(OpinionViewModel opinionView)
+        {
+
+            if (opinionView.UserId == -1)
+            {
+                return RedirectToAction("Index");
+            }
+
+            _homeService.AddOpinion(opinionView);
+
+            return RedirectToAction("Opinions");
+        }
+
 
         public IActionResult Privacy()
         {

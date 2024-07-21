@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZedShop.DataLayer.Context;
 
@@ -11,9 +12,10 @@ using ZedShop.DataLayer.Context;
 namespace ZedShop.DataLayer.Migrations
 {
     [DbContext(typeof(ZedShopContext))]
-    partial class ZedShopContextModelSnapshot : ModelSnapshot
+    [Migration("20240720090234_Addopinion")]
+    partial class Addopinion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,38 +147,6 @@ namespace ZedShop.DataLayer.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("ZedShop.DataLayer.Entities.Opinion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<bool>("IsBan")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("OpinionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<short>("OpinionRate")
-                        .HasColumnType("smallint");
-
-                    b.Property<string>("OpinionText")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Opinions");
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Order", b =>
@@ -523,17 +493,6 @@ namespace ZedShop.DataLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ZedShop.DataLayer.Entities.Opinion", b =>
-                {
-                    b.HasOne("ZedShop.DataLayer.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("User");
                 });
