@@ -1,0 +1,18 @@
+﻿@using ZedShop.Core.DTOs.Product
+@model List<ZedShop.Core.DTOs.Product.ProductViewModel>
+
+@{
+    List<ProductViewModel> products = Model;
+
+    foreach (var item in products)
+    {
+
+        <div class="usi-container" onclick="usiOnClick(@item.ProductId)">
+            <img src="/Products/Image/@item.ProductImageName" alt="product Image" class="usi-avatar">
+            <div class="usi-content">
+                <h6 class="usi-author">@item.Name</h6>
+                <p class="usi-text">@item.SellPrice.ToString("N0") تومان</p>
+            </div>
+        </div>
+    }
+}
