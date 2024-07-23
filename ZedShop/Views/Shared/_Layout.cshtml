@@ -31,10 +31,12 @@
                         <div class="header-container">
                             <div class="child1" style="margin-right:6.5%;  margin-top: 60px;">
                                
-                                <input style="width:30%;padding:5px; border-radius: 10px;" type="text" class="search-field" placeholder="کالای خود را جستجو کنید">
-                                <i class="icon-search" style="font-size: 25px;"></i>
+                                <input style="width:30%;padding:5px; border-radius: 10px;" type="text" id="searchInputHeader" class="searchInputHeader" placeholder="کالای خود را جستجو کنید">
+                                <img src="/images/icons8-search-128.png" width="43" height="43" style="margin-bottom:2px; margin-right:-5px;">
 
                             </div>
+                            <div class="searchResultsHeader" id="searchResultsHeader"></div>
+
                             <nav class="site-navigation position-relative text-right" role="navigation">
 
                                 <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block" style="position: relative;  top: 10px;">
@@ -97,5 +99,39 @@
         <script src="/js/jquery.fancybox.min.js"></script>
         <script src="/js/jquery.sticky.js"></script>
         <script src="/js/main.js"></script>
+
+    <script>
+
+        const searchInputHeader = document.getElementById('searchInputHeader');
+        const searchResultsHeader = document.getElementById('searchResultsHeader');
+
+        searchInputHeader.addEventListener('keyup', () => {
+            const searchTermHeader = searchInputHeader.value;
+
+            console.log("dadaadad");
+
+            $.ajax({
+                url: '/Home/ProductsUserSearch/', // controller and action
+                data: { userInput: searchTermHeader }, // Send the userInput as a parameter
+                dataType: 'html',
+                success: function (data) {
+
+                    $('#searchResultsHeader').html(data); // Insert the received HTML into the container
+                    searchResultsHeader.style.display = 'block';
+                }
+            });
+
+        });
+    </script>
+
+    <script>
+        function usiOnClick(productId) {
+            window.location.href = "/ShowProduct/" + productId;
+            const searchInputHeader2 = document.getElementById('searchInputHeader');
+            searchInputHeader2.value = "";
+        }
+
+    </script>
+
 </body>
 </html>
