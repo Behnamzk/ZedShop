@@ -53,7 +53,7 @@
 
                 foreach (var item in products)
                 {
-                    <partial name="_BoxProducts" model="@item" />
+                        <partial name="_BoxProducts" model="@item" />
                 }
             }
 
@@ -69,11 +69,12 @@
             <form class="col-md-7" method="post">
                 <h2>کالای خود را جستجو کنید</h2>
                 <div class="d-flex mb-4">
-                    <input type="text" class="form-control rounded-0" placeholder="نام یا دسته‌بندی کالای خود را وارد کنید">
+                    <input type="text" id="searchInput" class="form-control rounded-0" placeholder="نام یا دسته‌بندی کالای خود را وارد کنید">
                     <input type="submit" class="btn btn-white btn-outline-white rounded-0" value="جستجو">
                 </div>
+                <div class="searchResults" id="searchResults"></div>
                 <p>
-                    با جستجوی پیشرفته تجریه، خرید متفاوتی را تجربه کنید..
+                    با جستجوی پیشرفته تجریه، خرید متفاوتی را تجربه کنید...
                 </p>
             </form>
         </div>
@@ -105,7 +106,7 @@
                             @item.Content
                         </p>
                     </blockquote>
-                    <br/>
+                    <br />
                     <p class="text-black"><strong>@item.UserName</strong></p>
                     <p class="text-black">@item.Date</p>
 
@@ -113,7 +114,7 @@
                 </div>
             </div>
         }
-       
+
 
     </div>
 </div>
@@ -134,7 +135,7 @@
                         <h3>تنوع محصولات</h3>
                         <p style="text-align:justify">
 
-                            در این فروشگاه در تلاشیم با ارائه طیف وسیعی از محصولات به نیازمندی شما پاسخ دهیم. 
+                            در این فروشگاه در تلاشیم با ارائه طیف وسیعی از محصولات به نیازمندی شما پاسخ دهیم.
 
                         </p>
                     </div>
@@ -170,7 +171,7 @@
                     <div>
                         <h3>پرداخت امن</h3>
                         <p style="text-align:justify">
-                            جهت اطمینان خاطر مشتریان عزیزمان تمامی پرداخت‌ها از طریق درگاه‌های معتبر بانکی انجام می‌شود.
+                            جهت اطمینان خاطر مشتریان تمامی پرداخت‌ها از طریق درگاه‌های معتبر بانکی انجام می‌شود.
                         </p>
                     </div>
                 </div>
@@ -192,7 +193,7 @@
                     <div>
                         <h3>پشتیبانی سریع</h3>
                         <p style="text-align:justify">
-                            در صورت بروز مشکل در فرایند خرید شما به راحتی می‌توانید با همکاران ما ارتباط برقرار کنید
+                            در صورت بروز مشکل در فرایند خرید به راحتی می‌توانید با همکاران ما ارتباط برقرار کنید.
                         </p>
                     </div>
                 </div>
@@ -214,4 +215,33 @@
     });
 </script>
 
+<script>
 
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+
+    searchInput.addEventListener('keyup', () => {
+        const searchTerm = searchInput.value;
+
+        $.ajax({
+            url: '/Home/ProductsUserSearch/', // controller and action
+            data: { userInput: searchTerm }, // Send the userInput as a parameter
+            dataType: 'html',
+            success: function (data) {
+
+                $('#searchResults').html(data); // Insert the received HTML into the container
+                searchResults.style.display = 'block';
+            }
+        });
+        
+    });
+</script>
+
+<script>
+    function usiOnClick(productId) {
+        window.location.href = "/ShowProduct/" + productId;
+        const searchInput = document.getElementById('searchInput');
+        searchInput.value = "";
+    }
+
+</script>

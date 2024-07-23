@@ -77,6 +77,42 @@ namespace ZedShop.Controllers
         }
 
 
+        [HttpGet]
+        public IActionResult ProductsUserSearch(string userInput = "")
+        {
+            List<Product> products = new List<Product>();
+
+            if (string.IsNullOrEmpty(userInput))
+            {
+                products = _productService.GetAllProducts(3);
+            }
+            else
+            {
+                products = _productService.GetAllProductsBySearchName(userInput);
+            }
+
+
+            List<ProductViewModel> productViewModels = new List<ProductViewModel>();
+
+            foreach (var p in products)
+            {
+
+                productViewModels.Add(new ProductViewModel()
+                {
+                    Name = p.Name,
+                    Description = p.Description,
+                    IsActivate = p.IsActivate,
+                    ProductId = p.ProductId,
+                    ProductImageName = p.ProductImageName,
+                    SellPrice = Convert.ToDouble(p.SellPrice),
+                });
+
+
+            }
+
+            return PartialView("_SearchProductContainer", productViewModels);
+        }
+
         [Route("/AboutUs")]
         public IActionResult ABoutUs()
         {

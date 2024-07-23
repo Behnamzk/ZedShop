@@ -2704,3 +2704,81 @@ h1, h2, h3, h4, h5,
         color: #aaa;
         font-size: 12px;
     }
+
+.searchResults {
+    display: none;
+    position: absolute;
+    background-color: #ffffffbb;
+    color: black;
+    max-height: 170px;
+    width: 84%;
+    overflow-y: scroll;
+    text-align:right;
+    margin-top:-20px;
+    /* other styles for results container */
+}
+
+    .searchResults p[class=pResaults] {
+        color: black;
+        margin-top:5px;
+        margin-right:10px;
+        font-family:"B Yekan";
+    }
+
+
+.usi-container {
+    display: flex;
+    align-items: start;
+    margin-top: 5px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+}
+
+    .usi-container:hover {
+        cursor: pointer;
+    }
+
+    .usi-container img[class=usi-avatar] {
+        width: 50px;
+        height: 50px;
+        top: 0px;
+        border-radius: 10%;
+        margin-right: 10px;
+    }
+
+    .usi-container div[class=usi-content] {
+        flex: 1;
+        padding-right: 10px;
+    }
+
+    .usi-container h4[class=usi-author] {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .usi-container p[class=usi-text] {
+        color:black;
+        width: 80%;
+        font-size:12px;
+        
+    }
+
+.searchResultsHeader {
+    display: none;
+    position: absolute;
+    background-color: #ffffffee;
+    color: black;
+    max-height: 150px;
+    width: 40%;
+    margin-right:60px;
+    overflow-y: scroll;
+    z-index: 9999;
+    text-align: right;
+}
+
+    .searchResultsHeader p[class=pResaults] {
+        color: black;
+        margin-top: 5px;
+        margin-right: 10px;
+        font-family: "B Yekan";
+    }
