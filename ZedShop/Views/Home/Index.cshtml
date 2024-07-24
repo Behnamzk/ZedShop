@@ -235,6 +235,13 @@
         });
         
     });
+
+    document.addEventListener('click', (event) => {
+        if (!searchResults.contains(event.target)) {
+            searchResults.style.display = 'none';
+            searchInput.value = "";
+        }
+    });
 </script>
 
 <script>
