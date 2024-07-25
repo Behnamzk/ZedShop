@@ -23,7 +23,7 @@
                         <td><img src="/Products/Image/@item.ProductImageName" alt="Product Image"></td>
                         <td>@item.ProductName</td>
                         <td>@item.ProdcutCount</td>
-                        <td>@item.SellPrice</td>
+                        <td>@item.SellPrice.ToString("N0") تومان</td>
                         <td><button id="updateButton" onclick="updateTableData(@item.OrderId, @item.ProductId)">×</button></td>
                     </tr>
                 }
@@ -31,7 +31,7 @@
 
             </tbody>
         </table>
-        <p class="p-total-price" id="total-price">مجموع: <span id="total-value">@Model.TotalPrice</span> تومان</p>
+        <p class="p-total-price" id="total-price">مجموع: <span id="total-value">@Model.TotalPrice.ToString("N0")</span> تومان</p>
         <button class="button-submit" type="button" onclick="location.href='@Url.Action("BuyProduct", "Order", new { id = 1 })'">تکمیل خرید و پرداخت</button>
 
         <script>
@@ -54,7 +54,10 @@
                         for (const model of receivedData.items) {
                             tableBodyContent += `<tr><td><img src="/Products/Image/${model.productImageName}" alt="Product Image"></td> <td>${model.productName}</td><td>${model.prodcutCount}</td> <td>${model.sellPrice}</td> <td><button id="updateButton" onclick="updateTableData(${model.orderId}, ${model.productId} )">×</button></td></td></tr>`;
                         }
-                        document.getElementById("total-price").innerHTML = `مجموع: ${receivedData.total_price} تومان`;
+
+                        console.log("datea", receivedData.totalPrice);
+
+                        document.getElementById("total-price").innerHTML = `مجموع: ${receivedData.totalPrice} تومان`;
                         document.getElementById("cart-items").innerHTML = tableBodyContent;
                     } else {
                         // Handle errors (optional)
