@@ -122,6 +122,14 @@
             });
 
         });
+
+        document.addEventListener('click', (event) => {
+            if (!searchResultsHeader.contains(event.target)) {
+                searchResultsHeader.style.display = 'none'; 
+                searchInputHeader.value = "";
+            }
+        });
+
     </script>
 
     <script>
