@@ -1,5 +1,93 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<ZedShop.Web.Areas.Admin.Models.UserViewModel.UserViewModel>
 @{
+    ViewData["Title"] = "مدیریت کاربران";
+    Layout = "~/areas/admin/views/shared/_AdminLayout.cshtml";
 }
+
+@* @if (TempData["StatusMessage"] != null) https://localhost:7062/Admin/ManageUsers/Index
+{
+    <div class="alert alert-success text-center" role="alert">
+        @TempData["StatusMessage"]
+    </div>
+} *@
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-title"> <strong>کاربران</strong> </p>
+                @if (ViewBag.Message != null)
+                {
+                    @foreach (var item in ViewBag.Message)
+                    {
+                        <div class="alert alert-info">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+                            <h3 class="text-info"><i class="fa fa-exclamation-circle"></i> Information</h3>
+                            @item
+                        </div>
+                    }
+                }
+                <div id="basicgrid" class="m-t-40 jsgrid" style="position: relative; height: 750px; width: 100%;">
+                    <div class="jsgrid-grid-header jsgrid-header-scrollbar">
+                        <table class="jsgrid-table table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width:10%">
+                                        نام کاربری
+                                    </th>
+                                    <th style="width:20%">
+                                        ایمیل
+                                    </th>
+                                    <th style="width:5%">
+                                        جنسیت
+                                    </th>
+                                    <th style="width:5%">
+                                        تایید ایمیل
+                                    </th>
+                                    <th style="width:5%">
+                                        مسدود
+                                    </th>
+                                    <th style="width:20%; text-align:center">
+                                        اقدامات
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div id="tableofusercontent">
+                        @Html.Partial("_UsersTable")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function updateTableData(pageNum) {
+
+        $.ajax({
+            url: '/Admin/ManageUsers/ChangePage/', // controller and action
+            data: { pageNumber: pageNum }, // Send the userInput as a parameter
+            dataType: 'html',
+            success: function (data) {
+
+                $('#tableofusercontent').html(data); // Insert the received HTML into the container
+            }
+        });
+    }
+
+</script>
+
+
+<script>
+    function DeleteUser(id) {
+        if (confirm("آیا از حذف مطمین هستید؟")) {
+            $.get("/Admin/ManageUsers/DeleteUser/" + id,
+                function () {
+                    var myobj = document.getElementById("User_" + id);
+                    myobj.remove();
+                });
+        }
+    }
+</script>

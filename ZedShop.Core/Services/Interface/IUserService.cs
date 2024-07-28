@@ -23,6 +23,10 @@ namespace ZedShop.Core.Services.Interface
 
         public User GetUserByUserName(string userName);
 
+        public List<User> GetAllUsers();
+        public int GetAllUsersCount();
+        public List<User> GetAllUsersPaged(int page, int pageSize);
+
         public bool UpdateUser(User user, IFormFile imgProfile);
 
     }

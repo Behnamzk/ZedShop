@@ -1,0 +1,115 @@
+﻿@using ZedShop.Web.Areas.Admin.Models.UserViewModel
+@model List<ZedShop.Web.Areas.Admin.Models.UserViewModel.UserViewModel>
+
+<div class="jsgrid-grid-body">
+    <table class="jsgrid-table table table-striped table-hover">
+        <tbody id="userstable">
+            @if (Model != null)
+            {
+                @foreach (var item in Model)
+                {
+                    <tr id="@item.UserId">
+
+                        <td>
+                            @item.UserName
+                        </td>
+                        <td>
+                            @item.Email
+                        </td>
+                        <td style=" text-align:center">
+                            @item.Gender.ToString()
+                        </td>
+                        <td style=" text-align:center">
+                            @if (item.IsActive)
+                            {
+                                <p>فعال</p>
+                            }
+                            else
+                            {
+                                <p>غیرفعال</p>
+                            }
+
+                        </td>
+                        <td style=" text-align:center">
+
+                            @if (!item.IsBan)
+                            {
+                                <p>خیر</p>
+                            }
+                            else
+                            {
+                                <p>مسدود شده</p>
+                            }
+                        </td>
+                        <td style=" text-align:center">
+                            <a style="margin-right:10%;" class="btn btn-primary btn-sm" href="/Admin/ManageUsers/EditUser/@item.UserId">ویرایش</a>
+                            <a class="btn btn-primary btn-sm" href="/Admin/ManageUsers/AddUserRole/@item.UserId">افزودن نقش </a>
+                            <button class="btn btn-danger btn-sm" onclick="DeleteUser('@item.UserId')">حذف </button>
+
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<div class="jsgrid-pager-container">
+    <div class="jsgrid-pager">
+        صفحه:
+
+
+        @if (ViewBag.CurrentPage == 1)
+        {
+            <span class="jsgrid-pager-nav-button-off jsgrid-pager-nav-inactive-button">
+                <a class="disabled">اولین</a>
+            </span>
+            <span class="jsgrid-pager-nav-button-off jsgrid-pager-nav-inactive-button">
+                <a class="disabled">قبلی</a>
+            </span>
+        }
+        else
+        {
+            <span class="jsgrid-pager-nav-button jsgrid-pager-nav-inactive-button">
+                <a href="javascript:updateTableData(1);">اولین</a>
+            </span>
+            <span class="jsgrid-pager-nav-button jsgrid-pager-nav-inactive-button">
+                <a href="javascript:updateTableData(@ViewBag.CurrentPage-1);">قبلی</a>
+            </span>
+        }
+
+
+        @if (ViewBag.CurrentPage > 1)
+        {
+            <span class="jsgrid-pager-page"><a href="javascript:updateTableData(@ViewBag.CurrentPage-1);">@((ViewBag.CurrentPage - 1))</a></span>
+        }
+
+        <span class="jsgrid-pager-page jsgrid-pager-current-page">@ViewBag.CurrentPage</span>
+
+        @if (ViewBag.CurrentPage < ViewBag.NumberOfPage)
+        {
+            <span class="jsgrid-pager-page"><a href="javascript:updateTableData(@ViewBag.CurrentPage+1);">@((ViewBag.CurrentPage + 1))</a></span>
+        }
+
+
+        @if (ViewBag.CurrentPage == ViewBag.NumberOfPage)
+        {
+            <span class="jsgrid-pager-nav-button-off jsgrid-pager-nav-inactive-button">
+                <a class="disabled">بعدی</a>
+            </span>
+            <span class="jsgrid-pager-nav-button-off jsgrid-pager-nav-inactive-button">
+                <a class="disabled">آخرین</a>
+            </span>
+
+        }
+        else
+        {
+            <span class="jsgrid-pager-nav-button jsgrid-pager-nav-inactive-button">
+                <a href="javascript:updateTableData(@ViewBag.CurrentPage+1);">بعدی</a>
+            </span>
+            <span class="jsgrid-pager-nav-button"><a href="javascript:updateTableData(@ViewBag.NumberOfPage);">آخرین</a></span>
+        }
+
+
+        &nbsp;&nbsp; @ViewBag.CurrentPage از @ViewBag.NumberOfPage
+    </div>
+</div>

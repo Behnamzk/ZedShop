@@ -102,5 +102,20 @@ namespace ZedShop.Core.Services
             _context.SaveChanges();
             return true;
         }
+
+        public List<User> GetAllUsers()
+        {
+            return _context.Users.ToList();
+        }
+
+        public List<User> GetAllUsersPaged(int page, int pageSize)
+        {
+            return _context.Users.ToPaged(page, pageSize).ToList();
+        }
+
+        public int GetAllUsersCount()
+        {
+            return _context.Users.Count();
+        }
     }
 }
