@@ -20,10 +20,10 @@ namespace ZedShop.Web.Areas.Admin.Controllers
             _userService = userService;
 
             // paging initialization
-            numberPerPage = 1;
+            numberPerPage = 10;
             currentPage = 1;
             allUserCount = userService.GetAllUsers().Count();
-            pageCount = allUserCount / numberPerPage;
+            pageCount = (int)Math.Ceiling((double)allUserCount / numberPerPage);
 
         }
 
