@@ -24,6 +24,10 @@ namespace ZedShop.Web.Areas.Admin.Models.UserViewModel
         [MaxLength(200, ErrorMessage = "{0} نمیتواند بیشتر از {1} باشد")]
         public string Password { get; set; } = string.Empty;
 
+        [DisplayName("آواتار")]
+        [MaxLength(200, ErrorMessage = "{0} نمیتواند بیشتر از {1} باشد")]
+        public string UserAvatar { get; set; }
+
         public GenderTypes Gender { get; set; }
 
         public bool IsActive { get; set; } = false;

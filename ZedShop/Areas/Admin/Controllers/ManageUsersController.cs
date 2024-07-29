@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ZedShop.Core.DTOs.Product;
 using ZedShop.Core.Services.Interface;
 using ZedShop.Web.Areas.Admin.Models.UserViewModel;
@@ -56,7 +57,49 @@ namespace ZedShop.Web.Areas.Admin.Controllers
             return View(userViews);
         }
 
+        //[Authorize]
+        [Route("/Admin/ManageUsers/EditUser/{userId}")]
+        public IActionResult EditUser(int userId)
+        {
+
+            var user = _userService.GetUserById(userId);
+
+            UserViewModel userViewModel = new UserViewModel();
+
+            if(user != null)
+            {
+                userViewModel.UserId = userId;
+                userViewModel.UserName = user.UserName;
+                userViewModel.Email = user.Email;
+                userViewModel.Password = user.Password;
+                userViewModel.UserAvatar = user.UserAvatar;
+                userViewModel.Gender = user.gender;
+                userViewModel.IsActive = user.IsActive;
+                userViewModel.IsBan = user.IsBan;
+
+            }
+
+
+            return View(userViewModel);
+        }
+
+        //[Authorize]
+        [Route("/Admin/ManageUsers/BanUser/{userId}")]
         [HttpGet]
+        public ActionResult BanUser(int userId)
+        {
+            bool resault = _userService.BanUser(userId);
+
+            return Json(new { resault = resault });
+        }
+
+        [HttpGet]
+        public ActionResult DeleteUser(int id)
+        {
+            return Json(new { success = true });
+        }
+
+            [HttpGet]
         public IActionResult ChangePage(int pageNumber = 1)
         {
             var users = _userService.GetAllUsersPaged(pageNumber, numberPerPage);

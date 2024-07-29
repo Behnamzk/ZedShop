@@ -117,5 +117,27 @@ namespace ZedShop.Core.Services
         {
             return _context.Users.Count();
         }
+
+        public bool BanUser(int userId)
+        {
+            User user = GetUserById(userId);
+            if (user == null)
+            {
+                return false;
+            }
+
+            user.IsBan = !user.IsBan;
+
+            _context.Update(user);
+            _context.SaveChanges();
+
+            return user.IsBan;
+
+        }
+
+        public User GetUserById(int userId)
+        {
+            return _context.Users.SingleOrDefault(u => u.UserId == userId);
+        }
     }
 }

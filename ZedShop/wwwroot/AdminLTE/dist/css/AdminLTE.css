@@ -5039,3 +5039,24 @@ Admin Table-Jsgrid table
     .jsgrid-pager-page.jsgrid-pager-current-page {
         padding: 0.5em 1em !important;
     }
+
+.row-form {
+    display: flex; 
+    justify-content: space-between; 
+}
+
+    .row-form .left, .right {
+        flex: 1;
+        margin-right:10px;
+        margin-left:10px;
+    }
+
+.simple-center-div {
+    text-align: center;
+}
+
+.edit-user-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 10%;
+}

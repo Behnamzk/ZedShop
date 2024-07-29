@@ -22,6 +22,8 @@ namespace ZedShop.Core.Services.Interface
         public bool ActiveAccount(string activeCode);
 
         public User GetUserByUserName(string userName);
+        public User GetUserById(int userId);
+        public bool BanUser(int userId);
 
         public List<User> GetAllUsers();
         public int GetAllUsersCount();

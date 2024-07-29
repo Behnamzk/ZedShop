@@ -35,6 +35,9 @@ namespace ZedShop.DataLayer.Entities
         [DisplayName("وضعیت")]
         public bool IsActive { get; set; }
 
+        [DisplayName("مسدود")]
+        public bool IsBan { get; set; }
+
         [DisplayName("آواتار")]
         [MaxLength(200, ErrorMessage = "{0} نمیتواند بیشتر از {1} باشد")]
         public string UserAvatar { get; set; }

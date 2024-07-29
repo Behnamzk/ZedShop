@@ -93,14 +93,20 @@
 
     function BanUser(id) {
         if (confirm("آیا از مسدود کردن کاربر مطمین هستید؟")) {
-            console.log("deeff", document.getElementById('ban_' + id).textContent);
-            var myobj = document.getElementById('ban_' + id);
-            myobj.textContent = "بله";
-            // $.get("/Admin/ManageUsers/BanUser/" + id,
-            //     function () {
-            //         document.getElementById('Ban_' + id).textContent = "بله";
+            console.log("deeff", id);
 
-            //     });
+            $.get("/Admin/ManageUsers/BanUser/" + id,
+                function (response) {
+                    console.log("deeff", response);
+                    var myobj = document.getElementById('ban_' + id);
+                    if (response.resault) {
+                        myobj.textContent = "بله";
+                    }else{
+                        myobj.textContent = "خیر";
+                    }
+                    
+
+                });
         }
     }
 
