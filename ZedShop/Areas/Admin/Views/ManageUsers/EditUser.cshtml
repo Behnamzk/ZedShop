@@ -22,61 +22,64 @@
                 }
 
 
+                <div class="row-form-container">
 
 
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="UserId" class="form-control" />
 
-                <div class="simple-center-div" style="margin-top:20px; margin-bottom:20px;">
-                    <figure>
-                        <img src="/UserAvatar/@Model.UserAvatar" alt="Image" class="edit-user-img">
-                    </figure>
-                </div>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="UserId" class="form-control" />
 
-                <div class="row-form">
-                    <div class="left" style="width: 50%;">
-                        <div class="form-group">
-                            <label asp-for="UserName" class="control-label"></label>
-                            <input asp-for="UserName" class="form-control" />
-                            <span asp-validation-for="UserName" class="text-danger"></span>
+                    <div class="simple-center-div" style="margin-top:20px; margin-bottom:20px;">
+                        <figure>
+                            <img src="/UserAvatar/@Model.UserAvatar" alt="Image" class="edit-user-img">
+                        </figure>
+                    </div>
+
+                    <div class="row-form">
+                        <div class="left" style="width: 50%;">
+                            <div class="form-group">
+                                <label asp-for="UserName" class="control-label"></label>
+                                <input asp-for="UserName" class="form-control" />
+                                <span asp-validation-for="UserName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>انتخاب تصویر</label>
+                                <input asp-for="UserAvatar" type="file">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>انتخاب تصویر</label>
-                            <input asp-for="UserAvatar" type="file">
+
+                        <div class="right" style="width: 50%;">
+                            <div class="form-group">
+                                <label asp-for="Email" class="control-label"></label>
+                                <input asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-auth-row">
+                                <label for="IsActive" class="ui-checkbox">
+                                    <input asp-for="IsActive" type="checkbox">
+                                    <span class="ui-checkbox-check" ></span>
+                                </label>
+                                <label for="IsActive">اکانت فعال شده</label>
+                            </div>
+
+                            <div class="form-auth-row">
+                                <label for="IsBan" class="ui-checkbox">
+                                    <input asp-for="IsBan" type="checkbox">
+                                    <span class="ui-checkbox-check"></span>
+                                </label>
+                                <label for="IsBan">اکانت مسدود شده</label>
+                            </div>
+
                         </div>
                     </div>
 
-                    <div class="right" style="width: 50%;">
+
+                    <div class="simple-center-div" style="margin-top:20px; margin-bottom:20px;">
                         <div class="form-group">
-                            <label asp-for="Email" class="control-label"></label>
-                            <input asp-for="Email" class="form-control" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <input type="submit" value="ذخیره" class="btn btn-success" />
+                            <button class="btn btn-warning btn-sm" asp-action="Index">انصراف</button>
                         </div>
-
-                        <div class="form-auth-row">
-                            <label for="IsActive" class="ui-checkbox">
-                                <input asp-for="IsActive" type="checkbox">
-                                <span class="ui-checkbox-check"></span>
-                            </label>
-                            <label for="IsActive">اکانت فعال شده</label>
-                        </div>
-
-                        <div class="form-auth-row">
-                            <label for="IsBan" class="ui-checkbox">
-                                <input asp-for="IsBan" type="checkbox">
-                                <span class="ui-checkbox-check"></span>
-                            </label>
-                            <label for="IsBan">اکانت مسدود شده</label>
-                        </div>
-
-                    </div>
-                </div>
-
-
-                <div class="simple-center-div" style="margin-top:20px; margin-bottom:20px;">
-                    <div class="form-group">
-                        <input type="submit" value="ذخیره" class="btn btn-success" />
-                        <a class="btn btn-outline-primary" asp-action="Index">انصراف</a>
                     </div>
                 </div>
             </form>

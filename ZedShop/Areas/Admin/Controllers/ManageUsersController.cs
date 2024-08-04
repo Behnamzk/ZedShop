@@ -45,7 +45,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
                     Email = user.Email,
                     Gender = user.gender,
                     IsActive = user.IsActive,
-                    IsBan = false
+                    IsBan = user.IsBan
 
                 });
 

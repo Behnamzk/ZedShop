@@ -87,7 +87,7 @@ body {
 }
 .content-wrapper {
   min-height: 100%;
-  background-color: #ecf0f5;
+  background-color: #fafafa;
   z-index: 800;
 }
 .main-footer {
@@ -5040,9 +5040,17 @@ Admin Table-Jsgrid table
         padding: 0.5em 1em !important;
     }
 
+.row-form-container {
+    margin-left: 10%;
+    margin-right: 10%;
+    border-radius: 15px;
+    padding: 2%;
+    border: 1px solid white;
+    background-color: #f5f5f5;
+}
 .row-form {
-    display: flex; 
-    justify-content: space-between; 
+    display: flex;
+    justify-content: space-between;
 }
 
     .row-form .left, .right {
