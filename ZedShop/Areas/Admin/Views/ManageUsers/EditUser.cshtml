@@ -11,7 +11,7 @@
         <div class="card-body">
 
             <h4 class="card-title"><strong> ویرایش کاربر </strong></h4>
-            <form asp-action="EditUser">
+            <form asp-action="EditUser" asp-controller="ManageUsers" method="post" enctype="multipart/form-data">
                 @if (TempData["Message"] != null)
                 {
                     <div class="alert alert-danger">
@@ -28,6 +28,7 @@
 
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="UserId" class="form-control" />
+                    <input type="hidden" asp-for="UserAvatar" class="form-control" />
 
                     <div class="simple-center-div" style="margin-top:20px; margin-bottom:20px;">
                         <figure>
@@ -44,7 +45,7 @@
                             </div>
                             <div class="form-group">
                                 <label>انتخاب تصویر</label>
-                                <input asp-for="UserAvatar" type="file">
+                                <input asp-for="ProfileFile" type="file">
                             </div>
                         </div>
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZedShop.DataLayer.Context;
 
@@ -11,9 +12,10 @@ using ZedShop.DataLayer.Context;
 namespace ZedShop.DataLayer.Migrations
 {
     [DbContext(typeof(ZedShopContext))]
-    partial class ZedShopContextModelSnapshot : ModelSnapshot
+    [Migration("20240805113541_Roles")]
+    partial class Roles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

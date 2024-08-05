@@ -20,13 +20,15 @@ namespace ZedShop.Web.Areas.Admin.Models.UserViewModel
         public string Email { get; set; } = string.Empty;
 
         [DisplayName("کلمه عبور")]
-        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(200, ErrorMessage = "{0} نمیتواند بیشتر از {1} باشد")]
         public string Password { get; set; } = string.Empty;
 
         [DisplayName("آواتار")]
         [MaxLength(200, ErrorMessage = "{0} نمیتواند بیشتر از {1} باشد")]
-        public string UserAvatar { get; set; }
+        public string UserAvatar { get; set; } = string.Empty;
+
+        public IFormFile? ProfileFile { get; set; }
+
 
         public GenderTypes Gender { get; set; }
 

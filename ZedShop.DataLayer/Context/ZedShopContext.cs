@@ -17,13 +17,15 @@ namespace ZedShop.DataLayer.Context
 
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
-
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderProduct> OrderProducts { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Opinion> Opinions { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ProductRate> Rates { get; set; }
+        public DbSet<Access> Accesses { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<RoleAccess> RolesAccess { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

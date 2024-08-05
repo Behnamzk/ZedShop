@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -138,6 +139,20 @@ namespace ZedShop.Core.Services
         public User GetUserById(int userId)
         {
             return _context.Users.SingleOrDefault(u => u.UserId == userId);
+        }
+        public User GetUserByIdWithRole(int userId)
+        {
+            return _context.Users.Include(u=>u.Role).SingleOrDefault(u => u.UserId == userId);
+        }
+
+        public List<Role> GetAllRoles()
+        {
+            return _context.Roles.ToList();
+        }
+
+        public bool IsRoleExist(int roleId)
+        {
+            return _context.Roles.Any(r => r.Id == roleId);
         }
     }
 }
