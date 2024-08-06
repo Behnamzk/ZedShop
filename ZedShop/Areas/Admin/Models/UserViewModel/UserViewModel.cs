@@ -27,6 +27,10 @@ namespace ZedShop.Web.Areas.Admin.Models.UserViewModel
         [MaxLength(200, ErrorMessage = "{0} نمیتواند بیشتر از {1} باشد")]
         public string UserAvatar { get; set; } = string.Empty;
 
+        [DisplayName("نقش کاربری")]
+        [MaxLength(200, ErrorMessage = "{0} نمیتواند بیشتر از {1} باشد")]
+        public string RoleName { get; set; } = string.Empty;
+
         public IFormFile? ProfileFile { get; set; }
 
 

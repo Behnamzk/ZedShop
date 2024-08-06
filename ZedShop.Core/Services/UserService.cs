@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -109,10 +110,6 @@ namespace ZedShop.Core.Services
             return _context.Users.ToList();
         }
 
-        public List<User> GetAllUsersPaged(int page, int pageSize)
-        {
-            return _context.Users.ToPaged(page, pageSize).ToList();
-        }
 
         public int GetAllUsersCount()
         {
@@ -153,6 +150,31 @@ namespace ZedShop.Core.Services
         public bool IsRoleExist(int roleId)
         {
             return _context.Roles.Any(r => r.Id == roleId);
+        }
+
+        public List<User> GetAllUsersPagedRole(int page, int pageSize, int roleId)
+        {
+            if (roleId == -1)
+            {
+                return _context.Users.Include(u=>u.Role).ToPaged(page, pageSize).ToList();
+            }
+            else
+            {
+                return _context.Users.Include(u => u.Role).Where(u => u.RoleId == roleId).ToPaged(page, pageSize).ToList();
+            }
+        }
+
+        public int GetAllUsersCount(int roleId)
+        {
+            if (roleId == -1)
+            {
+                return _context.Users.Count();
+            }
+            else
+            {
+                return _context.Users.Where(u => u.RoleId == roleId).Count();
+            }
+            
         }
     }
 }

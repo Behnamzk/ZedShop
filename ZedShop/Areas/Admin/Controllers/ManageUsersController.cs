@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using ZedShop.Core.DTOs.Product;
+using ZedShop.Core.Services;
 using ZedShop.Core.Services.Interface;
 using ZedShop.DataLayer.Entities;
 using ZedShop.Web.Areas.Admin.Models.UserViewModel;
@@ -14,7 +15,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
     {
         private readonly IUserService _userService;
 
-        private int pageCount, currentPage, allUserCount, numberPerPage;
+        private int pageCount, currentPage, allUserCount, numberPerPage, roleId;
 
 
 
@@ -23,9 +24,10 @@ namespace ZedShop.Web.Areas.Admin.Controllers
             _userService = userService;
 
             // paging initialization
-            numberPerPage = 10;
+
+            numberPerPage = 1;
             currentPage = 1;
-            allUserCount = userService.GetAllUsers().Count();
+            allUserCount = userService.GetAllUsersCount(roleId);
             pageCount = (int)Math.Ceiling((double)allUserCount / numberPerPage);
 
         }
@@ -33,8 +35,38 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
+            roleId = -1;
+            List<UserViewModel> userViews = GetUsers(roleId);
 
-            var users = _userService.GetAllUsersPaged(currentPage, numberPerPage);
+            var roles = _userService.GetAllRoles();
+            ViewBag.Roles = roles;
+
+            currentPage = 1;
+
+            ViewBag.NumberOfPage = pageCount;
+            ViewBag.CurrentPage = currentPage;
+
+            return View(userViews);
+        }
+
+        [HttpGet]
+        public IActionResult AllUsersOfRole(int _roleId)
+        {
+            
+            List<UserViewModel> userViews = GetUsers(_roleId);
+
+            currentPage = 1;
+
+            ViewBag.NumberOfPage = pageCount;
+            ViewBag.CurrentPage = currentPage;
+
+            return PartialView("_UsersTable", userViews);
+        }
+
+        public List<UserViewModel> GetUsers(int _roleId)
+        {
+            this.roleId = _roleId;
+            var users = _userService.GetAllUsersPagedRole(currentPage, numberPerPage, roleId);
 
             List<UserViewModel> userViews = new List<UserViewModel>();
 
@@ -44,21 +76,19 @@ namespace ZedShop.Web.Areas.Admin.Controllers
                 {
                     UserId = user.UserId,
                     UserName = user.UserName,
+                    RoleName = user.Role.Name,
                     Email = user.Email,
                     Gender = user.gender,
                     IsActive = user.IsActive,
                     IsBan = user.IsBan
-
                 });
-
             }
 
-            ViewBag.NumberOfPage = pageCount;
-            ViewBag.CurrentPage = currentPage;
+            allUserCount = _userService.GetAllUsersCount(roleId);
+            pageCount = (int)Math.Ceiling((double)allUserCount / numberPerPage);
 
-            return View(userViews);
+            return userViews;
         }
-
 
         //[Authorize]
         [Route("/Admin/ManageUsers/EditUserRole/{userId}")]
@@ -221,29 +251,15 @@ namespace ZedShop.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult ChangePage(int pageNumber = 1)
         {
-            var users = _userService.GetAllUsersPaged(pageNumber, numberPerPage);
-
-            List<UserViewModel> userViews = new List<UserViewModel>();
-
-            foreach (var user in users)
-            {
-                userViews.Add(new UserViewModel
-                {
-                    UserId = user.UserId,
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    Gender = user.gender,
-                    IsActive = user.IsActive,
-                    IsBan = false
-
-                });
-
-            }
-
             currentPage = pageNumber;
+            List<UserViewModel> userViews = GetUsers(roleId);
+
+
+            roleId = roleId;
 
             ViewBag.NumberOfPage = pageCount;
             ViewBag.CurrentPage = currentPage;
+
             return PartialView("_UsersTable", userViews);
         }
     }

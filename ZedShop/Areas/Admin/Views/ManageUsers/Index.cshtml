@@ -14,7 +14,22 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <p class="card-title"> <strong>کاربران</strong> </p>
+                <div style="display:flex;">
+
+                    <p class="card-title"> <strong>کاربران</strong> </p>
+
+                    <select id="role-select" style="margin-right:2%; width:15%" onclick="LoadUserByRoles()">
+                        <option value="-2">انتخاب نقش</option>
+                        <option value="-1">همه کاربران</option>
+                        @foreach (var item in ViewBag.Roles)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                      
+                    </select>
+                </div>
+
+
                 @if (ViewBag.Message != null)
                 {
                     @foreach (var item in ViewBag.Message)
@@ -34,8 +49,11 @@
                                     <th style="width:10%">
                                         نام کاربری
                                     </th>
-                                    <th style="width:20%">
+                                    <th style="width:18%">
                                         ایمیل
+                                    </th>
+                                    <th style="width:8%; text-align:center;">
+                                        نقش کاربری
                                     </th>
                                     <th style="width:5%; text-align:center;">
                                         جنسیت
@@ -101,13 +119,28 @@
                     var myobj = document.getElementById('ban_' + id);
                     if (response.resault) {
                         myobj.textContent = "بله";
-                    }else{
+                    } else {
                         myobj.textContent = "خیر";
                     }
-                    
+
 
                 });
         }
     }
 
+</script>
+
+<script>
+    function LoadUserByRoles() {
+        var selectElement = document.getElementById("role-select");
+        let id1 = selectElement.value;
+        $.ajax({
+            url: '/Admin/ManageUsers/AllUsersOfRole/', //controller and action
+            data: { _roleId: id1 }, // Send the product ID as a parameter
+            dataType: 'html',
+            success: function (data) {
+                $('#tableofusercontent').html(data); // Insert the received HTML into the container
+            }
+        });
+    }
 </script>
