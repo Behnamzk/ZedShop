@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.CodeAnalysis;
 using ZedShop.Core.DTOs.Product;
 using ZedShop.Core.Services;
 using ZedShop.Core.Services.Interface;
@@ -25,7 +26,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
             // paging initialization
 
-            numberPerPage = 1;
+            numberPerPage = 10;
             currentPage = 1;
             allUserCount = userService.GetAllUsersCount(roleId);
             pageCount = (int)Math.Ceiling((double)allUserCount / numberPerPage);
@@ -45,6 +46,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
             ViewBag.NumberOfPage = pageCount;
             ViewBag.CurrentPage = currentPage;
+            ViewBag.RoleId = roleId;
 
             return View(userViews);
         }
@@ -59,6 +61,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
             ViewBag.NumberOfPage = pageCount;
             ViewBag.CurrentPage = currentPage;
+            ViewBag.RoleId = roleId;
 
             return PartialView("_UsersTable", userViews);
         }
@@ -90,60 +93,92 @@ namespace ZedShop.Web.Areas.Admin.Controllers
             return userViews;
         }
 
-        //[Authorize]
+        [Authorize]
         [Route("/Admin/ManageUsers/EditUserRole/{userId}")]
         [HttpGet]
         public IActionResult EditUserRole(int userId)
         {
-            UserRoleViewModel userRole = new UserRoleViewModel();
-            var user = _userService.GetUserByIdWithRole(userId);
-
-            if (user != null)
+            if(User.Identity != null)
             {
-                userRole.UserName = user.UserName;
-                userRole.UserId = user.UserId;
-                userRole.RoleName = user.Role.Name;
-                userRole.RoleId = user.RoleId;
+                var username = User.Identity.Name;
+                if (!string.IsNullOrEmpty(username))
+                {
+                    User currentUser = _userService.GetUserByUserName(username);
+
+                    if(currentUser.RoleId == 3) // Site Owner
+                    {
+                        UserRoleViewModel userRole = new UserRoleViewModel();
+                        var user = _userService.GetUserByIdWithRole(userId);
+
+                        if (user != null)
+                        {
+                            userRole.UserName = user.UserName;
+                            userRole.UserId = user.UserId;
+                            userRole.RoleName = user.Role.Name;
+                            userRole.RoleId = user.RoleId;
+                        }
+
+                        List<Role> roles = _userService.GetAllRoles();
+
+                        ViewBag.Roles = roles;
+
+
+                        return View(userRole);
+                    }
+
+                }
             }
 
-            List<Role> roles = _userService.GetAllRoles();
-
-            ViewBag.Roles = roles;
+            return RedirectToAction("Index");
 
 
-            return View(userRole);
         }
 
-        //[Authorize]
+        [Authorize]
         [Route("/Admin/ManageUsers/EditUserRole/{userId}")]
         [HttpPost]
         public IActionResult EditUserRole(UserRoleViewModel userRole)
         {
-            if (!ModelState.IsValid)
+            if (User.Identity != null)
             {
-
-                return View(userRole);
-            }
-
-            User user = _userService.GetUserById(userRole.UserId);
-
-            // check user is notnull
-            if (user != null)
-            {
-                // Todo: implement site policy
-
-                if (_userService.IsRoleExist(userRole.SelectedRoleId))
+                var username = User.Identity.Name;
+                if (!string.IsNullOrEmpty(username))
                 {
-                    user.RoleId = userRole.SelectedRoleId;
+                    User currentUser = _userService.GetUserByUserName(username);
 
-                    _userService.UpdateUser(user, null);
+                    if (currentUser.RoleId == 3) // Site Owner
+                    {
+                        if (!ModelState.IsValid)
+                        {
 
-                    return RedirectToAction("Index");
+                            return View(userRole);
+                        }
+
+                        User user = _userService.GetUserById(userRole.UserId);
+
+                        // check user is notnull
+                        if (user != null)
+                        {
+                            // Todo: implement site policy
+
+                            if (_userService.IsRoleExist(userRole.SelectedRoleId))
+                            {
+                                user.RoleId = userRole.SelectedRoleId;
+
+                                _userService.UpdateUser(user, null);
+
+                                return RedirectToAction("Index");
+
+
+                            }
+                        }
+
+
+                        return View(userRole);
+                    }
                 }
             }
-
-
-            return View(userRole);
+            return RedirectToAction("Index");
         }
 
 
@@ -249,17 +284,15 @@ namespace ZedShop.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult ChangePage(int pageNumber = 1)
+        public IActionResult ChangePage(int _roleId, int pageNumber = 1)
         {
+            this.roleId = _roleId;
             currentPage = pageNumber;
             List<UserViewModel> userViews = GetUsers(roleId);
 
-
-            roleId = roleId;
-
             ViewBag.NumberOfPage = pageCount;
             ViewBag.CurrentPage = currentPage;
-
+            ViewBag.RoleId = roleId;
             return PartialView("_UsersTable", userViews);
         }
     }

@@ -41,7 +41,7 @@
                             }
                             else
                             {
-                                <p>مسدود شده</p>
+                                <p>مسدود</p>
                             }
                         </td>
                         <td style="width:20%; text-align:center">
@@ -63,7 +63,7 @@
         صفحه:
 
 
-        @if (ViewBag.CurrentPage == 1)
+        @if (ViewBag.CurrentPage == 1 || ViewBag.NumberOfPage == 0)
         {
             <span class="jsgrid-pager-nav-button-off jsgrid-pager-nav-inactive-button">
                 <a class="disabled">اولین</a>
@@ -75,28 +75,28 @@
         else
         {
             <span class="jsgrid-pager-nav-button jsgrid-pager-nav-inactive-button">
-                <a href="javascript:updateTableData(1);">اولین</a>
+                <a href="javascript:updateTableData(@ViewBag.RoleId,1);">اولین</a>
             </span>
             <span class="jsgrid-pager-nav-button jsgrid-pager-nav-inactive-button">
-                <a href="javascript:updateTableData(@ViewBag.CurrentPage-1);">قبلی</a>
+                <a href="javascript:updateTableData(@ViewBag.RoleId,@ViewBag.CurrentPage-1);">قبلی</a>
             </span>
         }
 
 
         @if (ViewBag.CurrentPage > 1)
         {
-            <span class="jsgrid-pager-page"><a href="javascript:updateTableData(@ViewBag.CurrentPage-1);">@((ViewBag.CurrentPage - 1))</a></span>
+            <span class="jsgrid-pager-page"><a href="javascript:updateTableData(@ViewBag.RoleId,@ViewBag.CurrentPage-1);">@((ViewBag.CurrentPage - 1))</a></span>
         }
 
         <span class="jsgrid-pager-page jsgrid-pager-current-page">@ViewBag.CurrentPage</span>
 
         @if (ViewBag.CurrentPage < ViewBag.NumberOfPage)
         {
-            <span class="jsgrid-pager-page"><a href="javascript:updateTableData(@ViewBag.CurrentPage+1);">@((ViewBag.CurrentPage + 1))</a></span>
+            <span class="jsgrid-pager-page"><a href="javascript:updateTableData(@ViewBag.RoleId,@ViewBag.CurrentPage+1);">@((ViewBag.CurrentPage + 1))</a></span>
         }
 
 
-        @if (ViewBag.CurrentPage == ViewBag.NumberOfPage)
+        @if (ViewBag.CurrentPage == ViewBag.NumberOfPage ||  ViewBag.NumberOfPage == 0)
         {
             <span class="jsgrid-pager-nav-button-off jsgrid-pager-nav-inactive-button">
                 <a class="disabled">بعدی</a>
@@ -109,9 +109,9 @@
         else
         {
             <span class="jsgrid-pager-nav-button jsgrid-pager-nav-inactive-button">
-                <a href="javascript:updateTableData(@ViewBag.CurrentPage+1);">بعدی</a>
+                <a href="javascript:updateTableData(@ViewBag.RoleId, @ViewBag.CurrentPage+1);">بعدی</a>
             </span>
-            <span class="jsgrid-pager-nav-button"><a href="javascript:updateTableData(@ViewBag.NumberOfPage);">آخرین</a></span>
+            <span class="jsgrid-pager-nav-button"><a href="javascript:updateTableData(@ViewBag.RoleId,@ViewBag.NumberOfPage);">آخرین</a></span>
         }
 
 

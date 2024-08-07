@@ -19,7 +19,7 @@
                     <p class="card-title"> <strong>کاربران</strong> </p>
 
                     <select id="role-select" style="margin-right:2%; width:15%" onclick="LoadUserByRoles()">
-                        <option value="-2">انتخاب نقش</option>
+
                         <option value="-1">همه کاربران</option>
                         @foreach (var item in ViewBag.Roles)
                         {
@@ -82,11 +82,10 @@
 </div>
 
 <script>
-    function updateTableData(pageNum) {
-
+    function updateTableData(roleId,pageNum) {
         $.ajax({
             url: '/Admin/ManageUsers/ChangePage/', // controller and action
-            data: { pageNumber: pageNum }, // Send the userInput as a parameter
+            data: { pageNumber: pageNum, _roleId:roleId }, // Send the userInput as a parameter
             dataType: 'html',
             success: function (data) {
 
