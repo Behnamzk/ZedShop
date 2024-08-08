@@ -25,12 +25,13 @@ namespace ZedShop.Core.Services.Interface
         public User GetUserById(int userId);
         public User GetUserByIdWithRole(int userId);
         public bool BanUser(int userId);
+        public bool DeleteUser(int userId);
 
         public List<User> GetAllUsers();
         public List<Role> GetAllRoles();
-        public int GetAllUsersCount(int roleId);
+        public int GetAllUsersCount(int roleId, int filterId);
         public int GetAllUsersCount();
-        public List<User> GetAllUsersPagedRole(int page, int pageSize, int roleId);
+        public List<User> GetAllUsersPagedRole(int page, int pageSize, int roleId, int filterId);
 
         public bool UpdateUser(User user, IFormFile imgProfile);
         public bool IsRoleExist(int roleId);

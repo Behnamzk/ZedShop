@@ -55,6 +55,7 @@ namespace ZedShop.DataLayer.Entities
 
         [Required]
         public bool IsAdmin { get; set; }
+        public bool IsDelete { get; set; } = false;
 
         public Admin? Admin { get; set; }
 

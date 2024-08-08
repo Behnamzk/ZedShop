@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -73,7 +74,7 @@ namespace ZedShop.Core.Services
             string password = PasswordHelper.EncodePasswordMd5(loginViewModel.Password);
             string email = FixText.FixEmail(loginViewModel.Email);
 
-            return _context.Users.SingleOrDefault(User => User.Email == email && User.Password == password);
+            return _context.Users.Where(u => u.IsDelete == false).SingleOrDefault(User => User.Email == email && User.Password == password);
 
         }
 
@@ -107,13 +108,13 @@ namespace ZedShop.Core.Services
 
         public List<User> GetAllUsers()
         {
-            return _context.Users.ToList();
+            return _context.Users.Where(u => u.IsDelete == false).ToList();
         }
 
 
         public int GetAllUsersCount()
         {
-            return _context.Users.Count();
+            return _context.Users.Where(u=>u.IsDelete == false).Count();
         }
 
         public bool BanUser(int userId)
@@ -131,6 +132,22 @@ namespace ZedShop.Core.Services
 
             return user.IsBan;
 
+        }
+
+        public bool DeleteUser(int userId)
+        {
+            User user = GetUserById(userId);
+            if (user == null)
+            {
+                return false;
+            }
+
+            user.IsDelete = !user.IsDelete;
+
+            _context.Update(user);
+            _context.SaveChanges();
+
+            return user.IsDelete;
         }
 
         public User GetUserById(int userId)
@@ -152,29 +169,98 @@ namespace ZedShop.Core.Services
             return _context.Roles.Any(r => r.Id == roleId);
         }
 
-        public List<User> GetAllUsersPagedRole(int page, int pageSize, int roleId)
+        public List<User> GetAllUsersPagedRole(int page, int pageSize, int roleId, int filterId) 
         {
             if (roleId == -1)
             {
-                return _context.Users.Include(u=>u.Role).ToPaged(page, pageSize).ToList();
+                switch (filterId){
+                    case -1:
+                        return _context.Users.Where(u => u.IsDelete == false).Include(u => u.Role).ToPaged(page, pageSize).ToList();
+
+                    case 0:
+                        return _context.Users.Where(u => u.IsDelete == true).Include(u => u.Role).ToPaged(page, pageSize).ToList();
+
+                    case 1:
+                        return _context.Users.Where(u => u.IsDelete == false && u.IsBan == true).Include(u => u.Role).ToPaged(page, pageSize).ToList();
+
+                    case 2:
+                        return _context.Users.Where(u => u.IsDelete == false && u.IsActive == false).Include(u => u.Role).ToPaged(page, pageSize).ToList();
+
+                    default:
+                        return _context.Users.Where(u => u.IsDelete == false).Include(u => u.Role).ToPaged(page, pageSize).ToList();
+
+                }
             }
             else
             {
-                return _context.Users.Include(u => u.Role).Where(u => u.RoleId == roleId).ToPaged(page, pageSize).ToList();
+                switch (filterId)
+                {
+                    case -1:
+                        return _context.Users.Where(u => u.IsDelete == false && u.RoleId == roleId).Include(u => u.Role).ToPaged(page, pageSize).ToList();
+
+                    case 0:
+                        return _context.Users.Where(u => u.IsDelete == true  && u.RoleId == roleId).Include(u => u.Role).ToPaged(page, pageSize).ToList();
+
+                    case 1:
+                        return _context.Users.Where(u => u.IsDelete == false && u.RoleId == roleId && u.IsBan == true).Include(u => u.Role).ToPaged(page, pageSize).ToList();
+
+                    case 2:
+                        return _context.Users.Where(u => u.IsDelete == false && u.RoleId == roleId && u.IsActive == false).Include(u => u.Role).ToPaged(page, pageSize).ToList();
+
+                    default:
+                        return _context.Users.Where(u => u.IsDelete == false && u.RoleId == roleId).Include(u => u.Role).ToPaged(page, pageSize).ToList();
+
+                }
+
             }
         }
 
-        public int GetAllUsersCount(int roleId)
+        public int GetAllUsersCount(int roleId, int filterId)
         {
             if (roleId == -1)
             {
-                return _context.Users.Count();
+                switch (filterId)
+                {
+                    case -1:
+                        return _context.Users.Where(u => u.IsDelete == false).Count();
+
+                    case 0:
+                        return _context.Users.Where(u => u.IsDelete == true).Count();
+
+                    case 1:
+                        return _context.Users.Where(u => u.IsDelete == false && u.IsBan == true).Count();
+
+                    case 2:
+                        return _context.Users.Where(u => u.IsDelete == false && u.IsActive == false).Count();
+
+                    default:
+                        return _context.Users.Where(u => u.IsDelete == false).Count();
+
+                }
             }
             else
             {
-                return _context.Users.Where(u => u.RoleId == roleId).Count();
+                switch (filterId)
+                {
+                    case -1:
+                        return _context.Users.Where(u => u.IsDelete == false && u.RoleId == roleId).Count();
+
+                    case 0:
+                        return _context.Users.Where(u => u.IsDelete == true && u.RoleId == roleId).Count();
+
+                    case 1:
+                        return _context.Users.Where(u => u.IsDelete == false && u.RoleId == roleId && u.IsBan == true).Count();
+
+                    case 2:
+                        return _context.Users.Where(u => u.IsDelete == false && u.RoleId == roleId && u.IsActive == false).Count();
+
+                    default:
+                        return _context.Users.Where(u => u.IsDelete == false && u.RoleId == roleId).Count();
+
+                }
             }
             
         }
+
     }
 }

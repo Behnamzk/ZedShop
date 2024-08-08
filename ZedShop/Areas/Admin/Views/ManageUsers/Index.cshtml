@@ -18,7 +18,8 @@
 
                     <p class="card-title"> <strong>کاربران</strong> </p>
 
-                    <select id="role-select" style="margin-right:2%; width:15%" onclick="LoadUserByRoles()">
+                    <p class="card-title" style="margin-top:15px;margin-right:2%;font-size:16px; "> دسته‌بندی:  </p>
+                    <select id="role-select" style="margin-right:5px; width:15%" onclick="LoadUserByRoleFilter()">
 
                         <option value="-1">همه کاربران</option>
                         @foreach (var item in ViewBag.Roles)
@@ -27,6 +28,17 @@
                         }
                       
                     </select>
+
+                    <p class="card-title" style="margin-top:15px;margin-right:2%;font-size:16px; "> فیلتر:  </p>
+                    <select id="filter-select" style="margin-right:5px; width:15%" onclick="LoadUserByRoleFilter()">
+
+                        @foreach (var item in ViewBag.Filters)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+
+                    </select>
+
                 </div>
 
 
@@ -82,10 +94,10 @@
 </div>
 
 <script>
-    function updateTableData(roleId,pageNum) {
+    function updateTableData(roleId, filterId, pageNum) {
         $.ajax({
             url: '/Admin/ManageUsers/ChangePage/', // controller and action
-            data: { pageNumber: pageNum, _roleId:roleId }, // Send the userInput as a parameter
+            data: { _roleId: roleId, _filterId: filterId, pageNumber: pageNum, }, // Send the userInput as a parameter
             dataType: 'html',
             success: function (data) {
 
@@ -130,12 +142,17 @@
 </script>
 
 <script>
-    function LoadUserByRoles() {
+    function LoadUserByRoleFilter() {
+
         var selectElement = document.getElementById("role-select");
+        var filterElement = document.getElementById("filter-select");
+
         let id1 = selectElement.value;
+        let id2 = filterElement.value;
+
         $.ajax({
-            url: '/Admin/ManageUsers/AllUsersOfRole/', //controller and action
-            data: { _roleId: id1 }, // Send the product ID as a parameter
+            url: '/Admin/ManageUsers/AllUsersOfRoleFilter/', //controller and action
+            data: { _roleId: id1, _filterId: id2 }, // Send the product ID as a parameter
             dataType: 'html',
             success: function (data) {
                 $('#tableofusercontent').html(data); // Insert the received HTML into the container

@@ -18,19 +18,25 @@ namespace ZedShop.Web.Areas.Admin.Controllers
     {
         private readonly IUserService _userService;
 
-        private int pageCount, currentPage, allUserCount, numberPerPage, roleId;
+        private int pageCount, currentPage, allUserCount, numberPerPage, roleId, filterId;
 
-
+        private readonly List<FilterBaseViewModel> filtersBase = new List<FilterBaseViewModel>();
 
         public ManageUsersController(IUserService userService)
         {
             _userService = userService;
 
+
+            filtersBase.Add(new FilterBaseViewModel(-1, "همه کاربران"));
+            filtersBase.Add(new FilterBaseViewModel(0, "حذف شده‌"));
+            filtersBase.Add(new FilterBaseViewModel(1, "مسدود شده‌"));
+            filtersBase.Add(new FilterBaseViewModel(2, "غیر فعال"));
+
             // paging initialization
 
             numberPerPage = 10;
             currentPage = 1;
-            allUserCount = userService.GetAllUsersCount(roleId);
+            allUserCount = userService.GetAllUsersCount(roleId, filterId);
             pageCount = (int)Math.Ceiling((double)allUserCount / numberPerPage);
 
         }
@@ -39,39 +45,44 @@ namespace ZedShop.Web.Areas.Admin.Controllers
         public IActionResult Index()
         {
             roleId = -1;
-            List<UserViewModel> userViews = GetUsers(roleId);
+            filterId = -1;
+            List<UserViewModel> userViews = GetUsers(roleId , filterId);
 
             var roles = _userService.GetAllRoles();
             ViewBag.Roles = roles;
 
             currentPage = 1;
 
+            ViewBag.Filters = filtersBase;
             ViewBag.NumberOfPage = pageCount;
             ViewBag.CurrentPage = currentPage;
             ViewBag.RoleId = roleId;
+            ViewBag.FilterId = filterId;
 
             return View(userViews);
         }
 
         [HttpGet]
-        public IActionResult AllUsersOfRole(int _roleId)
+        public IActionResult AllUsersOfRoleFilter(int _roleId, int _filterId)
         {
 
-            List<UserViewModel> userViews = GetUsers(_roleId);
+            List<UserViewModel> userViews = GetUsers(_roleId, _filterId);
 
             currentPage = 1;
 
             ViewBag.NumberOfPage = pageCount;
             ViewBag.CurrentPage = currentPage;
             ViewBag.RoleId = roleId;
+            ViewBag.FilterId = filterId;
 
             return PartialView("_UsersTable", userViews);
         }
 
-        public List<UserViewModel> GetUsers(int _roleId)
+        public List<UserViewModel> GetUsers(int _roleId, int _filterId)
         {
             this.roleId = _roleId;
-            var users = _userService.GetAllUsersPagedRole(currentPage, numberPerPage, roleId);
+            this.filterId = _filterId;
+            var users = _userService.GetAllUsersPagedRole(currentPage, numberPerPage, roleId, filterId);
 
             List<UserViewModel> userViews = new List<UserViewModel>();
 
@@ -89,7 +100,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
                 });
             }
 
-            allUserCount = _userService.GetAllUsersCount(roleId);
+            allUserCount = _userService.GetAllUsersCount(roleId, filterId);
             pageCount = (int)Math.Ceiling((double)allUserCount / numberPerPage);
 
             return userViews;
@@ -257,19 +268,23 @@ namespace ZedShop.Web.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult DeleteUser(int id)
         {
+            _userService.DeleteUser(id);
             return Json(new { success = true });
         }
 
         [HttpGet]
-        public IActionResult ChangePage(int _roleId, int pageNumber = 1)
+        public IActionResult ChangePage(int _roleId , int _filterId, int pageNumber = 1)
         {
             this.roleId = _roleId;
+            this.filterId = _filterId;
             currentPage = pageNumber;
-            List<UserViewModel> userViews = GetUsers(roleId);
+            List<UserViewModel> userViews = GetUsers(roleId, filterId);
 
             ViewBag.NumberOfPage = pageCount;
             ViewBag.CurrentPage = currentPage;
             ViewBag.RoleId = roleId;
+            ViewBag.FilterId = filterId;
+
             return PartialView("_UsersTable", userViews);
         }
     }
