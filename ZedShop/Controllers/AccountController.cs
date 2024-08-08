@@ -48,7 +48,8 @@ namespace ZedShop.Web.Controllers.Account
                     var claims = new Claim[]
                     {
                         new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                        new Claim(ClaimTypes.Name, user.UserName)
+                        new Claim(ClaimTypes.Name, user.UserName),
+                        new Claim(ClaimTypes.Role, user.RoleId.ToString())
                     };
 
                     var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

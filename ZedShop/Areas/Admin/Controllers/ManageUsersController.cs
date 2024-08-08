@@ -7,11 +7,13 @@ using ZedShop.Core.Services;
 using ZedShop.Core.Services.Interface;
 using ZedShop.DataLayer.Entities;
 using ZedShop.Web.Areas.Admin.Models.UserViewModel;
+using ZedShop.Core.CustomAuthorization;
 
 namespace ZedShop.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    // [Authorize(Roles ="Admin , Owner")]
+    [Authorize(Roles = "2 , 3")] // 2 is admin and 3 is owner
+
     public class ManageUsersController : Controller
     {
         private readonly IUserService _userService;
@@ -54,7 +56,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult AllUsersOfRole(int _roleId)
         {
-            
+
             List<UserViewModel> userViews = GetUsers(_roleId);
 
             currentPage = 1;
@@ -93,92 +95,67 @@ namespace ZedShop.Web.Areas.Admin.Controllers
             return userViews;
         }
 
-        [Authorize]
+        [OwnerFilter] // just owner of site
         [Route("/Admin/ManageUsers/EditUserRole/{userId}")]
         [HttpGet]
         public IActionResult EditUserRole(int userId)
         {
-            if(User.Identity != null)
+
+            UserRoleViewModel userRole = new UserRoleViewModel();
+            var user = _userService.GetUserByIdWithRole(userId);
+
+            if (user != null)
             {
-                var username = User.Identity.Name;
-                if (!string.IsNullOrEmpty(username))
-                {
-                    User currentUser = _userService.GetUserByUserName(username);
-
-                    if(currentUser.RoleId == 3) // Site Owner
-                    {
-                        UserRoleViewModel userRole = new UserRoleViewModel();
-                        var user = _userService.GetUserByIdWithRole(userId);
-
-                        if (user != null)
-                        {
-                            userRole.UserName = user.UserName;
-                            userRole.UserId = user.UserId;
-                            userRole.RoleName = user.Role.Name;
-                            userRole.RoleId = user.RoleId;
-                        }
-
-                        List<Role> roles = _userService.GetAllRoles();
-
-                        ViewBag.Roles = roles;
-
-
-                        return View(userRole);
-                    }
-
-                }
+                userRole.UserName = user.UserName;
+                userRole.UserId = user.UserId;
+                userRole.RoleName = user.Role.Name;
+                userRole.RoleId = user.RoleId;
             }
 
-            return RedirectToAction("Index");
+            List<Role> roles = _userService.GetAllRoles();
 
+            ViewBag.Roles = roles;
+
+
+            return View(userRole);
 
         }
 
-        [Authorize]
+        [OwnerFilter] // just owner of site
         [Route("/Admin/ManageUsers/EditUserRole/{userId}")]
         [HttpPost]
         public IActionResult EditUserRole(UserRoleViewModel userRole)
         {
-            if (User.Identity != null)
+
+            if (!ModelState.IsValid)
             {
-                var username = User.Identity.Name;
-                if (!string.IsNullOrEmpty(username))
+
+                return View(userRole);
+            }
+
+            User user = _userService.GetUserById(userRole.UserId);
+
+            // check user is notnull
+            if (user != null)
+            {
+                // Todo: implement site policy
+
+                if (_userService.IsRoleExist(userRole.SelectedRoleId))
                 {
-                    User currentUser = _userService.GetUserByUserName(username);
+                    user.RoleId = userRole.SelectedRoleId;
 
-                    if (currentUser.RoleId == 3) // Site Owner
-                    {
-                        if (!ModelState.IsValid)
-                        {
+                    _userService.UpdateUser(user, null);
 
-                            return View(userRole);
-                        }
-
-                        User user = _userService.GetUserById(userRole.UserId);
-
-                        // check user is notnull
-                        if (user != null)
-                        {
-                            // Todo: implement site policy
-
-                            if (_userService.IsRoleExist(userRole.SelectedRoleId))
-                            {
-                                user.RoleId = userRole.SelectedRoleId;
-
-                                _userService.UpdateUser(user, null);
-
-                                return RedirectToAction("Index");
+                    return RedirectToAction("Index");
 
 
-                            }
-                        }
-
-
-                        return View(userRole);
-                    }
                 }
             }
-            return RedirectToAction("Index");
+
+
+            return View(userRole);
+
+
         }
 
 
