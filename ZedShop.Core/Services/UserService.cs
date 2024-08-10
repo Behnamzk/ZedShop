@@ -15,6 +15,7 @@ using ZedShop.Core.Security;
 using ZedShop.Core.Services.Interface;
 using ZedShop.DataLayer.Context;
 using ZedShop.DataLayer.Entities;
+using ZedShop.DataLayer.Migrations;
 
 namespace ZedShop.Core.Services
 {
@@ -159,15 +160,7 @@ namespace ZedShop.Core.Services
             return _context.Users.Include(u=>u.Role).SingleOrDefault(u => u.UserId == userId);
         }
 
-        public List<Role> GetAllRoles()
-        {
-            return _context.Roles.ToList();
-        }
 
-        public bool IsRoleExist(int roleId)
-        {
-            return _context.Roles.Any(r => r.Id == roleId);
-        }
 
         public List<User> GetAllUsersPagedRole(int page, int pageSize, int roleId, int filterId) 
         {
@@ -261,6 +254,41 @@ namespace ZedShop.Core.Services
             }
             
         }
+
+        #region Roles
+        public List<Role> GetAllRoles()
+        {
+            return _context.Roles.ToList();
+        }
+
+        public bool IsRoleExist(int roleId)
+        {
+            return _context.Roles.Any(r => r.Id == roleId);
+        }
+        public Role GetRoleById(int roleId)
+        {
+            return _context.Roles.Include(r=>r.RoleAccesses).FirstOrDefault(r=>r.Id == roleId);
+        }
+        #endregion
+
+        #region Access
+
+        public List<Access> GetAllAccesses()
+        {
+            return _context.Accesses.ToList();
+        }
+
+        public bool IsAccessExist(int accessId)
+        {
+            return _context.Accesses.Any(r => r.Id == accessId);
+        }
+
+        public Access GetAccessById(int accessId)
+        {
+            return _context.Accesses.FirstOrDefault(r => r.Id == accessId);
+
+        }
+        #endregion
 
     }
 }

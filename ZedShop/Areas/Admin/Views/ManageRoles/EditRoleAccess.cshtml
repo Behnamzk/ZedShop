@@ -1,0 +1,88 @@
+﻿@model ZedShop.Web.Areas.Admin.Models.UserViewModel.RoleAccessViewModel
+
+@{
+    ViewData["Title"] = "ویرایش نقش";
+    Layout = "~/areas/admin/views/shared/_AdminLayout.cshtml";
+
+}
+
+@* /Admin/ManageRoles/EditRoleAccess/ *@
+
+<label>دسترسی‌ها</label>
+
+<div>
+    <form asp-action="EditRoleAccess" asp-controller="ManageRoles" method="post">
+
+        <input type="hidden" asp-for="Id" class="form-control" />
+        <input type="hidden" asp-for="Name" class="form-control" />
+
+
+        <ul>
+            @foreach (var item in Model.Access)
+            {
+                <li>
+                    <input asp-for="@item.IsActive" type="checkbox" />
+                    @item.Name
+                </li>
+            }
+        </ul>
+
+
+        <label>@Model.Name</label>
+@* 
+        <div class="access-scrollable-list">
+            <ul id="aceessCheckboxList">
+                @foreach (var item in @Model.Access)
+                {
+                    <li>
+
+                        <div class="form-auth-row">
+                            <label class="ui-checkbox">
+                                <input type="hidden" asp-for="@item.Id" />
+                                <input type="hidden" asp-for="@item.Name" />
+                                <input asp-for="@item.IsActive" type="checkbox" name="@item.IsActive">
+                                <span class="ui-checkbox-check"></span>
+                            </label>
+                            <label asp-for="@item.IsActive">@item.Name</label>
+                        </div>
+
+
+                    </li>
+                }
+            </ul>
+        </div>
+        *@
+
+        <div class="simple-center-div" style="margin-top:20px; margin-bottom:20px;">
+            <div class="form-group">
+                <input type="submit" value="ذخیره" class="btn btn-success" />
+                <button class="btn btn-warning btn-sm" asp-action="Index">انصراف</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<button onclick="checkSelectedItems()">push</button>
+
+<script>
+    function AccessCheckBoxClick(id1) {
+        // Your code here
+        console.log("Checkbox checked!", id1); // Example: Log a message to the console
+    }
+
+
+    function checkSelectedItems() {
+        const checkboxes = document.querySelectorAll('#aceessCheckboxList input[type="checkbox"]');
+        const selectedItems = [];
+
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                selectedItems.push(checkbox.value);
+            }
+        });
+
+        console.log(selectedItems);
+        // This will log an array of values for checked items
+    }
+</script>

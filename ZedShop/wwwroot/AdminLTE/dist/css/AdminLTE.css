@@ -5068,3 +5068,9 @@ Admin Table-Jsgrid table
     height: 150px;
     border-radius: 10%;
 }
+
+.access-scrollable-list {
+    height: 100px;
+    width: 30%;
+    overflow-y: scroll;
+}

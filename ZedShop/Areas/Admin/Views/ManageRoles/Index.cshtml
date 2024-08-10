@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "مدیریت نقش‌ها";
+    Layout = "~/areas/admin/views/shared/_AdminLayout.cshtml";
+}
+
+<div>
+    <label>دسترسی‌ها</label>
+
+    <div class="access-scrollable-list">
+        <ul id="aceessCheckboxList">
+            <li>
+                <label>
+                    <input value="op1" type="checkbox" onchange="AccessCheckBoxClick(1)">
+                    Option 1
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input value="op2" id="op2" type="checkbox" onchange="AccessCheckBoxClick(2)">
+                    Option 2
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input value="op3" id="op3" type="checkbox" onchange="AccessCheckBoxClick(3)">
+                    Option 3
+                </label>
+            </li>
+           
+        </ul>
+    </div>
+</div>
+
+<button onclick="checkSelectedItems()">push</button>
+
+<script>
+    function AccessCheckBoxClick(id1) {
+        // Your code here
+        console.log("Checkbox checked!", id1); // Example: Log a message to the console
+    }
+
+
+    function checkSelectedItems() {
+        const checkboxes = document.querySelectorAll('#aceessCheckboxList input[type="checkbox"]');
+        const selectedItems = [];
+
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                selectedItems.push(checkbox.value);
+            }
+        });
+
+        console.log(selectedItems);
+        // This will log an array of values for checked items
+    }
+</script>

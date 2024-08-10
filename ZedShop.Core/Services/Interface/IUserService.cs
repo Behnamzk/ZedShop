@@ -28,13 +28,24 @@ namespace ZedShop.Core.Services.Interface
         public bool DeleteUser(int userId);
 
         public List<User> GetAllUsers();
-        public List<Role> GetAllRoles();
+
         public int GetAllUsersCount(int roleId, int filterId);
         public int GetAllUsersCount();
         public List<User> GetAllUsersPagedRole(int page, int pageSize, int roleId, int filterId);
 
         public bool UpdateUser(User user, IFormFile imgProfile);
+
+        #region Role
+        public List<Role> GetAllRoles();
         public bool IsRoleExist(int roleId);
 
+        public Role GetRoleById(int roleId);
+        #endregion
+
+        #region Access
+        public List<Access> GetAllAccesses();
+        public bool IsAccessExist(int accessId);
+        public Access GetAccessById(int accessId);
+        #endregion
     }
 }
