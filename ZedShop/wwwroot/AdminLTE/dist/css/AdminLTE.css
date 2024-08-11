@@ -5073,9 +5073,3 @@ Admin Table-Jsgrid table
     width: 60%;
     overflow-y: scroll;
 }
-
-.roles-table {
-    height: 50px;
-    width: 100%;
-    overflow-y: scroll;
-}

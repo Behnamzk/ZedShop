@@ -48,7 +48,8 @@
         if (confirm("آیا از حذف مطمین هستید؟")) {
             $.get("/Admin/Manageroles/DeleteRole/" + id,
                 function (response) {
-                    if (response.resault) {
+                    console.log("hehehe", response);
+                    if (response.success) {
                         alert("نقش حذف شد!");
                         var myobj = document.getElementById(id);
                         myobj.remove();
