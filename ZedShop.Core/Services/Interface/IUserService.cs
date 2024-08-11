@@ -38,8 +38,14 @@ namespace ZedShop.Core.Services.Interface
         #region Role
         public List<Role> GetAllRoles();
         public bool IsRoleExist(int roleId);
+        public bool IsRoleNameExist(string roleName);
+        public bool DeleteRole(int roleId);
 
         public Role GetRoleById(int roleId);
+
+        public List<int> GetRoleAccessIds(int roleId);
+
+        public bool UpdateRole(Role role);
         #endregion
 
         #region Access

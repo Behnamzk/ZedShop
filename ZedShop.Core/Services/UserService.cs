@@ -269,6 +269,43 @@ namespace ZedShop.Core.Services
         {
             return _context.Roles.Include(r=>r.RoleAccesses).FirstOrDefault(r=>r.Id == roleId);
         }
+
+        public List<int> GetRoleAccessIds(int roleId)
+        {
+            return _context.RolesAccess.Where(r => r.RoleId == roleId).Select(a=>a.AccessId)?.ToList();
+        }
+
+
+        public bool UpdateRole(Role role)
+        {
+            if(role == null) return false;
+
+            _context.Roles.Update(role);
+            _context.SaveChanges();
+            return true;
+        }
+
+        public bool DeleteRole(int roleId)
+        {
+            if(_context.Users.Any(u=>u.RoleId == roleId))
+            {
+                return false;
+            }
+            else
+            {
+                _context.Roles.Remove(GetRoleById(roleId));
+                _context.SaveChanges();
+                return true;
+            }
+
+            
+        }
+
+        public bool IsRoleNameExist(string roleName)
+        {
+            return _context.Roles.Any(r=>r.Name == roleName);
+        }
+
         #endregion
 
         #region Access
@@ -288,6 +325,14 @@ namespace ZedShop.Core.Services
             return _context.Accesses.FirstOrDefault(r => r.Id == accessId);
 
         }
+
+
+
+
+
+
+
+
         #endregion
 
     }

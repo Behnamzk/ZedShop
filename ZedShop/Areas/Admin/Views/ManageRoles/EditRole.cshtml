@@ -1,0 +1,49 @@
+﻿@model ZedShop.Web.Areas.Admin.Models.UserViewModel.RoleAccessViewModel
+
+@{
+    ViewData["Title"] = "ویرایش نقش";
+    Layout = "~/areas/admin/views/shared/_AdminLayout.cshtml";
+
+}
+
+<div class="col-12">
+    <div class="card">
+        <div class="card-body">
+
+            <h4 class="card-title"><strong> ویرایش نام نقش </strong></h4>
+            <form asp-action="EditRole" asp-controller="ManageRoles" method="post">
+
+                <div class="row-form-container">
+
+                    <input type="hidden" asp-for="Id" class="form-control" />
+
+                    <div class="row-form">
+                        <div class="left" style="width: 50%; text-align:center;">
+                            <div class="form-group">
+                                <p><strong> نام نقش: @Model.Name</strong></p>
+                            </div>
+                        </div>
+
+                        <div class="right" style="width: 50%;">
+                            <div class="form-group">
+                                <label class="control-label">نام جدید نقش</label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="simple-center-div" style="margin-top:20px; margin-bottom:20px;">
+                        <div class="form-group">
+                            <input type="submit" value="ذخیره" class="btn btn-success" />
+                            <button class="btn btn-warning btn-sm" asp-action="Index">انصراف</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

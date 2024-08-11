@@ -1,0 +1,28 @@
+﻿@using ZedShop.Web.Areas.Admin.Models.UserViewModel
+@model List<ZedShop.Web.Areas.Admin.Models.UserViewModel.RoleAccessViewModel>
+
+<div class="jsgrid-grid-body">
+    <table class="jsgrid-table table table-striped table-hover roles-table">
+        <tbody id="rolestable">
+            @if (Model != null)
+            {
+                @foreach (var item in Model)
+                {
+                    <tr id="@item.Id">
+
+                        <td style="width:30%">
+                            @item.Name
+                        </td>
+
+                        <td style="width:70%; text-align:center">
+                            <a class="btn btn-primary btn-sm" href="/Admin/ManageRoles/EditRole/@item.Id">ویرایش</a>
+                            <a class="btn btn-primary btn-sm" href="/Admin/ManageRoles/EditRoleAccess/@item.Id">ویرایش دسترسی</a>
+                            <button class="btn btn-danger btn-sm" onclick="DeleteRole(@item.Id)">حذف </button>
+
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

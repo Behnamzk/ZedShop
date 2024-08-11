@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.IO;
 using ZedShop.Core.CustomAuthorization;
 using ZedShop.Core.Services.Interface;
+using ZedShop.DataLayer.Entities;
 using ZedShop.Web.Areas.Admin.Models.UserViewModel;
 
 namespace ZedShop.Web.Areas.Admin.Controllers
@@ -16,8 +18,66 @@ namespace ZedShop.Web.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            List<RoleAccessViewModel> roleAccessViews = new List<RoleAccessViewModel>();
+
+            var rolesList = _userService.GetAllRoles();
+
+            foreach(var item in rolesList)
+            {
+                roleAccessViews.Add(new RoleAccessViewModel() { Id = item.Id, Name = item.Name });
+            }
+
+            return View(roleAccessViews);
         }
+
+        [OwnerFilter] // just owner of site
+        [Route("/Admin/ManageRoles/EditRole/{roleId}")]
+        [HttpGet]
+        public IActionResult EditRole(int roleId)
+        {
+            RoleAccessViewModel roleAccess = new RoleAccessViewModel();
+
+            var role = _userService.GetRoleById(roleId);
+
+            if (role != null)
+            {
+                roleAccess.Name = role.Name;
+                roleAccess.Id = role.Id;
+            }
+
+            return View(roleAccess);
+        }
+
+
+        [OwnerFilter] // just owner of site
+        [Route("/Admin/ManageRoles/EditRole/{roleId}")]
+        [HttpPost]
+        public IActionResult EditRole(RoleAccessViewModel roleAccess)
+        {
+            if (!ModelState.IsValid)
+            {
+
+                return View(roleAccess);
+            }
+
+            Role role = _userService.GetRoleById(roleAccess.Id);
+
+            if (!(role.Name != roleAccess.Name && _userService.IsRoleNameExist(roleAccess.Name)))
+            {
+                role.Name = roleAccess.Name;
+
+                _userService.UpdateRole(role);
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError("Name", "نام نقش تکراری است!!");
+            }
+            return View(roleAccess);
+
+        }
+
 
         [OwnerFilter] // just owner of site
         [Route("/Admin/ManageRoles/EditRoleAccess/{roleId}")]
@@ -59,8 +119,40 @@ namespace ZedShop.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult EditRoleAccess(RoleAccessViewModel roleAccess)
         {
+            Role role = _userService.GetRoleById(roleAccess.Id);
+
+            ICollection<RoleAccess> roleAccesses = new HashSet<RoleAccess>();
+
+
+            foreach (var item in roleAccess.Access)
+            {
+                if (item.IsActive)
+                {
+                    roleAccesses.Add(new RoleAccess() { AccessId = item.Id, RoleId = roleAccess.Id });
+                }
+            }
+
+            role.RoleAccesses = roleAccesses;
+
+            _userService.UpdateRole(role);
+
+
             return RedirectToAction("Index");
 
+        }
+
+        [OwnerFilter] // just owner of site
+        [HttpGet]
+        public ActionResult DeleteRole(int id)
+        {
+            if (_userService.DeleteRole(id)){
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
+            
         }
     }
 }

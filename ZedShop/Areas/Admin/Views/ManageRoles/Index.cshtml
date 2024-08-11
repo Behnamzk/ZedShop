@@ -1,56 +1,63 @@
-﻿@{
+﻿@model List<ZedShop.Web.Areas.Admin.Models.UserViewModel.RoleAccessViewModel>
+@{
     ViewData["Title"] = "مدیریت نقش‌ها";
     Layout = "~/areas/admin/views/shared/_AdminLayout.cshtml";
 }
 
-<div>
-    <label>دسترسی‌ها</label>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div style="display:flex;">
 
-    <div class="access-scrollable-list">
-        <ul id="aceessCheckboxList">
-            <li>
-                <label>
-                    <input value="op1" type="checkbox" onchange="AccessCheckBoxClick(1)">
-                    Option 1
-                </label>
-            </li>
-            <li>
-                <label>
-                    <input value="op2" id="op2" type="checkbox" onchange="AccessCheckBoxClick(2)">
-                    Option 2
-                </label>
-            </li>
-            <li>
-                <label>
-                    <input value="op3" id="op3" type="checkbox" onchange="AccessCheckBoxClick(3)">
-                    Option 3
-                </label>
-            </li>
-           
-        </ul>
+                    <p class="card-title"> <strong>نقش‌ها</strong> </p>
+
+
+                </div>
+
+                <div id="basicgrid" class="m-t-40 jsgrid" style="position: relative; height: 750px; width: 100%;">
+                    <div class="jsgrid-grid-header jsgrid-header-scrollbar">
+                        <table class="jsgrid-table table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width:30%">
+                                        نام نقش
+                                    </th>
+                                    <th style="width:70%; text-align:center;">
+                                        اقدامات
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div id="tableofusercontent">
+                        @Html.Partial("_RolesTable")
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
 </div>
 
-<button onclick="checkSelectedItems()">push</button>
+
+
 
 <script>
-    function AccessCheckBoxClick(id1) {
-        // Your code here
-        console.log("Checkbox checked!", id1); // Example: Log a message to the console
+    function DeleteRole(id) {
+        if (confirm("آیا از حذف مطمین هستید؟")) {
+            $.get("/Admin/Manageroles/DeleteRole/" + id,
+                function (response) {
+                    if (response.resault) {
+                        alert("نقش حذف شد!");
+                        var myobj = document.getElementById(id);
+                        myobj.remove();
+                    }else{
+                        alert("کاربری با این نقش وجود دارد بنابراین نمی‌توان این نقش را حذف کرد!");
+                    }
+
+                });
+        }
     }
 
-
-    function checkSelectedItems() {
-        const checkboxes = document.querySelectorAll('#aceessCheckboxList input[type="checkbox"]');
-        const selectedItems = [];
-
-        checkboxes.forEach(checkbox => {
-            if (checkbox.checked) {
-                selectedItems.push(checkbox.value);
-            }
-        });
-
-        console.log(selectedItems);
-        // This will log an array of values for checked items
-    }
 </script>
