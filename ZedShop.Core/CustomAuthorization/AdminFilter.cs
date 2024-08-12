@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using ZedShop.Core.Services.Interface;
 using System.Security.Claims;
 using ZedShop.DataLayer.Entities;
+using ZedShop.Core.Services;
 
 
 namespace ZedShop.Core.CustomAuthorization
@@ -17,6 +18,14 @@ namespace ZedShop.Core.CustomAuthorization
 
     public class OwnerFilter : Attribute, IAuthorizationFilter
     {
+        //private readonly IUserService _userService;
+
+
+        //public OwnerFilter()
+        //{
+        //    _userService = new UserService();  
+        //}
+
         // simple sample of filtering
         public void OnAuthorization(AuthorizationFilterContext context)
         {

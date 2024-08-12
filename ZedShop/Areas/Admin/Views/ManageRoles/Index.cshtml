@@ -15,24 +15,30 @@
 
                 </div>
 
-                <div id="basicgrid" class="m-t-40 jsgrid" style="position: relative; height: 750px; width: 100%;">
-                    <div class="jsgrid-grid-header jsgrid-header-scrollbar">
-                        <table class="jsgrid-table table table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th style="width:30%">
-                                        نام نقش
-                                    </th>
-                                    <th style="width:70%; text-align:center;">
-                                        اقدامات
-                                    </th>
-                                </tr>
-                            </thead>
-                        </table>
+                <div class="row" style="display:flex">
+                    <div class="column left" style="width: 30%;"> </div>
+                    <div class="column middle" style="width: 50%; text-align:center;">
+                        <div id="basicgrid" class="m-t-40 jsgrid" style="position: relative; height: 750px; width: 100%;">
+                            <div  class="jsgrid-grid-header jsgrid-header-scrollbar">
+                                <table class="jsgrid-table table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:30%">
+                                                نام نقش
+                                            </th>
+                                            <th style="width:70%; text-align:center;">
+                                                اقدامات
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div id="tableofusercontent">
+                                @Html.Partial("_RolesTable")
+                            </div>
+                        </div>
                     </div>
-                    <div id="tableofusercontent">
-                        @Html.Partial("_RolesTable")
-                    </div>
+                    <div class="column right" style="width: 30%;"> </div>
                 </div>
             </div>
         </div>

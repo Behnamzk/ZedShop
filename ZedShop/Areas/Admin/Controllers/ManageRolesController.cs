@@ -24,7 +24,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
             foreach(var item in rolesList)
             {
-                roleAccessViews.Add(new RoleAccessViewModel() { Id = item.Id, Name = item.Name });
+                roleAccessViews.Add(new RoleAccessViewModel() { Id = item.Id, Name = item.DisplayName });
             }
 
             return View(roleAccessViews);
@@ -41,7 +41,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
             if (role != null)
             {
-                roleAccess.Name = role.Name;
+                roleAccess.Name = role.DisplayName;
                 roleAccess.Id = role.Id;
             }
 
@@ -62,9 +62,9 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
             Role role = _userService.GetRoleById(roleAccess.Id);
 
-            if (!(role.Name != roleAccess.Name && _userService.IsRoleNameExist(roleAccess.Name)))
+            if (!(role.DisplayName != roleAccess.Name && _userService.IsRoleNameExist(roleAccess.Name)))
             {
-                role.Name = roleAccess.Name;
+                role.DisplayName = roleAccess.Name;
 
                 _userService.UpdateRole(role);
 
@@ -92,14 +92,14 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
             if (role != null)
             {
-                roleAccess.Name = role.Name;
+                roleAccess.Name = role.DisplayName;
                 roleAccess.Id = role.Id;
 
 
                 foreach (var item in accesss)
                 {
                     AccessViewModel accessVM = new AccessViewModel();
-                    accessVM.Name = item.Name;
+                    accessVM.Name = item.DisplayName;
                     accessVM.Id = item.Id;
                     accessVM.IsActive = false;
 

@@ -34,7 +34,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
             // paging initialization
 
-            numberPerPage = 10;
+            numberPerPage = 5;
             currentPage = 1;
             allUserCount = userService.GetAllUsersCount(roleId, filterId);
             pageCount = (int)Math.Ceiling((double)allUserCount / numberPerPage);
@@ -92,7 +92,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
                 {
                     UserId = user.UserId,
                     UserName = user.UserName,
-                    RoleName = user.Role.Name,
+                    RoleName = user.Role.DisplayName,
                     Email = user.Email,
                     Gender = user.gender,
                     IsActive = user.IsActive,
@@ -119,7 +119,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
             {
                 userRole.UserName = user.UserName;
                 userRole.UserId = user.UserId;
-                userRole.RoleName = user.Role.Name;
+                userRole.RoleName = user.Role.DisplayName;
                 userRole.RoleId = user.RoleId;
             }
 
