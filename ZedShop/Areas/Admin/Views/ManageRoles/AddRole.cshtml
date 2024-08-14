@@ -1,0 +1,53 @@
+﻿@model ZedShop.Web.Areas.Admin.Models.UserViewModel.RoleViewModel
+
+@{
+    ViewData["Title"] = "افزودن نقش";
+    Layout = "~/areas/admin/views/shared/_AdminLayout.cshtml";
+
+}
+
+<div class="col-12">
+    <div class="card">
+        <div class="card-body">
+
+            <h4 class="card-title"><strong> افزودن نقش </strong></h4>
+            <form asp-action="AddRole" asp-controller="ManageRoles" method="post">
+
+                <div class="row-form-container">
+
+                    <div style="display:flex;" class="row">
+                        <div class="column left" style="width: 25%;"> </div>
+                        <div class="column middle" style="width: 50%;">
+                            <div style="text-align:center">
+
+                                <div style="text-align:right" class="form-group">
+                                    <label class="control-label">نام نقش</label>
+                                    <input asp-for="Name" class="form-control" placeholder="must be English" />
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+
+                                <div style="text-align:right" class="form-group">
+                                    <label class="control-label">نام نمایشی نقش</label>
+                                    <input asp-for="DisplayName" class="form-control" placeholder="به زبان فارسی" />
+                                    <span asp-validation-for="DisplayName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column right" style="width: 25%;"> </div>
+                    </div>
+
+
+
+
+                    <div class="simple-center-div" style="margin-top:20px; margin-bottom:20px;">
+                        <div class="form-group">
+                            <input type="submit" value="ذخیره" class="btn btn-success" />
+                            <button class="btn btn-warning btn-sm" asp-action="Index">انصراف</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

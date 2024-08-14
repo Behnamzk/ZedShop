@@ -306,6 +306,25 @@ namespace ZedShop.Core.Services
             return _context.Roles.Any(r=>r.Name == roleName);
         }
 
+        public bool IsRoleDisplayNameExist(string roleName)
+        {
+            return _context.Roles.Any(r => r.DisplayName == roleName);
+        }
+
+        public bool AddRole(Role role)
+        {
+            if (role != null)
+            {
+                _context.Roles.Add(role);
+                _context.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         #endregion
 
         #region Access
@@ -331,6 +350,8 @@ namespace ZedShop.Core.Services
             return _context.RolesAccess.Where(r => r.RoleId == roleId).Include(r=>r.Access).Select(r=>r.Access)?.ToList();
 
         }
+
+
 
 
 

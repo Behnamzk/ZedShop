@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace ZedShop.Core.CustomAuthorization
 {
-    public class ManangeUsersFilter : Attribute, IAuthorizationFilter
+    public class CheckAccess : Attribute, IAuthorizationFilter
     {
         private string _actionRequrment;
 
-        public ManangeUsersFilter(string actionRequrment) { 
+        public CheckAccess(string actionRequrment) { 
             _actionRequrment = actionRequrment;
         }
         public void OnAuthorization(AuthorizationFilterContext context)
@@ -34,7 +34,7 @@ namespace ZedShop.Core.CustomAuthorization
 
                 if (claims[3].Value != null)
                 {
-                    userAccess = JsonSerializer.Deserialize<List<string>>(claims[3].Value);
+                    userAccess = JsonSerializer.Deserialize<List<string>>(claims[3].Value); // get access of user
 
                 }
                 var role_id = claims[2].Value; // get role attribute
@@ -47,8 +47,17 @@ namespace ZedShop.Core.CustomAuthorization
 
                 if (userAccess.Count() == 0 || !userAccess.Contains(_actionRequrment))
                 {
-                    context.Result = new RedirectToActionResult("Index", "ManageUsers", null);
-                    return;
+                    try
+                    {
+                        string controllerName = context.RouteData.Values["controller"].ToString();
+                        context.Result = new RedirectToActionResult("Index", controllerName, null);
+                        return;
+                    }
+                    catch (Exception e)
+                    {
+                        context.Result = new RedirectToActionResult("Index", "AdminHome", null);
+                        return;
+                    }
                 }
 
 

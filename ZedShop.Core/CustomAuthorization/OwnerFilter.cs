@@ -48,8 +48,17 @@ namespace ZedShop.Core.CustomAuthorization
                 {
                     if(role_id != "3")
                     {
-                        context.Result = new RedirectToActionResult("Index", "AdminHome", null);
-                        return;
+                        try
+                        {
+                            string controllerName = context.RouteData.Values["controller"].ToString();
+                            context.Result = new RedirectToActionResult("Index", controllerName, null);
+                            return;
+                        }
+                        catch (Exception e)
+                        {
+                            context.Result = new RedirectToActionResult("Index", "AdminHome", null);
+                            return;
+                        }
                     }
                 }
 

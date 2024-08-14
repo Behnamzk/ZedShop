@@ -39,6 +39,8 @@ namespace ZedShop.Core.Services.Interface
         public List<Role> GetAllRoles();
         public bool IsRoleExist(int roleId);
         public bool IsRoleNameExist(string roleName);
+        public bool IsRoleDisplayNameExist(string roleName);
+        public bool AddRole(Role role);
         public bool DeleteRole(int roleId);
 
         public Role GetRoleById(int roleId);

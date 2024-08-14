@@ -12,6 +12,7 @@
 
                     <p class="card-title"> <strong>نقش‌ها</strong> </p>
 
+                    <a style="margin-right:5%;" class="btn btn-primary btn-sm" href="/Admin/ManageRoles/AddRole">افزودن نقش <strong>+</strong></a>
 
                 </div>
 
@@ -51,20 +52,25 @@
 
 <script>
     function DeleteRole(id) {
-        if (confirm("آیا از حذف مطمین هستید؟")) {
-            $.get("/Admin/Manageroles/DeleteRole/" + id,
-                function (response) {
-                    console.log("hehehe", response);
+        if (confirm("آیا از تغیر وضعیت حذف کاربر مطمین هستید؟")) {
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/ManageRoles/DeleteRole', // controller and action
+                data: { roleId: id }, // Send the userInput as a parameter
+                dataType: 'json',
+                success: function (response) {
                     if (response.success) {
                         alert("نقش حذف شد!");
                         var myobj = document.getElementById(id);
                         myobj.remove();
-                    }else{
+                    } else {
                         alert("کاربری با این نقش وجود دارد بنابراین نمی‌توان این نقش را حذف کرد!");
                     }
-
-                });
+                }
+            });
         }
+
+    
     }
 
 </script>

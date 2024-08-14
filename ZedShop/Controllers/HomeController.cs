@@ -115,7 +115,6 @@ namespace ZedShop.Controllers
         }
 
         [Route("/AboutUs")]
-        [ManangeUsersFilter("fff")]
         public IActionResult ABoutUs()
         {
             return View();
@@ -130,7 +129,6 @@ namespace ZedShop.Controllers
 
 
         [Route("/EarningIncome")]
-        [ManangeUsersFilter("bbb")]
         public IActionResult EarningIncome()
         {
             return View();

@@ -22,7 +22,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
             var rolesList = _userService.GetAllRoles();
 
-            foreach(var item in rolesList)
+            foreach (var item in rolesList)
             {
                 roleAccessViews.Add(new RoleAccessViewModel() { Id = item.Id, Name = item.DisplayName });
             }
@@ -30,7 +30,55 @@ namespace ZedShop.Web.Areas.Admin.Controllers
             return View(roleAccessViews);
         }
 
-        [OwnerFilter] // just owner of site
+
+        [CheckAccess("AddRole")]
+        [Route("/Admin/ManageRoles/AddRole")]
+        [HttpGet]
+        public IActionResult AddRole()
+        {
+            return View(new RoleViewModel());
+        }
+
+
+        [CheckAccess("AddRole")]
+        [Route("/Admin/ManageRoles/AddRole")]
+        [HttpPost]
+        public IActionResult AddRole(RoleViewModel role)
+        {
+            if (!ModelState.IsValid)
+            {
+
+                return View(role);
+            }
+
+            if (!_userService.IsRoleNameExist(role.Name) )
+            {
+                if (!_userService.IsRoleDisplayNameExist(role.DisplayName))
+                {
+
+                    _userService.AddRole(new Role()
+                    {
+                        Name = role.Name,
+                        DisplayName = role.DisplayName
+                    });
+
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError("DisplayName", "نام نقش تکراری است!!");
+                }
+
+            }
+            else
+            {
+                ModelState.AddModelError("Name", "نام نقش تکراری است!!");
+            }
+            return View(role);
+
+        }
+
+        [CheckAccess("EditRole")]
         [Route("/Admin/ManageRoles/EditRole/{roleId}")]
         [HttpGet]
         public IActionResult EditRole(int roleId)
@@ -49,7 +97,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
         }
 
 
-        [OwnerFilter] // just owner of site
+        [CheckAccess("EditRole")]
         [Route("/Admin/ManageRoles/EditRole/{roleId}")]
         [HttpPost]
         public IActionResult EditRole(RoleAccessViewModel roleAccess)
@@ -77,7 +125,6 @@ namespace ZedShop.Web.Areas.Admin.Controllers
             return View(roleAccess);
 
         }
-
 
         [OwnerFilter] // just owner of site
         [Route("/Admin/ManageRoles/EditRoleAccess/{roleId}")]
@@ -141,18 +188,20 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
         }
 
-        [OwnerFilter] // just owner of site
-        [HttpGet]
-        public ActionResult DeleteRole(int id)
+        [CheckAccess("DeleteRole")]
+        [Route("/Admin/ManageRoles/DeleteRole")]
+        [HttpPost]
+        public ActionResult DeleteRole(int roleId)
         {
-            if (_userService.DeleteRole(id)){
+            if (_userService.DeleteRole(roleId))
+            {
                 return Json(new { success = true });
             }
             else
             {
                 return Json(new { success = false });
             }
-            
+
         }
     }
 }

@@ -171,7 +171,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
 
 
-        [ManangeUsersFilter("EditUser")]
+        [CheckAccess("EditUser")]
         [Route("/Admin/ManageUsers/EditUser/{userId}")]
         [HttpGet]
         public IActionResult EditUser(int userId)
@@ -199,7 +199,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
         }
 
 
-        [ManangeUsersFilter("EditUser")]
+        [CheckAccess("EditUser")]
         [Route("/Admin/ManageUsers/EditUser/{userId}")]
         [HttpPost]
         public IActionResult EditUser(UserViewModel userViewModel)
@@ -255,7 +255,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
         }
 
 
-        [ManangeUsersFilter("BanUser")]
+        [CheckAccess("BanUser")]
         [Route("/Admin/ManageUsers/BanUser")]
         [HttpPost]
         public ActionResult BanUser(int userId)
@@ -266,7 +266,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
         }
 
 
-        [ManangeUsersFilter("DeleteUser")]
+        [CheckAccess("DeleteUser")]
         [Route("/Admin/ManageUsers/DeleteUser")]
         [HttpPost]
         public ActionResult DeleteUser(int userId)
