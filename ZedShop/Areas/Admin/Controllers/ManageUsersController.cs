@@ -171,7 +171,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
 
 
-        //[Authorize]
+        [ManangeUsersFilter("EditUser")]
         [Route("/Admin/ManageUsers/EditUser/{userId}")]
         [HttpGet]
         public IActionResult EditUser(int userId)
@@ -199,7 +199,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
         }
 
 
-        //[Authorize]
+        [ManangeUsersFilter("EditUser")]
         [Route("/Admin/ManageUsers/EditUser/{userId}")]
         [HttpPost]
         public IActionResult EditUser(UserViewModel userViewModel)
@@ -255,9 +255,9 @@ namespace ZedShop.Web.Areas.Admin.Controllers
         }
 
 
-        //[Authorize]
-        [Route("/Admin/ManageUsers/BanUser/{userId}")]
-        [HttpGet]
+        [ManangeUsersFilter("BanUser")]
+        [Route("/Admin/ManageUsers/BanUser")]
+        [HttpPost]
         public ActionResult BanUser(int userId)
         {
             bool resault = _userService.BanUser(userId);
@@ -265,10 +265,13 @@ namespace ZedShop.Web.Areas.Admin.Controllers
             return Json(new { resault = resault });
         }
 
-        [HttpGet]
-        public ActionResult DeleteUser(int id)
+
+        [ManangeUsersFilter("DeleteUser")]
+        [Route("/Admin/ManageUsers/DeleteUser")]
+        [HttpPost]
+        public ActionResult DeleteUser(int userId)
         {
-            _userService.DeleteUser(id);
+            _userService.DeleteUser(userId);
             return Json(new { success = true });
         }
 

@@ -326,6 +326,12 @@ namespace ZedShop.Core.Services
 
         }
 
+        public List<Access> GetRolesAccess(int roleId)
+        {
+            return _context.RolesAccess.Where(r => r.RoleId == roleId).Include(r=>r.Access).Select(r=>r.Access)?.ToList();
+
+        }
+
 
 
 

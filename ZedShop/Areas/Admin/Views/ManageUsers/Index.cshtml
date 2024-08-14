@@ -19,7 +19,7 @@
                         {
                             <option value="@item.Id">@item.DisplayName</option>
                         }
-                      
+
                     </select>
 
                     <p class="card-title" style="margin-top:15px;margin-right:2%;font-size:16px; "> فیلتر:  </p>
@@ -93,31 +93,54 @@
 
 <script>
     function DeleteUser(id) {
-        if (confirm("آیا از حذف مطمین هستید؟")) {
-            $.get("/Admin/ManageUsers/DeleteUser/" + id,
-                function () {
+        if (confirm("آیا از تغیر وضعیت حذف کاربر مطمین هستید؟")) {
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/ManageUsers/DeleteUser/', // controller and action
+                data: { userId: id }, // Send the userInput as a parameter
+                dataType: 'json',
+                success: function (response) {
                     var myobj = document.getElementById(id);
                     myobj.remove();
-                });
+                }
+            });
         }
     }
 
     function BanUser(id) {
-        if (confirm("آیا از مسدود کردن کاربر مطمین هستید؟")) {
-            console.log("deeff", id);
-
-            $.get("/Admin/ManageUsers/BanUser/" + id,
-                function (response) {
+        if (confirm("آیا از تغیر وضعیت مسدودیت کاربر مطمین هستید؟")) {
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/ManageUsers/BanUser', // controller and action
+                data: { userId: id }, // Send the userInput as a parameter
+                dataType: 'json',
+                success: function (response) {
                     var myobj = document.getElementById('ban_' + id);
                     if (response.resault) {
-                        myobj.textContent = "بله";
+                        myobj.textContent = "مسدود";
                     } else {
                         myobj.textContent = "خیر";
                     }
-
-
-                });
+                }
+            });
         }
+
+        // if (confirm("آیا از مسدود کردن کاربر مطمین هستید؟")) {
+        //     console.log("deeff", id);
+
+        //     $.get("/Admin/ManageUsers/BanUser/" + id,
+        //         function (response) {
+        //             console.log("deeressff", response);
+        //             var myobj = document.getElementById('ban_' + id);
+        //             if (response.resault) {
+        //                 myobj.textContent = "بله";
+        //             } else {
+        //                 myobj.textContent = "خیر";
+        //             }
+
+
+        //         });
+        // }
     }
 
 </script>

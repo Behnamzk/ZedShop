@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using ZedShop.Core.CustomAuthorization;
 using ZedShop.Core.DTOs.Home;
 using ZedShop.Core.DTOs.Product;
 using ZedShop.Core.Services;
@@ -114,6 +115,7 @@ namespace ZedShop.Controllers
         }
 
         [Route("/AboutUs")]
+        [ManangeUsersFilter("fff")]
         public IActionResult ABoutUs()
         {
             return View();
@@ -128,6 +130,7 @@ namespace ZedShop.Controllers
 
 
         [Route("/EarningIncome")]
+        [ManangeUsersFilter("bbb")]
         public IActionResult EarningIncome()
         {
             return View();

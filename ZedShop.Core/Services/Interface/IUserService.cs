@@ -52,6 +52,7 @@ namespace ZedShop.Core.Services.Interface
         public List<Access> GetAllAccesses();
         public bool IsAccessExist(int accessId);
         public Access GetAccessById(int accessId);
+        public List<Access> GetRolesAccess(int roleId);
         #endregion
     }
 }
