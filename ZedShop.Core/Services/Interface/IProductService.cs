@@ -26,5 +26,14 @@ namespace ZedShop.Core.Services.Interface
         bool DecreaseProductCount(int prodcutId, int count);
         bool IncreaseProductCount(int prodcutId, int count);
 
+        int GetAllProductsCount(int filterId);
+        List<Product> GetAllProductsPaged(int page, int pageSize, int filterId);
+
+        bool DeleteProduct(int productId);
+        bool ShowProduct(int productId);
+        bool IsProducExist(int productId);
+        bool CompleteDeleteProduct(int productId);
+        bool UpdateProduct(Product product);
+
     }
 }

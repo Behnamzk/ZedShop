@@ -1,0 +1,78 @@
+﻿@model ZedShop.Web.Areas.Admin.Models.ProductViewModel.ProductCategoryViewModelAdmin
+
+@{
+    ViewData["Title"] = "ویرایش دسته کالا";
+    Layout = "~/areas/admin/views/shared/_AdminLayout.cshtml";
+
+}
+
+<div class="col-12">
+    <div class="card">
+        <div class="card-body">
+
+            <h4 class="card-title"><strong> ویرایش دسته کالا </strong></h4>
+            <form asp-action="EditProductCategory" asp-controller="ManageProducts" method="post" enctype="multipart/form-data">
+
+
+
+                <div class="row-form-container">
+
+
+                    <input type="hidden" asp-for="ProductId" class="form-control" />
+                    <input type="hidden" asp-for="Name" class="form-control" />
+                    <input type="hidden" asp-for="CategoryText" class="form-control" />
+
+                    <div class="row-form">
+                        <div class="left" style="width: 40%; text-align:center;">
+                            <div class="form-group">
+                                <p><strong> نام کالا: @Model.Name</strong></p>
+                            </div>
+
+                            <div class="form-group">
+                                <p><strong> دسته کالا: @Model.CategoryText</strong></p>
+                            </div>
+
+                        </div>
+
+                        <div class="right" style="width: 60%;">
+                            <div class="form-group" style="display: flex;">
+                                <p><strong> دسته‌ها:</strong></p>
+                                <div class="access-scrollable-list">
+                                    <ul>
+                                        @for (int i = 0; i < Model.ProdcutCategories.Count; i++)
+                                        {
+                                            <li>
+                                                <div class="form-auth-row">
+                                                    <input type="hidden" asp-for="@Model.ProdcutCategories[i].Name" />
+                                                    <input type="hidden" asp-for="@Model.ProdcutCategories[i].Id" />
+                                                    <label class="ui-checkbox">
+                                                        <input asp-for="@Model.ProdcutCategories[i].IsActive" type="checkbox">
+                                                        <span class="ui-checkbox-check"></span>
+                                                    </label>
+                                                    <label>@Model.ProdcutCategories[i].Name</label>
+                                                </div>
+
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="simple-center-div" style="margin-top:20px; margin-bottom:20px;">
+                        <div class="form-group">
+                            <input type="submit" value="ذخیره" class="btn btn-success" />
+                            <button class="btn btn-warning btn-sm" asp-action="Index">انصراف</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+

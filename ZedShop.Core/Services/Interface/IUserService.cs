@@ -14,6 +14,7 @@ namespace ZedShop.Core.Services.Interface
         public bool IsExistUserName(string userName);
 
         public bool IsExistEmail(string email);
+        public bool IsUserExist(int userId);
 
         public int AddUser(User user);
 

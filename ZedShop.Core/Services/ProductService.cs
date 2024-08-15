@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZedShop.Core.Convertors;
 using ZedShop.Core.DTOs.Product;
 using ZedShop.Core.Services.Interface;
 using ZedShop.DataLayer.Context;
@@ -164,10 +167,144 @@ namespace ZedShop.Core.Services
             return _context.Categories.ToList();
         }
 
+        public int GetAllProductsCount(int filterId)
+        {
 
+            switch (filterId)
+            {
+                case -1:
+                    // All products except Deleted products
+                    return _context.Products.Where(u => u.IsDelete == false).Count();
 
+                case 0:
+                    // Deleted products 
+                    return _context.Products.Where(u => u.IsDelete == true).Count();
 
+                case 1:
+                    // Count == 0
+                    return _context.Products.Where(u => u.IsDelete == false && u.Count == 0).Count();
 
+                case 2:
+                    // IsActivate == false
+                    return _context.Products.Where(u => u.IsDelete == false && u.IsActivate == false).Count();
+
+                case 3:
+                    // IsShow == false
+                    return _context.Products.Where(u => u.IsDelete == false && u.IsShow == false).Count();
+
+                default:
+                    return _context.Products.Where(u => u.IsDelete == false).Count();
+
+            }
+        }
+
+        public List<Product> GetAllProductsPaged(int page, int pageSize, int filterId)
+        {
+            switch (filterId)
+            {
+                case -1:
+                    // All products except Deleted products
+                    return _context.Products.Where(u => u.IsDelete == false).ToPaged(page, pageSize).ToList();
+
+                case 0:
+                    // Deleted products 
+                    return _context.Products.Where(u => u.IsDelete == true).ToPaged(page, pageSize).ToList();
+
+                case 1:
+                    // Count == 0
+                    return _context.Products.Where(u => u.IsDelete == false && u.Count == 0).ToPaged(page, pageSize).ToList();
+
+                case 2:
+                    // IsActivate == false
+                    return _context.Products.Where(u => u.IsDelete == false && u.IsActivate == false).ToPaged(page, pageSize).ToList();
+
+                case 3:
+                    // IsShow == false
+                    return _context.Products.Where(u => u.IsDelete == false && u.IsShow == false).ToPaged(page, pageSize).ToList();
+
+                default:
+                    return _context.Products.Where(u => u.IsDelete == false).ToPaged(page, pageSize).ToList();
+
+            }
+        }
+
+        public bool DeleteProduct(int productId)
+        {
+            if (_context.OrderProducts.Any(u => u.ProductId == productId))
+            {
+                return false;
+            }
+            else
+            {
+                var product = GetProduct(productId);
+                if (product != null)
+                {
+                    product.IsDelete = !product.IsDelete;
+                    _context.Products.Update(product);
+                    _context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+        }
+
+        public bool CompleteDeleteProduct(int productId)
+        {
+            if (_context.OrderProducts.Any(u => u.ProductId == productId))
+            {
+                return false;
+            }
+            else
+            {
+                var product = GetProduct(productId);
+                if (product != null)
+                {
+                    product.IsDelete = true;
+                    _context.Products.Remove(product);
+                    _context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+        }
+
+        public bool ShowProduct(int productId)
+        {
+            var product = GetProduct(productId);
+
+            product.IsShow = !product.IsShow;
+            _context.Products.Update(product);
+            _context.SaveChanges();
+            return product.IsShow;
+
+        }
+
+        public bool IsProducExist(int productId)
+        {
+            return _context.Products.Any(p => p.ProductId == productId);
+        }
+
+        public bool UpdateProduct(Product product)
+        {
+            if(product == null)
+            {
+                return false;
+            }
+            else
+            {
+                _context.Products.Update(product);
+                _context.SaveChanges();
+                return true;
+            }
+        }
 
         #endregion
     }

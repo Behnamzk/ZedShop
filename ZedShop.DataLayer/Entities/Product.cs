@@ -32,6 +32,9 @@ namespace ZedShop.DataLayer.Entities
         public bool IsShow { get; set; }
 
         [Required]
+        public bool IsDelete { get; set; } = false;
+
+        [Required]
         public DateTime BuyDate { get; set; }
 
         [Required]

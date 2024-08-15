@@ -36,7 +36,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
             numberPerPage = 5;
             currentPage = 1;
-            allUserCount = userService.GetAllUsersCount(roleId, filterId);
+            allUserCount = _userService.GetAllUsersCount(roleId, filterId);
             pageCount = (int)Math.Ceiling((double)allUserCount / numberPerPage);
 
         }
@@ -260,9 +260,13 @@ namespace ZedShop.Web.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult BanUser(int userId)
         {
-            bool resault = _userService.BanUser(userId);
+            if (_userService.IsUserExist(userId))
+            {
+                bool resault = _userService.BanUser(userId);
 
-            return Json(new { resault = resault });
+                return Json(new { resault = resault });
+            }
+            return RedirectToAction("Index");
         }
 
 

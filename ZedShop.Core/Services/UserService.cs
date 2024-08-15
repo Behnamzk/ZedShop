@@ -121,10 +121,7 @@ namespace ZedShop.Core.Services
         public bool BanUser(int userId)
         {
             User user = GetUserById(userId);
-            if (user == null)
-            {
-                return false;
-            }
+
 
             user.IsBan = !user.IsBan;
 
@@ -349,6 +346,11 @@ namespace ZedShop.Core.Services
         {
             return _context.RolesAccess.Where(r => r.RoleId == roleId).Include(r=>r.Access).Select(r=>r.Access)?.ToList();
 
+        }
+
+        public bool IsUserExist(int userId)
+        {
+            return _context.Users.Any(r => r.UserId == userId);
         }
 
 
