@@ -147,7 +147,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
         }
 
-        [CheckAccess("EditProdcutCategory")]
+        [CheckAccess("EditProductCategory")]
         [Route("/Admin/ManageProducts/EditProductCategory/{productId}")]
         [HttpGet]
         public IActionResult EditProductCategory(int productId)
@@ -184,7 +184,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
             return View(productCategory);
         }
 
-        [CheckAccess("EditProdcutCategory")]
+        [CheckAccess("EditProductCategory")]
         [Route("/Admin/ManageProducts/EditProductCategory/{productId}")]
         [HttpPost]
         public IActionResult EditProductCategory(ProductCategoryViewModelAdmin productCategory)
@@ -204,6 +204,47 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
             product.ProductCategories = productCategories;
 
+            _productService.UpdateProduct(product);
+
+
+            return RedirectToAction("Index");
+
+        }
+
+
+        [CheckAccess("EditProduct")]
+        [Route("/Admin/ManageProducts/EditProduct/{productId}")]
+        [HttpGet]
+        public IActionResult EditProduct(int productId)
+        {
+
+            var product = _productService.GetProduct(productId);
+
+            if (product != null)
+            {
+
+                ViewBag.EditMode = true;
+                ViewBag.ActionName = "EditProduct";
+
+                return View("AddEditProduct", product);
+
+            }
+
+            return RedirectToAction("Index");
+
+        }
+
+        [CheckAccess("EditProduct")]
+        [Route("/Admin/ManageProducts/EditProduct/{productId}")]
+        [HttpPost]
+        public IActionResult EditProduct(Product product)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.EditMode = true;
+                return View("AddEditProduct", product);
+
+            }
             _productService.UpdateProduct(product);
 
 
