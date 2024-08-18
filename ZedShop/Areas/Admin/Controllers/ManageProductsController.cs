@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using System.Globalization;
+using ZedShop.Core.Convertors;
 using ZedShop.Core.CustomAuthorization;
 using ZedShop.Core.DTOs.Product;
 using ZedShop.Core.Services;
@@ -22,6 +25,10 @@ namespace ZedShop.Web.Areas.Admin.Controllers
         private readonly List<FilterBaseViewModel> filtersBase = new List<FilterBaseViewModel>();
 
         private readonly PersianCalendar pc;
+
+        private readonly MapperConfiguration productAEMapperConfig;
+
+        private IMapper productAEMapper;
         public ManageProductsController(IProductService productService)
         {
             _productService = productService;
@@ -33,6 +40,10 @@ namespace ZedShop.Web.Areas.Admin.Controllers
             filtersBase.Add(new FilterBaseViewModel(3, "مخفی شده"));
 
             pc = new PersianCalendar();
+
+
+            productAEMapperConfig = new MapperConfiguration(cfg => cfg.AddProfile<ProductMapping>());
+            productAEMapper = productAEMapperConfig.CreateMapper();
 
             // paging initialization
 
@@ -220,13 +231,18 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
             var product = _productService.GetProduct(productId);
 
+           
             if (product != null)
             {
+                // Use Mapper
+                ProductAEViewModelAdmin productAE = productAEMapper.Map<ProductAEViewModelAdmin>(product);
+
+                productAE.BuyDateSTR = string.Format("{0}/{1}/{2}", pc.GetYear(product.BuyDate), pc.GetMonth(product.BuyDate), pc.GetDayOfMonth(product.BuyDate));
 
                 ViewBag.EditMode = true;
                 ViewBag.ActionName = "EditProduct";
 
-                return View("AddEditProduct", product);
+                return View("AddEditProduct", productAE);
 
             }
 
@@ -237,15 +253,21 @@ namespace ZedShop.Web.Areas.Admin.Controllers
         [CheckAccess("EditProduct")]
         [Route("/Admin/ManageProducts/EditProduct/{productId}")]
         [HttpPost]
-        public IActionResult EditProduct(Product product)
+        public IActionResult EditProduct(ProductAEViewModelAdmin productAE)
         {
             if (!ModelState.IsValid)
             {
                 ViewBag.EditMode = true;
-                return View("AddEditProduct", product);
-
+                return View("AddEditProduct", productAE);
             }
-            _productService.UpdateProduct(product);
+
+            Product product = productAEMapper.Map<Product>(productAE);
+            productAE.BuyDateSTR = Tools.ConvertPersianToEnglishNumbers(productAE.BuyDateSTR);
+            var dateParts = productAE.BuyDateSTR.Split('/');
+
+            product.BuyDate = new DateTime(int.Parse(dateParts[0]), int.Parse(dateParts[1]), int.Parse(dateParts[2]), pc);
+
+            _productService.UpdateProduct(product, productAE.ProductImageFile);
 
 
             return RedirectToAction("Index");

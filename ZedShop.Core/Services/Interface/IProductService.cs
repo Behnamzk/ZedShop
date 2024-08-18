@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,6 +35,7 @@ namespace ZedShop.Core.Services.Interface
         bool IsProducExist(int productId);
         bool CompleteDeleteProduct(int productId);
         bool UpdateProduct(Product product);
+        bool UpdateProduct(Product product, IFormFile imgProduct);
 
     }
 }

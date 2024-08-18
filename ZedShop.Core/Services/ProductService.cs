@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using ZedShop.Core.Convertors;
 using ZedShop.Core.DTOs.Product;
+using ZedShop.Core.Generator;
+using ZedShop.Core.Security;
 using ZedShop.Core.Services.Interface;
 using ZedShop.DataLayer.Context;
 using ZedShop.DataLayer.Entities;
@@ -300,6 +303,37 @@ namespace ZedShop.Core.Services
             }
             else
             {
+                _context.Products.Update(product);
+                _context.SaveChanges();
+                return true;
+            }
+        }
+
+        public bool UpdateProduct(Product product, IFormFile imgProduct)
+        {
+            if (product == null)
+            {
+                return false;
+            }
+            else
+            {
+                if (imgProduct != null && imgProduct.IsImage())
+                {
+                    if (product.ProductImageName != "Defult.jpg")
+                    {
+                        string deleteimagePath = Path.Combine(Directory.GetCurrentDirectory(),  "wwwroot/Products/Image", product.ProductImageName);
+                        if (File.Exists(deleteimagePath))
+                        {
+                            File.Delete(deleteimagePath);
+                        }
+                    }
+                    product.ProductImageName = NameGenerator.GenerateUniqueCode() + Path.GetExtension(imgProduct.FileName);
+
+                    ImageConvertor imgResizer = new ImageConvertor();
+                    string thumbPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Products/Image", product.ProductImageName);
+
+                    imgResizer.ResizeImage(imgProduct, thumbPath, 750, 500);
+                }
                 _context.Products.Update(product);
                 _context.SaveChanges();
                 return true;
