@@ -36,6 +36,7 @@ namespace ZedShop.Core.Services.Interface
         bool CompleteDeleteProduct(int productId);
         bool UpdateProduct(Product product);
         bool UpdateProduct(Product product, IFormFile imgProduct);
+        bool AddProduct(Product product, IFormFile imgProduct);
 
     }
 }

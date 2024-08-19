@@ -231,7 +231,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
             var product = _productService.GetProduct(productId);
 
-           
+
             if (product != null)
             {
                 // Use Mapper
@@ -258,20 +258,102 @@ namespace ZedShop.Web.Areas.Admin.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.EditMode = true;
+                ViewBag.ActionName = "EditProduct";
+
                 return View("AddEditProduct", productAE);
             }
 
             Product product = productAEMapper.Map<Product>(productAE);
             productAE.BuyDateSTR = Tools.ConvertPersianToEnglishNumbers(productAE.BuyDateSTR);
-            var dateParts = productAE.BuyDateSTR.Split('/');
 
-            product.BuyDate = new DateTime(int.Parse(dateParts[0]), int.Parse(dateParts[1]), int.Parse(dateParts[2]), pc);
+            if (productAE.BuyDateSTR.All(c => char.IsDigit(c) || c == '/'))
+            {
+                try
+                {
+                    var dateParts = productAE.BuyDateSTR.Split('/');
 
-            _productService.UpdateProduct(product, productAE.ProductImageFile);
+                    product.BuyDate = new DateTime(int.Parse(dateParts[0]), int.Parse(dateParts[1]), int.Parse(dateParts[2]), pc);
+
+                    _productService.UpdateProduct(product, productAE.ProductImageFile);
 
 
-            return RedirectToAction("Index");
+                    return RedirectToAction("Index");
+                }
+                catch
+                {
+                    ModelState.AddModelError("BuyDateSTR", "لطفا فیلد تاریخ را به درستی (مثال: 1234/5/6) وارد کنید");
+                }
 
+            }
+            else
+            {
+                ModelState.AddModelError("BuyDateSTR", "تاریخ باید به فرمت 1234/5/6 باشد");
+            }
+
+            ViewBag.EditMode = true;
+            ViewBag.ActionName = "EditProduct";
+
+            return View("AddEditProduct", productAE);
+        }
+
+
+        [CheckAccess("AddProduct")]
+        [Route("/Admin/ManageProducts/AddProduct")]
+        [HttpGet]
+        public IActionResult AddProduct()
+        {
+
+            ProductAEViewModelAdmin productAE = new ProductAEViewModelAdmin();
+            productAE.ProductImageName = "noimage_product.png";
+
+            ViewBag.EditMode = false;
+            ViewBag.ActionName = "AddProduct";
+
+            return View("AddEditProduct", productAE);
+        }
+
+        [CheckAccess("AddProduct")]
+        [Route("/Admin/ManageProducts/AddProduct")]
+        [HttpPost]
+        public IActionResult AddProduct(ProductAEViewModelAdmin productAE)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.EditMode = false;
+                ViewBag.ActionName = "AddProduct";
+                return View("AddEditProduct", productAE);
+            }
+
+            Product product = productAEMapper.Map<Product>(productAE);
+            productAE.BuyDateSTR = Tools.ConvertPersianToEnglishNumbers(productAE.BuyDateSTR);
+
+            if (productAE.BuyDateSTR.All(c => char.IsDigit(c) || c == '/'))
+            {
+                try
+                {
+                    var dateParts = productAE.BuyDateSTR.Split('/');
+
+                    product.BuyDate = new DateTime(int.Parse(dateParts[0]), int.Parse(dateParts[1]), int.Parse(dateParts[2]), pc);
+
+                    _productService.AddProduct(product, productAE.ProductImageFile);
+
+
+                    return RedirectToAction("Index");
+                }
+                catch
+                {
+                    ModelState.AddModelError("BuyDateSTR", "لطفا فیلد تاریخ را به درستی (مثال: 1234/5/6) وارد کنید");
+                }
+
+            }
+            else
+            {
+                ModelState.AddModelError("BuyDateSTR", "تاریخ باید به فرمت 1234/5/6 باشد");
+            }
+
+            ViewBag.EditMode = false;
+            ViewBag.ActionName = "AddProduct";
+            return View("AddEditProduct", productAE);
         }
 
     }
