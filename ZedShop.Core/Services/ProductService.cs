@@ -290,14 +290,14 @@ namespace ZedShop.Core.Services
 
         }
 
-        public bool IsProducExist(int productId)
+        public bool IsProductExist(int productId)
         {
             return _context.Products.Any(p => p.ProductId == productId);
         }
 
         public bool UpdateProduct(Product product)
         {
-            if(product == null)
+            if (product == null)
             {
                 return false;
             }
@@ -321,7 +321,7 @@ namespace ZedShop.Core.Services
                 {
                     if (product.ProductImageName != "noimage_product.png")
                     {
-                        string deleteimagePath = Path.Combine(Directory.GetCurrentDirectory(),  "wwwroot/Products/Image", product.ProductImageName);
+                        string deleteimagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Products/Image", product.ProductImageName);
                         if (File.Exists(deleteimagePath))
                         {
                             File.Delete(deleteimagePath);
@@ -370,7 +370,81 @@ namespace ZedShop.Core.Services
                 return true;
             }
         }
-
         #endregion
+
+
+        public int GetAllCommentsCount(int filterId)
+        {
+            switch (filterId)
+            {
+                case -1:
+                    // All products except Deleted products
+                    return _context.Comments.Count();
+
+                case 0:
+                    // IsShow == false
+                    return _context.Comments.Where(u => u.IsShow == false).Count();
+
+                default:
+                    return _context.Comments.Count();
+
+            }
+        }
+
+        public List<Comment> GetAllCommemtsPaged(int page, int pageSize, int filterId)
+        {
+            switch (filterId)
+            {
+                case -1:
+                    // All products except Deleted products
+                    return _context.Comments.Include(c=>c.User).Include(c => c.Product).ToPaged(page, pageSize).ToList();
+
+                case 0:
+                    // IsShow == false
+                    return _context.Comments.Include(c => c.User).Include(c => c.Product).Where(u => u.IsShow == false).ToPaged(page, pageSize).ToList();
+
+                default:
+                    return _context.Comments.Include(c => c.User).Include(c => c.Product).ToPaged(page, pageSize).ToList();
+
+            }
+        }
+
+        public bool DeleteComment(int commentId)
+        {
+
+            var comment = GetComment(commentId);
+            if (comment != null)
+            {
+                _context.Comments.Remove(comment);
+                _context.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        public bool ShowComment(int commentId)
+        {
+            var comment = GetComment(commentId);
+
+            comment.IsShow = !comment.IsShow;
+            _context.Comments.Update(comment);
+            _context.SaveChanges();
+            return comment.IsShow;
+        }
+
+        public bool IsCommentExist(int commentId)
+        {
+            return _context.Comments.Any(p => p.Id == commentId);
+        }
+
+        public Comment GetComment(int commentId)
+        {
+            return _context.Comments.Include(c => c.User).Include(c => c.Product).SingleOrDefault(c => c.Id == commentId);
+
+        }
     }
 }

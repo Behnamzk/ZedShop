@@ -12,7 +12,8 @@ using ZedShop.Core.CustomAuthorization;
 namespace ZedShop.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "2 , 3")] // 2 is admin and 3 is owner
+    [Authorize(Roles = "Admin,SiteOwner")] //Only admin and SiteOwner
+
 
     public class ManageUsersController : Controller
     {

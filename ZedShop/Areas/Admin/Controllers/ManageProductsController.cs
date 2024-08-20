@@ -15,7 +15,8 @@ using ZedShop.Web.Areas.Admin.Models.UserViewModel;
 namespace ZedShop.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "2 , 3")] // 2 is admin and 3 is owner
+    [Authorize(Roles = "Admin,SiteOwner")] //Only admin and SiteOwner
+
     public class ManageProductsController : Controller
     {
         private readonly IProductService _productService;
@@ -147,7 +148,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult ShowProduct(int productId)
         {
-            if (_productService.IsProducExist(productId))
+            if (_productService.IsProductExist(productId))
             {
                 bool resault = _productService.ShowProduct(productId);
 

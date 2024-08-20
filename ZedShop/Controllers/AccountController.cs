@@ -55,7 +55,7 @@ namespace ZedShop.Web.Controllers.Account
                     {
                         new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
                         new Claim(ClaimTypes.Name, user.UserName),
-                        new Claim(ClaimTypes.Role, user.RoleId.ToString()),
+                        new Claim(ClaimTypes.Role, user.Role.Name),
                         new Claim("UserAccess", serializedUserAccess),
                     };
 

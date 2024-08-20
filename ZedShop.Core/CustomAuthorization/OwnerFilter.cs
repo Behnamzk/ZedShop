@@ -46,7 +46,7 @@ namespace ZedShop.Core.CustomAuthorization
 
                 if(role_id != null)
                 {
-                    if(role_id != "3")
+                    if(role_id != "SiteOwner")
                     {
                         try
                         {

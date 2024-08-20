@@ -28,15 +28,26 @@ namespace ZedShop.Core.Services.Interface
         bool IncreaseProductCount(int prodcutId, int count);
 
         int GetAllProductsCount(int filterId);
+        int GetAllCommentsCount(int filterId);
         List<Product> GetAllProductsPaged(int page, int pageSize, int filterId);
+        List<Comment> GetAllCommemtsPaged(int page, int pageSize, int filterId);
+
+
 
         bool DeleteProduct(int productId);
         bool ShowProduct(int productId);
-        bool IsProducExist(int productId);
+        bool IsProductExist(int productId);
         bool CompleteDeleteProduct(int productId);
         bool UpdateProduct(Product product);
         bool UpdateProduct(Product product, IFormFile imgProduct);
         bool AddProduct(Product product, IFormFile imgProduct);
+
+        bool DeleteComment(int commentId);
+        bool ShowComment(int commentId);
+        bool IsCommentExist(int commentId);
+
+        Comment GetComment(int commentId);
+
 
     }
 }

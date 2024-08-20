@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using ZedShop.Core.CustomAuthorization;
 using ZedShop.Core.Services.Interface;
@@ -8,6 +9,8 @@ using ZedShop.Web.Areas.Admin.Models.UserViewModel;
 namespace ZedShop.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin,SiteOwner")] //Only admin and SiteOwner
+
     public class ManageRolesController : Controller
     {
         private readonly IUserService _userService;

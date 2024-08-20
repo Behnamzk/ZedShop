@@ -75,7 +75,7 @@ namespace ZedShop.Core.Services
             string password = PasswordHelper.EncodePasswordMd5(loginViewModel.Password);
             string email = FixText.FixEmail(loginViewModel.Email);
 
-            return _context.Users.Where(u => u.IsDelete == false).SingleOrDefault(User => User.Email == email && User.Password == password);
+            return _context.Users.Include(u=>u.Role).Where(u => u.IsDelete == false).SingleOrDefault(User => User.Email == email && User.Password == password);
 
         }
 
