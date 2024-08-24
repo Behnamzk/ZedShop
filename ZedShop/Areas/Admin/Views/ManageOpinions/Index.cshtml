@@ -1,6 +1,6 @@
-﻿@model List<ZedShop.Web.Areas.Admin.Models.CommentViewModel.CommentViewModelAdmin>
+﻿@model List<ZedShop.Web.Areas.Admin.Models.OpinionViewModel.OpinionViewModelAdmin>
 @{
-    ViewData["Title"] = "مدیریت دیدگاه‌ها";
+    ViewData["Title"] = "مدیریت نظرها";
     Layout = "~/areas/admin/views/shared/_AdminLayout.cshtml";
 }
 <div class="row">
@@ -9,11 +9,11 @@
             <div class="card-body">
                 <div style="display:flex;">
 
-                    <p class="card-title"> <strong>دیدگاه‌ها</strong> </p>
+                    <p class="card-title"> <strong>نظرها</strong> </p>
 
 
                     <p class="card-title" style="margin-top:15px;margin-right:2%;font-size:16px; "> فیلتر:  </p>
-                    <select id="filter-select" style="margin-right:5px; width:15%" onclick="AllCommentsOfFilter()">
+                    <select id="filter-select" style="margin-right:5px; width:15%" onclick="AllOpinionsOfFilter()">
 
                         @foreach (var item in ViewBag.Filters)
                         {
@@ -34,7 +34,7 @@
                                         شناسه
                                     </th>
                                     <th style="max-width:12%; width:12%; text-align:center;">
-                                        متن دیدگاه‌
+                                        متن نظر
                                     </th>
                                     <th style="max-width:5%; width:5%; text-align:center;">
                                         تاریخ
@@ -43,20 +43,20 @@
                                         نام کاربر
                                     </th>
                                     <th style="max-width:5%; width:5%; text-align:center;">
-                                        نام کالا
-                                    </th>
-                                    <th style="max-width:5%; width:5%; text-align:center;">
                                         نمایش
                                     </th>
-                                    <th style="max-width:8%; width:8%; text-align:center;">
+                                    <th style="max-width:5%; width:5%; text-align:center;">
+                                        مسدود
+                                    </th>
+                                    <th style="max-width:10%; width:10%; text-align:center;">
                                         اقدامات
                                     </th>
                                 </tr>
                             </thead>
                         </table>
                     </div>
-                    <div id="tableofcommentcontent">
-                        @Html.Partial("_CommentsTable")
+                    <div id="tableofopinioncontent">
+                        @Html.Partial("_OpinionsTable")
                     </div>
                 </div>
             </div>
@@ -68,12 +68,12 @@
 <script>
     function updateTableData(filterId, pageNum) {
         $.ajax({
-            url: '/Admin/ManageComments/ChangePage/', // controller and action
+            url: '/Admin/ManageOpinions/ChangePage/', // controller and action
             data: { _filterId: filterId, pageNumber: pageNum }, // Send the userInput as a parameter
             dataType: 'html',
             success: function (data) {
 
-                $('#tableofcommentcontent').html(data); // Insert the received HTML into the container
+                $('#tableofopinioncontent').html(data); // Insert the received HTML into the container
             }
         });
     }
@@ -82,16 +82,16 @@
 
 
 <script>
-    function DeleteComment(id) {
-        if (confirm("آیا از حذف دیدگاه مطمعن هستید؟")) {
+    function DeleteOpinion(id) {
+        if (confirm("آیا از حذف نظر مطمعن هستید؟")) {
             $.ajax({
                 type: 'POST',
-                url: '/Admin/ManageComments/DeleteComment/', // controller and action
-                data: { commentId: id }, // Send the userInput as a parameter
+                url: '/Admin/ManageOpinions/DeleteOpinion/', // controller and action
+                data: { opinionId: id }, // Send the userInput as a parameter
                 dataType: 'json',
                 success: function (response) {
                     if (response.success) {
-                        alert("نظر دیدگاه شد‌!");
+                        alert("نظر حذف شد‌!");
                         var myobj = document.getElementById(id);
                         myobj.remove();
                     } else {
@@ -102,12 +102,12 @@
         }
     }
 
-    function ShowComment(id) {
-        if (confirm("آیا از تغیر وضعیت مخفی نمودن دیدگاه مطمعن هستید؟")) {
+    function ShowOpinion(id) {
+        if (confirm("آیا از تغیر وضعیت مخفی نمودن نظر مطمعن هستید؟")) {
             $.ajax({
                 type: 'POST',
-                url: '/Admin/ManageComments/ShowComment', // controller and action
-                data: { commentId: id },
+                url: '/Admin/ManageOpinions/ShowOpinion', // controller and action
+                data: { opinionId: id },
                 dataType: 'json',
                 success: function (response) {
                     var myobj = document.getElementById('show_' + id);
@@ -121,10 +121,29 @@
         }
     }
 
+    function BanOpinion(id) {
+        if (confirm("آیا از تغیر وضعیت مسدودیت دیدگاه نظر مطمعن هستید؟")) {
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/ManageOpinions/BanOpinion', // controller and action
+                data: { opinionId: id },
+                dataType: 'json',
+                success: function (response) {
+                    var myobj = document.getElementById('ban_' + id);
+                    if (response.resault) {
+                        myobj.textContent = "مسدود";
+                    } else {
+                        myobj.textContent = "خیر";
+                    }
+                }
+            });
+        }
+    }
+
 </script>
 
 <script>
-    function AllCommentsOfFilter() {
+    function AllOpinionsOfFilter() {
 
         var filterElement = document.getElementById("filter-select");
 
@@ -132,11 +151,11 @@
 
 
         $.ajax({
-            url: '/Admin/ManageComments/AllCommentsOfFilter/', //controller and action
+            url: '/Admin/ManageOpinions/AllOpinionsOfFilter/', //controller and action
             data: { _filterId: id1 }, // Send the product ID as a parameter
             dataType: 'html',
             success: function (data) {
-                $('#tableofcommentcontent').html(data); // Insert the received HTML into the container
+                $('#tableofopinioncontent').html(data); // Insert the received HTML into the container
             }
         });
     }

@@ -14,16 +14,16 @@ namespace ZedShop.Web.Areas.Admin.Models.OpinionViewModel
         public int UserId { get; set; }
 
         [DisplayName("نام کاربر")]
-
         public string UserName { get; set; } = string.Empty;
-
-
 
         [DisplayName("تاریخ دیدگاه")]
         public string OpinionDate { get; set; } = string.Empty;
 
         [DisplayName("نمایش")]
         public bool IsShow { get; set; } = false;
+
+        [DisplayName("مسدود")]
+        public bool IsBan { get; set; } = false;
 
     }
 }

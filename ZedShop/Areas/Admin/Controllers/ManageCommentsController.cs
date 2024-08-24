@@ -32,7 +32,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
         {
             _productService = productService;
 
-            filtersBase.Add(new FilterBaseViewModel(-1, "همه نظرها"));
+            filtersBase.Add(new FilterBaseViewModel(-1, "همه دیدگاه‌ها"));
             filtersBase.Add(new FilterBaseViewModel(0, "مخفی شده"));
 
             pc = new PersianCalendar();
@@ -79,7 +79,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
                 commentsViews.Add(commentVM);
             }
 
-            allCommentCount = _productService.GetAllProductsCount(filterId);
+            allCommentCount = _productService.GetAllCommentsCount(filterId);
             pageCount = (int)Math.Ceiling((double)allCommentCount / numberPerPage);
 
             return commentsViews;

@@ -1,0 +1,120 @@
+﻿@using ZedShop.Web.Areas.Admin.Models.OpinionViewModel
+@model List<ZedShop.Web.Areas.Admin.Models.OpinionViewModel.OpinionViewModelAdmin>
+
+<div class="jsgrid-grid-body">
+    <table class="jsgrid-table table table-striped table-hover">
+        <tbody id="Opinionstable">
+            @if (Model != null)
+            {
+                @foreach (var item in Model)
+                {
+                    <tr id="@item.Id">
+
+                        <td style="max-width:4%; width:4%; text-align:center;">
+                            @item.Id
+                        </td>
+                        <td style="max-width:12%; width:12%;">
+                            @item.OpinionText
+                        </td>
+                        <td style="max-width:5%; width:5%; text-align:center;">
+                            @item.OpinionDate
+                        </td>
+                        <td style="max-width:5%; width:5%; text-align:center">
+                            @item.UserName
+                        </td>
+
+                        <td id='show_@item.Id' style="max-width:5%; width:5%; text-align:center">
+                            @if (item.IsShow)
+                            {
+                                <p>بله</p>
+                            }
+                            else
+                            {
+                                <p>مخفی شده</p>
+                            }
+
+                        </td>
+
+                        <td id='ban_@item.Id' style="max-width:5%; width:5%; text-align:center">
+                            @if (item.IsBan)
+                            {
+                                <p>مسدود</p>
+                            }
+                            else
+                            {
+                                <p>خیر</p>
+                            }
+
+                        </td>
+
+                        <td style="max-width:10%; width:10%; text-align:center">
+                            <button class="btn btn-primary btn-sm" onclick="ShowOpinion(@item.Id)">مخفی کردن</button>
+                            <button class="btn btn-warning btn-sm" onclick="BanOpinion(@item.Id)">مسدودیت</button>
+                            <button class="btn btn-danger btn-sm" onclick="DeleteOpinion(@item.Id)">حذف </button>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<div class="jsgrid-pager-container">
+    <div class="jsgrid-pager">
+        صفحه:
+
+
+        @if (ViewBag.CurrentPage == 1 || ViewBag.NumberOfPage == 0)
+        {
+            <span class="jsgrid-pager-nav-button-off jsgrid-pager-nav-inactive-button">
+                <a class="disabled">اولین</a>
+            </span>
+            <span class="jsgrid-pager-nav-button-off jsgrid-pager-nav-inactive-button">
+                <a class="disabled">قبلی</a>
+            </span>
+        }
+        else
+        {
+            <span class="jsgrid-pager-nav-button jsgrid-pager-nav-inactive-button">
+                <a href="javascript:updateTableData(@ViewBag.FilterId,1);">اولین</a>
+            </span>
+            <span class="jsgrid-pager-nav-button jsgrid-pager-nav-inactive-button">
+                <a href="javascript:updateTableData(@ViewBag.FilterId,@ViewBag.CurrentPage-1);">قبلی</a>
+            </span>
+        }
+
+
+        @if (ViewBag.CurrentPage > 1)
+        {
+            <span class="jsgrid-pager-page"><a href="javascript:updateTableData(@ViewBag.FilterId,@ViewBag.CurrentPage-1);">@((ViewBag.CurrentPage - 1))</a></span>
+        }
+
+        <span class="jsgrid-pager-page jsgrid-pager-current-page">@ViewBag.CurrentPage</span>
+
+        @if (ViewBag.CurrentPage < ViewBag.NumberOfPage)
+        {
+            <span class="jsgrid-pager-page"><a href="javascript:updateTableData(@ViewBag.FilterId,@ViewBag.CurrentPage+1);">@((ViewBag.CurrentPage + 1))</a></span>
+        }
+
+
+        @if (ViewBag.CurrentPage == ViewBag.NumberOfPage || ViewBag.NumberOfPage == 0)
+        {
+            <span class="jsgrid-pager-nav-button-off jsgrid-pager-nav-inactive-button">
+                <a class="disabled">بعدی</a>
+            </span>
+            <span class="jsgrid-pager-nav-button-off jsgrid-pager-nav-inactive-button">
+                <a class="disabled">آخرین</a>
+            </span>
+
+        }
+        else
+        {
+            <span class="jsgrid-pager-nav-button jsgrid-pager-nav-inactive-button">
+                <a href="javascript:updateTableData(@ViewBag.FilterId, @ViewBag.CurrentPage+1);">بعدی</a>
+            </span>
+            <span class="jsgrid-pager-nav-button"><a href="javascript:updateTableData( @ViewBag.FilterId,@ViewBag.NumberOfPage);">آخرین</a></span>
+        }
+
+
+        &nbsp;&nbsp; @ViewBag.CurrentPage از @ViewBag.NumberOfPage
+    </div>
+</div>
