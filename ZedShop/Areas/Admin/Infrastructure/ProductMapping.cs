@@ -21,6 +21,7 @@ namespace ZedShop.Core.Convertors
             
             CreateMap<ProductAEViewModelAdmin, Product>().ReverseMap();
 
+
             CreateMap<Comment, CommentViewModelAdmin>()
                 .ForMember(c=>c.ProductName, o=>o.MapFrom(com=>com.Product.Name))
                 .ForMember(c => c.UserName, o => o.MapFrom(com => com.User.UserName)).ReverseMap();

@@ -45,8 +45,14 @@ namespace ZedShop.Core.Services.Interface
         bool DeleteComment(int commentId);
         bool ShowComment(int commentId);
         bool IsCommentExist(int commentId);
-
         Comment GetComment(int commentId);
+
+
+        int GetAllCategoriesCount(int filterId);
+        List<Category> GetAllCategoriesPaged(int page, int pageSize, int filterId);
+        bool DeleteCategory(int categoryId);
+        bool IsCategoryExist(int categoryId);
+        Category GetCategory(int categoryId);
 
 
     }

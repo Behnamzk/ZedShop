@@ -1,6 +1,6 @@
-﻿@model List<ZedShop.Web.Areas.Admin.Models.CommentViewModel.CommentViewModelAdmin>
+﻿@model List<ZedShop.Web.Areas.Admin.Models.CategoryViewModel.CategoryViewModelAdmin>
 @{
-    ViewData["Title"] = "مدیریت دیدگاه‌ها";
+    ViewData["Title"] = "مدیریت دسته‌بندی‌ها";
     Layout = "~/areas/admin/views/shared/_AdminLayout.cshtml";
 }
 <div class="row">
@@ -13,7 +13,7 @@
 
 
                     <p class="card-title" style="margin-top:15px;margin-right:2%;font-size:16px; "> فیلتر:  </p>
-                    <select id="filter-select" style="margin-right:5px; width:15%" onclick="AllCommentsOfFilter()">
+                    <select id="filter-select" style="margin-right:5px; width:15%" onclick="AllCategoriesOfFilter()">
 
                         @foreach (var item in ViewBag.Filters)
                         {
@@ -33,30 +33,24 @@
                                     <th style="max-width:4%; width:4%; text-align:center;">
                                         شناسه
                                     </th>
-                                    <th style="max-width:12%; width:12%; text-align:center;">
-                                        متن دیدگاه‌
-                                    </th>
-                                    <th style="max-width:5%; width:5%; text-align:center;">
-                                        تاریخ
-                                    </th>
-                                    <th style="max-width:5%; width:5%; text-align:center;">
-                                        نام کاربر
-                                    </th>
-                                    <th style="max-width:5%; width:5%; text-align:center;">
-                                        نام کالا
-                                    </th>
-                                    <th style="max-width:5%; width:5%; text-align:center;">
-                                        نمایش
-                                    </th>
                                     <th style="max-width:8%; width:8%; text-align:center;">
+                                        نام
+                                    </th>
+                                    <th style="max-width:5%; width:5%; text-align:center;">
+                                        والد
+                                    </th>
+                                    <th style="max-width:5%; width:5%; text-align:center;">
+                                        نام والد
+                                    </th>
+                                    <th style="max-width:15%; width:15%; text-align:center;">
                                         اقدامات
                                     </th>
                                 </tr>
                             </thead>
                         </table>
                     </div>
-                    <div id="tableofcommentcontent">
-                        @Html.Partial("_CommentsTable")
+                    <div id="tableofcategorycontent">
+                        @Html.Partial("_CategoriesTable")
                     </div>
                 </div>
             </div>
@@ -68,12 +62,12 @@
 <script>
     function updateTableData(filterId, pageNum) {
         $.ajax({
-            url: '/Admin/ManageComments/ChangePage/', // controller and action
+            url: '/Admin/ManageCategories/ChangePage/', // controller and action
             data: { _filterId: filterId, pageNumber: pageNum }, // Send the userInput as a parameter
             dataType: 'html',
             success: function (data) {
 
-                $('#tableofcommentcontent').html(data); // Insert the received HTML into the container
+                $('#tableofcategorycontent').html(data); // Insert the received HTML into the container
             }
         });
     }
@@ -82,16 +76,16 @@
 
 
 <script>
-    function DeleteComment(id) {
-        if (confirm("آیا از حذف دیدگاه مطمعن هستید؟")) {
+    function DeleteCategory(id) {
+        if (confirm("آیا از حذف دسته‌بندی مطمعن هستید؟")) {
             $.ajax({
                 type: 'POST',
-                url: '/Admin/ManageComments/DeleteComment/', // controller and action
-                data: { commentId: id }, // Send the userInput as a parameter
+                url: '/Admin/ManageCategories/DeleteCategory/', // controller and action
+                data: { categoryId: id }, // Send the userInput as a parameter
                 dataType: 'json',
                 success: function (response) {
                     if (response.success) {
-                        alert(" دیدگاه حذف شد‌!");
+                        alert("دسته‌بندی حذف شد‌!");
                         var myobj = document.getElementById(id);
                         myobj.remove();
                     } else {
@@ -102,29 +96,11 @@
         }
     }
 
-    function ShowComment(id) {
-        if (confirm("آیا از تغیر وضعیت مخفی نمودن دیدگاه مطمعن هستید؟")) {
-            $.ajax({
-                type: 'POST',
-                url: '/Admin/ManageComments/ShowComment', // controller and action
-                data: { commentId: id },
-                dataType: 'json',
-                success: function (response) {
-                    var myobj = document.getElementById('show_' + id);
-                    if (response.resault) {
-                        myobj.textContent = "بله";
-                    } else {
-                        myobj.textContent = "مخفی شده";
-                    }
-                }
-            });
-        }
-    }
 
 </script>
 
 <script>
-    function AllCommentsOfFilter() {
+    function AllCategoriesOfFilter() {
 
         var filterElement = document.getElementById("filter-select");
 
@@ -132,11 +108,11 @@
 
 
         $.ajax({
-            url: '/Admin/ManageComments/AllCommentsOfFilter/', //controller and action
+            url: '/Admin/ManageCategories/AllCategoriesOfFilter/', //controller and action
             data: { _filterId: id1 }, // Send the product ID as a parameter
             dataType: 'html',
             success: function (data) {
-                $('#tableofcommentcontent').html(data); // Insert the received HTML into the container
+                $('#tableofcategorycontent').html(data); // Insert the received HTML into the container
             }
         });
     }

@@ -37,6 +37,9 @@ namespace ZedShop.DataLayer.Context
             #endregion
 
 
+            modelBuilder.Entity<Category>().HasOne(b => b.Parent)
+                .WithMany(c=>c.ChildCategories).OnDelete(DeleteBehavior.NoAction);
+
             #region ManyToMany ProductCategory
 
             modelBuilder.Entity<ProductCategory>().HasKey(b => new { b.ProductId, b.CategoryId });

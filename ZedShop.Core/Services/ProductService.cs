@@ -20,12 +20,10 @@ namespace ZedShop.Core.Services
     public class ProductService : IProductService
     {
         private readonly ZedShopContext _context;
-        private readonly IUserService _userService;
 
-        public ProductService(ZedShopContext context, IUserService userService)
+        public ProductService(ZedShopContext context)
         {
             _context = context;
-            _userService = userService;
         }
 
         public List<Product> GetAllProducts()
@@ -444,6 +442,66 @@ namespace ZedShop.Core.Services
         public Comment GetComment(int commentId)
         {
             return _context.Comments.Include(c => c.User).Include(c => c.Product).SingleOrDefault(c => c.Id == commentId);
+
+        }
+
+        public int GetAllCategoriesCount(int filterId)
+        {
+            switch (filterId)
+            {
+                case -1:
+                    return _context.Categories.Count();
+
+                case 0:
+                    // IsShow == false
+                    return _context.Categories.Where(c => c.IsRoot == true).Count();
+
+                default:
+                    return _context.Categories.Count();
+
+            }
+        }
+
+        public List<Category> GetAllCategoriesPaged(int page, int pageSize, int filterId)
+        {
+            switch (filterId)
+            {
+                case -1:
+                    return _context.Categories.Include(c => c.Parent).ToPaged(page, pageSize).ToList();
+
+                case 0:
+                    // IsShow == false
+                    return _context.Categories.Include(c => c.Parent).Where(c => c.IsRoot == true).ToPaged(page, pageSize).ToList();
+
+                default:
+                    return _context.Categories.Include(c => c.Parent).ToPaged(page, pageSize).ToList();
+
+            }
+        }
+
+        public bool DeleteCategory(int categoryId)
+        {
+            var category = GetCategory(categoryId);
+            if (category != null)
+            {
+                _context.Categories.Remove(category);
+                _context.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool IsCategoryExist(int categoryId)
+        {
+            return _context.Categories.Any(p => p.Id == categoryId);
+        }
+
+        public Category GetCategory(int categoryId)
+        {
+            return _context.Categories.Include(c=>c.Parent).SingleOrDefault(c => c.Id == categoryId);
 
         }
     }
