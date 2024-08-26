@@ -53,6 +53,7 @@ namespace ZedShop.Core.Services.Interface
         bool DeleteCategory(int categoryId);
         bool IsCategoryExist(int categoryId);
         Category GetCategory(int categoryId);
+        bool AddCategory(Category category);
 
 
     }

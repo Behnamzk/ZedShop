@@ -42,7 +42,8 @@
                         </td>
 
                         <td style="max-width:15%; width:15%; text-align:center">
-                            <button class="btn btn-danger btn-sm" onclick="DeleteCategory(@item.Id)">حذف </button>
+                            <a class="btn btn-primary btn-sm" href="/Admin/ManageCategories/EditCategory/@item.Id">ویرایش</a>
+                            <button class="btn btn-danger btn-sm" onclick="DeleteCategory(@item.Id)">حذف</button>
                         </td>
                     </tr>
                 }

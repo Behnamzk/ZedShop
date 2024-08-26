@@ -125,5 +125,75 @@ namespace ZedShop.Web.Areas.Admin.Controllers
             return Json(new { success = resault });
         }
 
+        [CheckAccess("AddCategory")]
+        [Route("/Admin/ManageCategories/AddCategory")]
+        [HttpGet]
+        public ActionResult AddCategory()
+        {
+            CategoryAddEditViewModel categoryAddEdit = new CategoryAddEditViewModel();
+
+            var categories = _productService.GetAllCategory();
+
+            foreach (var category in categories)
+            {
+                CategoryViewModelTemp categoryTemp = new CategoryViewModelTemp()
+                {
+                    Id = category.Id,
+                    Name = category.Name,
+                    IsActive = false
+                };
+                categoryAddEdit.ParentCategory.Add(categoryTemp);
+            }
+
+            ViewBag.EditMode = false;
+            ViewBag.ActionName = "AddCategory";
+
+            return View("AddEditCategory", categoryAddEdit);
+        }
+
+        [CheckAccess("AddCategory")]
+        [Route("/Admin/ManageCategories/AddCategory")]
+        [HttpPost]
+        public ActionResult AddCategory(CategoryAddEditViewModel categoryView)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.EditMode = false;
+                ViewBag.ActionName = "AddCategory";
+                return View("AddEditCategory", categoryView);
+            }
+
+            try
+            {
+                Category category = new Category()
+                {
+                    Name = categoryView.Name,
+                    IsRoot = categoryView.IsRoot
+                };
+
+                foreach (var item in categoryView.ParentCategory)
+                {
+                    if (item.IsActive)
+                    {
+                        category.ParentId = item.Id;
+                        break;
+                    }
+                }
+
+                _productService.AddCategory(category);
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                ModelState.AddModelError("Name", "اطلاعات به درستی وارد نشده است!");
+            }
+
+
+            ViewBag.EditMode = false;
+            ViewBag.ActionName = "AddCategory";
+            return View("AddEditCategory", categoryView);
+        }
+
     }
 }

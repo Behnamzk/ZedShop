@@ -504,5 +504,22 @@ namespace ZedShop.Core.Services
             return _context.Categories.Include(c=>c.Parent).SingleOrDefault(c => c.Id == categoryId);
 
         }
+
+        public bool AddCategory(Category category)
+        {
+            if (category != null)
+            {
+                _context.Categories.Add(category);
+                _context.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+       
     }
 }

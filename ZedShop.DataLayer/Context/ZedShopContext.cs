@@ -8,11 +8,11 @@ using ZedShop.DataLayer.Entities;
 
 namespace ZedShop.DataLayer.Context
 {
-    public class ZedShopContext:DbContext
+    public class ZedShopContext : DbContext
     {
-        public ZedShopContext(DbContextOptions<ZedShopContext> options):base(options)
+        public ZedShopContext(DbContextOptions<ZedShopContext> options) : base(options)
         {
-            
+
         }
 
         public DbSet<User> Users { get; set; }
@@ -31,14 +31,17 @@ namespace ZedShop.DataLayer.Context
         {
             #region EnumGenderUser
             modelBuilder
-            .Entity<User>()
-            .Property(e => e.gender)
-            .HasConversion<int>();
+                .Entity<User>()
+                .Property(e => e.gender)
+                .HasConversion<int>();
             #endregion
 
+            modelBuilder
+                .Entity<Category>()
+                .HasKey(d => d.Id);
 
             modelBuilder.Entity<Category>().HasOne(b => b.Parent)
-                .WithMany(c=>c.ChildCategories).OnDelete(DeleteBehavior.NoAction);
+                .WithMany(c => c.ChildCategories).OnDelete(DeleteBehavior.NoAction);
 
             #region ManyToMany ProductCategory
 
@@ -79,5 +82,5 @@ namespace ZedShop.DataLayer.Context
         }
     }
 
-    
+
 }

@@ -26,7 +26,7 @@ namespace ZedShop.DataLayer.Entities
         public Category? Parent { get; set; }
 
         public bool IsRoot { get; set; } = true;
-		public List<ProductCategory> ProductCategories { get; set; }
-        public List<Category> ChildCategories { get; set; }
+		public ICollection<ProductCategory> ProductCategories { get; set; }
+        public ICollection<Category> ChildCategories { get; set; }
     }
 }
