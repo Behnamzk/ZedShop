@@ -23,6 +23,7 @@ namespace ZedShop.DataLayer.Context
         public DbSet<Opinion> Opinions { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ProductRate> Rates { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Access> Accesses { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<RoleAccess> RolesAccess { get; set; }

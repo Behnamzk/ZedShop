@@ -389,7 +389,7 @@ namespace ZedShop.Core.Services
             }
         }
 
-        public List<Comment> GetAllCommemtsPaged(int page, int pageSize, int filterId)
+        public List<Comment> GetAllCommentsPaged(int page, int pageSize, int filterId)
         {
             switch (filterId)
             {
@@ -484,9 +484,13 @@ namespace ZedShop.Core.Services
             var category = GetCategory(categoryId);
             if (category != null)
             {
-                _context.Categories.Remove(category);
-                _context.SaveChanges();
-                return true;
+                if(!_context.ProductCategories.Any(c =>c.CategoryId == categoryId))
+                {
+                    _context.Categories.Remove(category);
+                    _context.SaveChanges();
+                    return true;
+                }
+                return false;
             }
             else
             {
@@ -520,6 +524,23 @@ namespace ZedShop.Core.Services
 
         }
 
-       
+        public bool UpdateCategory(Category category)
+        {
+            if (category == null)
+            {
+                return false;
+            }
+            else
+            {
+                _context.Categories.Update(category);
+                _context.SaveChanges();
+                return true;
+            }
+        }
+
+        public bool IsCategoryNameExist(string categoryName, int categoryId)
+        {
+            return _context.Categories.Any(c=>c.Name == categoryName && c.Id != categoryId);
+        }
     }
 }

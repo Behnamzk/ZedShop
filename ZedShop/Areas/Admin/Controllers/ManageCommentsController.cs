@@ -67,7 +67,7 @@ namespace ZedShop.Web.Areas.Admin.Controllers
         private List<CommentViewModelAdmin> GetComments(int _filterId)
         {
             this.filterId = _filterId;
-            var comments = _productService.GetAllCommemtsPaged(currentPage, numberPerPage, filterId);
+            var comments = _productService.GetAllCommentsPaged(currentPage, numberPerPage, filterId);
 
             List<CommentViewModelAdmin> commentsViews = new List<CommentViewModelAdmin>();
 

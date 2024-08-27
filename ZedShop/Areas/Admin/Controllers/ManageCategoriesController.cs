@@ -165,6 +165,15 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
             try
             {
+                if (_productService.IsCategoryNameExist(categoryView.Name, categoryView.Id))
+                {
+                    ModelState.AddModelError("Name", "دسته دیگری با این نام وجود دارد!");
+
+                    ViewBag.EditMode = false;
+                    ViewBag.ActionName = "AddCategory";
+                    return View("AddEditCategory", categoryView);
+                }
+
                 Category category = new Category()
                 {
                     Name = categoryView.Name,
@@ -194,6 +203,115 @@ namespace ZedShop.Web.Areas.Admin.Controllers
             ViewBag.ActionName = "AddCategory";
             return View("AddEditCategory", categoryView);
         }
+
+        [CheckAccess("EditCategory")]
+        [Route("/Admin/ManageCategories/EditCategory/{categoryId}")]
+        [HttpGet]
+        public ActionResult EditCategory(int categoryId)
+        {
+            CategoryAddEditViewModel categoryAddEdit = new CategoryAddEditViewModel();
+
+            var categories = _productService.GetAllCategory();
+
+            var category = _productService.GetCategory(categoryId);
+
+            if (category != null)
+            {
+                categoryAddEdit.Name = category.Name;
+                categoryAddEdit.IsRoot = category.IsRoot;
+                categoryAddEdit.Id = category.Id;
+
+                if(category.ParentId == null)
+                {
+                    category.ParentId = -1;
+                }
+
+                foreach (var item in categories)
+                {
+                    if(item.Id != category.Id)
+                    {
+                        CategoryViewModelTemp categoryTemp = new CategoryViewModelTemp()
+                        {
+                            Id = item.Id,
+                            Name = item.Name,
+                            IsActive = false
+                        };
+
+                        if (item.Id == category.ParentId)
+                        {
+                            categoryTemp.IsActive = true;
+                        }
+
+                        categoryAddEdit.ParentCategory.Add(categoryTemp);
+                    }
+                  
+                }
+
+                ViewBag.EditMode = true;
+                ViewBag.ActionName = "EditCategory";
+
+                return View("AddEditCategory", categoryAddEdit);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+        }
+
+        [CheckAccess("EditCategory")]
+        [Route("/Admin/ManageCategories/EditCategory/{categoryId}")]
+        [HttpPost]
+        public ActionResult EditCategory(CategoryAddEditViewModel categoryView)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.EditMode = true;
+                ViewBag.ActionName = "EditCategory";
+                return View("AddEditCategory", categoryView);
+            }
+
+            try
+            {
+                if(_productService.IsCategoryNameExist(categoryView.Name, categoryView.Id))
+                {
+                    ModelState.AddModelError("Name", "دسته دیگری با این نام وجود دارد!");
+
+                    ViewBag.EditMode = true;
+                    ViewBag.ActionName = "EditCategory";
+                    return View("AddEditCategory", categoryView);
+                }
+
+                Category category = new Category()
+                {
+                    Id = categoryView.Id,
+                    Name = categoryView.Name,
+                    IsRoot = categoryView.IsRoot
+                };
+
+                foreach (var item in categoryView.ParentCategory)
+                {
+                    if (item.IsActive)
+                    {
+                        category.ParentId = item.Id;
+                        break;
+                    }
+                }
+
+                _productService.UpdateCategory(category);
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                ModelState.AddModelError("Name", "اطلاعات به درستی وارد نشده است!");
+            }
+
+
+            ViewBag.EditMode = true;
+            ViewBag.ActionName = "EditCategory";
+            return View("AddEditCategory", categoryView);
+        }
+
 
     }
 }

@@ -30,7 +30,7 @@ namespace ZedShop.Core.Services.Interface
         int GetAllProductsCount(int filterId);
         int GetAllCommentsCount(int filterId);
         List<Product> GetAllProductsPaged(int page, int pageSize, int filterId);
-        List<Comment> GetAllCommemtsPaged(int page, int pageSize, int filterId);
+        List<Comment> GetAllCommentsPaged(int page, int pageSize, int filterId);
 
 
 
@@ -54,7 +54,9 @@ namespace ZedShop.Core.Services.Interface
         bool IsCategoryExist(int categoryId);
         Category GetCategory(int categoryId);
         bool AddCategory(Category category);
+        bool UpdateCategory(Category category);
 
+        bool IsCategoryNameExist(string categoryName, int categoryId);
 
     }
 }
