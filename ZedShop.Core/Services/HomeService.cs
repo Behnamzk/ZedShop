@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZedShop.Core.Convertors;
 using ZedShop.Core.DTOs.Home;
 using ZedShop.Core.DTOs.Product;
 using ZedShop.Core.Services.Interface;
@@ -47,6 +48,69 @@ namespace ZedShop.Core.Services
             return true;
         }
 
+
+
+        public bool DeleteOpinion(int opinionId)
+        {
+            var opinion = GetOpinion(opinionId);
+            if (opinion != null)
+            {
+                _context.Opinions.Remove(opinion);
+                _context.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public int GetAllOpinionsCount(int filterId)
+        {
+            switch (filterId)
+            {
+                case -1:
+                    // All products except Deleted products
+                    return _context.Opinions.Count();
+                case 0:
+                    // IsShow == false
+                    return _context.Opinions.Where(u => u.IsShow == false).Count();
+                case 1:
+                    // IsBan == true
+                    return _context.Opinions.Where(u => u.IsBan == true).Count();
+
+                default:
+                    return _context.Opinions.Count();
+
+            }
+        }
+
+        public List<Opinion> GetAllOpinionsPaged(int page, int pageSize, int filterId)
+        {
+            switch (filterId)
+            {
+                case -1:
+                    // All products except Deleted products
+                    return _context.Opinions.Include(c => c.User).ToPaged(page, pageSize).ToList();
+                case 0:
+                    // IsShow == false
+                    return _context.Opinions.Include(c => c.User).Where(u => u.IsShow == false).ToPaged(page, pageSize).ToList();
+                case 1:
+                    // IsBan == true
+                    return _context.Opinions.Include(c => c.User).Where(u => u.IsBan == true).ToPaged(page, pageSize).ToList();
+
+                default:
+                    return _context.Opinions.Include(c => c.User).ToPaged(page, pageSize).ToList();
+
+            }
+        }
+
+        public Opinion GetOpinion(int opinionId)
+        {
+            return _context.Opinions.Include(o => o.User).SingleOrDefault(o => o.Id == opinionId);
+
+        }
+
         public List<Opinion> GetOpinions()
         {
             return _context.Opinions.Where(o=>o.IsBan == false).Include(o => o.User).OrderByDescending(c=>c.OpinionRate).ToList();
@@ -55,6 +119,31 @@ namespace ZedShop.Core.Services
         public List<Opinion> GetOpinions(int count)
         {
             return _context.Opinions.Where(o => o.IsBan == false).Include(o=>o.User).OrderByDescending(c => c.OpinionRate).Take(count).ToList();
+        }
+
+        public bool IsOpinionExist(int opinionId)
+        {
+            return _context.Opinions.Any(o => o.Id == opinionId);
+        }
+
+        public bool ShowOpinion(int opinionId)
+        {
+            var opinion = GetOpinion(opinionId);
+
+            opinion.IsShow = !opinion.IsShow;
+            _context.Opinions.Update(opinion);
+            _context.SaveChanges();
+            return opinion.IsShow;
+        }
+
+        public bool BanOpinion(int opinionId)
+        {
+            var opinion = GetOpinion(opinionId);
+
+            opinion.IsBan = !opinion.IsBan;
+            _context.Opinions.Update(opinion);
+            _context.SaveChanges();
+            return opinion.IsBan;
         }
     }
 }

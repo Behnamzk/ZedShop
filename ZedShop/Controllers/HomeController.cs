@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using ZedShop.Core.CustomAuthorization;
 using ZedShop.Core.DTOs.Home;
 using ZedShop.Core.DTOs.Product;
 using ZedShop.Core.Services;

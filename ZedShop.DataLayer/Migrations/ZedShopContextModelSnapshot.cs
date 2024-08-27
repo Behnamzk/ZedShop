@@ -30,6 +30,11 @@ namespace ZedShop.DataLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -37,7 +42,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Access");
+                    b.ToTable("Accesses");
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Admin", b =>
@@ -95,10 +100,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("IsRoot")
+                    b.Property<bool>("IsRoot")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -111,7 +113,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("ParentId");
 
                     b.ToTable("Categories");
                 });
@@ -131,6 +133,9 @@ namespace ZedShop.DataLayer.Migrations
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
+
+                    b.Property<bool>("IsShow")
+                        .HasColumnType("bit");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -156,6 +161,9 @@ namespace ZedShop.DataLayer.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<bool>("IsBan")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsShow")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("OpinionDate")
@@ -296,6 +304,9 @@ namespace ZedShop.DataLayer.Migrations
                     b.Property<bool>("IsActivate")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsShow")
                         .HasColumnType("bit");
 
@@ -329,7 +340,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("ProductCategory");
+                    b.ToTable("ProductCategories");
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.ProductOldPrice", b =>
@@ -390,6 +401,11 @@ namespace ZedShop.DataLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -397,7 +413,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Role");
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.RoleAccess", b =>
@@ -412,7 +428,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasIndex("AccessId");
 
-                    b.ToTable("RoleAccess");
+                    b.ToTable("RolesAccess");
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.User", b =>
@@ -437,6 +453,12 @@ namespace ZedShop.DataLayer.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsBan")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
                     b.Property<string>("Password")
@@ -503,9 +525,12 @@ namespace ZedShop.DataLayer.Migrations
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Category", b =>
                 {
-                    b.HasOne("ZedShop.DataLayer.Entities.Category", null)
+                    b.HasOne("ZedShop.DataLayer.Entities.Category", "Parent")
                         .WithMany("ChildCategories")
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Comment", b =>

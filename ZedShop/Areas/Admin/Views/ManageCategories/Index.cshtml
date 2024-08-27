@@ -1,0 +1,119 @@
+﻿@model List<ZedShop.Web.Areas.Admin.Models.CategoryViewModel.CategoryViewModelAdmin>
+@{
+    ViewData["Title"] = "مدیریت دسته‌بندی‌ها";
+    Layout = "~/areas/admin/views/shared/_AdminLayout.cshtml";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div style="display:flex;">
+
+                    <p class="card-title"> <strong>دیدگاه‌ها</strong> </p>
+
+                    <p class="card-title" style="margin-top:15px;margin-right:2%;font-size:16px; "> فیلتر:  </p>
+                    <select id="filter-select" style="margin-right:5px; width:15%" onclick="AllCategoriesOfFilter()">
+
+                        @foreach (var item in ViewBag.Filters)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+
+                    </select>
+
+                    <a style="margin-right:5%; height:35px;" class="btn btn-primary btn-sm" href="/Admin/ManageCategories/AddCategory">افزودن دسته‌بندی <strong>+</strong></a>
+
+                </div>
+
+
+                <div id="basicgrid" class="m-t-40 jsgrid" style="position: relative; height: 750px; width: 100%;">
+                    <div class="jsgrid-grid-header jsgrid-header-scrollbar">
+                        <table class="jsgrid-table table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="max-width:4%; width:4%; text-align:center;">
+                                        شناسه
+                                    </th>
+                                    <th style="max-width:8%; width:8%; text-align:center;">
+                                        نام
+                                    </th>
+                                    <th style="max-width:5%; width:5%; text-align:center;">
+                                        والد
+                                    </th>
+                                    <th style="max-width:5%; width:5%; text-align:center;">
+                                        نام والد
+                                    </th>
+                                    <th style="max-width:15%; width:15%; text-align:center;">
+                                        اقدامات
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div id="tableofcategorycontent">
+                        @Html.Partial("_CategoriesTable")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function updateTableData(filterId, pageNum) {
+        $.ajax({
+            url: '/Admin/ManageCategories/ChangePage/', // controller and action
+            data: { _filterId: filterId, pageNumber: pageNum }, // Send the userInput as a parameter
+            dataType: 'html',
+            success: function (data) {
+
+                $('#tableofcategorycontent').html(data); // Insert the received HTML into the container
+            }
+        });
+    }
+
+</script>
+
+
+<script>
+    function DeleteCategory(id) {
+        if (confirm("آیا از حذف دسته‌بندی مطمعن هستید؟")) {
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/ManageCategories/DeleteCategory/', // controller and action
+                data: { categoryId: id }, // Send the userInput as a parameter
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        alert("دسته‌بندی حذف شد‌!");
+                        var myobj = document.getElementById(id);
+                        myobj.remove();
+                    } else {
+                        alert("این دسته‌بندی را نمی‌توان حذف کرد، در این دسته کالایی وجود دارد!!");
+                    }
+                }
+            });
+        }
+    }
+
+</script>
+
+<script>
+    function AllCategoriesOfFilter() {
+
+        var filterElement = document.getElementById("filter-select");
+
+        let id1 = filterElement.value;
+
+
+        $.ajax({
+            url: '/Admin/ManageCategories/AllCategoriesOfFilter/', //controller and action
+            data: { _filterId: id1 }, // Send the product ID as a parameter
+            dataType: 'html',
+            success: function (data) {
+                $('#tableofcategorycontent').html(data); // Insert the received HTML into the container
+            }
+        });
+    }
+</script>

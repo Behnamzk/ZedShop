@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Text.Json;
 using ZedShop.Core.Convertors;
 using ZedShop.Core.DTOs.Account;
 using ZedShop.Core.Generator;
@@ -45,10 +46,17 @@ namespace ZedShop.Web.Controllers.Account
             {
                 if (user.IsActive)
                 {
+                    var UserAccess = _service.GetRolesAccess(user.RoleId);
+
+
+                    var serializedUserAccess = JsonSerializer.Serialize(UserAccess.Select(u=>u.Name).ToList());
+
                     var claims = new Claim[]
                     {
                         new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                        new Claim(ClaimTypes.Name, user.UserName)
+                        new Claim(ClaimTypes.Name, user.UserName),
+                        new Claim(ClaimTypes.Role, user.Role.Name),
+                        new Claim("UserAccess", serializedUserAccess),
                     };
 
                     var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

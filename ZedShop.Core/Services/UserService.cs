@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +15,7 @@ using ZedShop.Core.Security;
 using ZedShop.Core.Services.Interface;
 using ZedShop.DataLayer.Context;
 using ZedShop.DataLayer.Entities;
+using ZedShop.DataLayer.Migrations;
 
 namespace ZedShop.Core.Services
 {
@@ -71,7 +75,7 @@ namespace ZedShop.Core.Services
             string password = PasswordHelper.EncodePasswordMd5(loginViewModel.Password);
             string email = FixText.FixEmail(loginViewModel.Email);
 
-            return _context.Users.SingleOrDefault(User => User.Email == email && User.Password == password);
+            return _context.Users.Include(u=>u.Role).Where(u => u.IsDelete == false).SingleOrDefault(User => User.Email == email && User.Password == password);
 
         }
 
@@ -102,5 +106,263 @@ namespace ZedShop.Core.Services
             _context.SaveChanges();
             return true;
         }
+
+        public List<User> GetAllUsers()
+        {
+            return _context.Users.Where(u => u.IsDelete == false).ToList();
+        }
+
+
+        public int GetAllUsersCount()
+        {
+            return _context.Users.Where(u=>u.IsDelete == false).Count();
+        }
+
+        public bool BanUser(int userId)
+        {
+            User user = GetUserById(userId);
+
+
+            user.IsBan = !user.IsBan;
+
+            _context.Update(user);
+            _context.SaveChanges();
+
+            return user.IsBan;
+
+        }
+
+        public bool DeleteUser(int userId)
+        {
+            User user = GetUserById(userId);
+            if (user == null)
+            {
+                return false;
+            }
+
+            user.IsDelete = !user.IsDelete;
+
+            _context.Update(user);
+            _context.SaveChanges();
+
+            return user.IsDelete;
+        }
+
+        public User GetUserById(int userId)
+        {
+            return _context.Users.SingleOrDefault(u => u.UserId == userId);
+        }
+        public User GetUserByIdWithRole(int userId)
+        {
+            return _context.Users.Include(u=>u.Role).SingleOrDefault(u => u.UserId == userId);
+        }
+
+
+
+        public List<User> GetAllUsersPagedRole(int page, int pageSize, int roleId, int filterId) 
+        {
+            if (roleId == -1)
+            {
+                switch (filterId){
+                    case -1:
+                        return _context.Users.Where(u => u.IsDelete == false).Include(u => u.Role).ToPaged(page, pageSize).ToList();
+
+                    case 0:
+                        return _context.Users.Where(u => u.IsDelete == true).Include(u => u.Role).ToPaged(page, pageSize).ToList();
+
+                    case 1:
+                        return _context.Users.Where(u => u.IsDelete == false && u.IsBan == true).Include(u => u.Role).ToPaged(page, pageSize).ToList();
+
+                    case 2:
+                        return _context.Users.Where(u => u.IsDelete == false && u.IsActive == false).Include(u => u.Role).ToPaged(page, pageSize).ToList();
+
+                    default:
+                        return _context.Users.Where(u => u.IsDelete == false).Include(u => u.Role).ToPaged(page, pageSize).ToList();
+
+                }
+            }
+            else
+            {
+                switch (filterId)
+                {
+                    case -1:
+                        return _context.Users.Where(u => u.IsDelete == false && u.RoleId == roleId).Include(u => u.Role).ToPaged(page, pageSize).ToList();
+
+                    case 0:
+                        return _context.Users.Where(u => u.IsDelete == true  && u.RoleId == roleId).Include(u => u.Role).ToPaged(page, pageSize).ToList();
+
+                    case 1:
+                        return _context.Users.Where(u => u.IsDelete == false && u.RoleId == roleId && u.IsBan == true).Include(u => u.Role).ToPaged(page, pageSize).ToList();
+
+                    case 2:
+                        return _context.Users.Where(u => u.IsDelete == false && u.RoleId == roleId && u.IsActive == false).Include(u => u.Role).ToPaged(page, pageSize).ToList();
+
+                    default:
+                        return _context.Users.Where(u => u.IsDelete == false && u.RoleId == roleId).Include(u => u.Role).ToPaged(page, pageSize).ToList();
+
+                }
+
+            }
+        }
+
+        public int GetAllUsersCount(int roleId, int filterId)
+        {
+            if (roleId == -1)
+            {
+                switch (filterId)
+                {
+                    case -1:
+                        return _context.Users.Where(u => u.IsDelete == false).Count();
+
+                    case 0:
+                        return _context.Users.Where(u => u.IsDelete == true).Count();
+
+                    case 1:
+                        return _context.Users.Where(u => u.IsDelete == false && u.IsBan == true).Count();
+
+                    case 2:
+                        return _context.Users.Where(u => u.IsDelete == false && u.IsActive == false).Count();
+
+                    default:
+                        return _context.Users.Where(u => u.IsDelete == false).Count();
+
+                }
+            }
+            else
+            {
+                switch (filterId)
+                {
+                    case -1:
+                        return _context.Users.Where(u => u.IsDelete == false && u.RoleId == roleId).Count();
+
+                    case 0:
+                        return _context.Users.Where(u => u.IsDelete == true && u.RoleId == roleId).Count();
+
+                    case 1:
+                        return _context.Users.Where(u => u.IsDelete == false && u.RoleId == roleId && u.IsBan == true).Count();
+
+                    case 2:
+                        return _context.Users.Where(u => u.IsDelete == false && u.RoleId == roleId && u.IsActive == false).Count();
+
+                    default:
+                        return _context.Users.Where(u => u.IsDelete == false && u.RoleId == roleId).Count();
+
+                }
+            }
+            
+        }
+
+        #region Roles
+        public List<Role> GetAllRoles()
+        {
+            return _context.Roles.ToList();
+        }
+
+        public bool IsRoleExist(int roleId)
+        {
+            return _context.Roles.Any(r => r.Id == roleId);
+        }
+        public Role GetRoleById(int roleId)
+        {
+            return _context.Roles.Include(r=>r.RoleAccesses).FirstOrDefault(r=>r.Id == roleId);
+        }
+
+        public List<int> GetRoleAccessIds(int roleId)
+        {
+            return _context.RolesAccess.Where(r => r.RoleId == roleId).Select(a=>a.AccessId)?.ToList();
+        }
+
+
+        public bool UpdateRole(Role role)
+        {
+            if(role == null) return false;
+
+            _context.Roles.Update(role);
+            _context.SaveChanges();
+            return true;
+        }
+
+        public bool DeleteRole(int roleId)
+        {
+            if(_context.Users.Any(u=>u.RoleId == roleId))
+            {
+                return false;
+            }
+            else
+            {
+                _context.Roles.Remove(GetRoleById(roleId));
+                _context.SaveChanges();
+                return true;
+            }
+
+            
+        }
+
+        public bool IsRoleNameExist(string roleName)
+        {
+            return _context.Roles.Any(r=>r.Name == roleName);
+        }
+
+        public bool IsRoleDisplayNameExist(string roleName)
+        {
+            return _context.Roles.Any(r => r.DisplayName == roleName);
+        }
+
+        public bool AddRole(Role role)
+        {
+            if (role != null)
+            {
+                _context.Roles.Add(role);
+                _context.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        #endregion
+
+        #region Access
+
+        public List<Access> GetAllAccesses()
+        {
+            return _context.Accesses.ToList();
+        }
+
+        public bool IsAccessExist(int accessId)
+        {
+            return _context.Accesses.Any(r => r.Id == accessId);
+        }
+
+        public Access GetAccessById(int accessId)
+        {
+            return _context.Accesses.FirstOrDefault(r => r.Id == accessId);
+
+        }
+
+        public List<Access> GetRolesAccess(int roleId)
+        {
+            return _context.RolesAccess.Where(r => r.RoleId == roleId).Include(r=>r.Access).Select(r=>r.Access)?.ToList();
+
+        }
+
+        public bool IsUserExist(int userId)
+        {
+            return _context.Users.Any(r => r.UserId == userId);
+        }
+
+
+
+
+
+
+
+
+
+
+        #endregion
+
     }
 }

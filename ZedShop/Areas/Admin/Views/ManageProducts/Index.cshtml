@@ -1,0 +1,146 @@
+﻿@model List<ZedShop.Web.Areas.Admin.Models.ProductViewModel.ProductViewModelAdmin>
+@{
+    ViewData["Title"] = "مدیریت کالاها";
+    Layout = "~/areas/admin/views/shared/_AdminLayout.cshtml";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div style="display:flex;">
+
+                    <p class="card-title"> <strong>کالاها</strong> </p>
+
+
+                    <p class="card-title" style="margin-top:15px;margin-right:2%;font-size:16px; "> فیلتر:  </p>
+                    <select id="filter-select" style="margin-right:5px; width:15%" onclick="LoadProductByFilter()">
+
+                        @foreach (var item in ViewBag.Filters)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+
+                    </select>
+
+
+                    <a style="margin-right:5%; height:40px;" class="btn btn-primary btn-sm" href="/Admin/ManageProducts/AddProduct">افزودن کالا <strong>+</strong></a>
+
+                </div>
+
+
+                <div id="basicgrid" class="m-t-40 jsgrid" style="position: relative; height: 750px; width: 100%;">
+                    <div class="jsgrid-grid-header jsgrid-header-scrollbar">
+                        <table class="jsgrid-table table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width:10%">
+                                        نام کالا
+                                    </th>
+                                    <th style="width:5%; text-align:center;">
+                                        تعداد
+                                    </th>
+                                    <th style="width:8%; text-align:center;">
+                                        تاریخ ورود
+                                    </th>
+                                    <th style="width:5%; text-align:center;">
+                                        قیمت فروش
+                                    </th>
+                                    <th style="width:5%; text-align:center;">
+                                        مخفی شده
+                                    </th>
+                                    <th style="width:5%; text-align:center;">
+                                        فعال شده
+                                    </th>
+                                    <th style="width:20%; text-align:center;">
+                                        اقدامات
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div id="tableofproductcontent">
+                        @Html.Partial("_ProductsTable")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function updateTableData( filterId, pageNum) {
+        $.ajax({
+            url: '/Admin/ManageProducts/ChangePage/', // controller and action
+            data: { _filterId: filterId, pageNumber: pageNum }, // Send the userInput as a parameter
+            dataType: 'html',
+            success: function (data) {
+
+                $('#tableofproductcontent').html(data); // Insert the received HTML into the container
+            }
+        });
+    }
+
+</script>
+
+
+<script>
+    function DeleteProduct(id) {
+        if (confirm("آیا از تغیر وضعیت حذف کالا مطمین هستید؟")) {
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/ManageProducts/DeleteProduct/', // controller and action
+                data: { productId: id }, // Send the userInput as a parameter
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        alert("کالا به بخش حذف شده‌ها انتقال داده شد!");
+                        var myobj = document.getElementById(id);
+                        myobj.remove();
+                    } else {
+                        alert("این کالا در سبد خرید کاربری وجود دارد بنابراین نمی‌توان این کالا را حذف کرد!");
+                    }
+                }
+            });
+        }
+    }
+
+    function ShowProduct(id) {
+        if (confirm("آیا از تغیر وضعیت مخفی نمودن کالا مطمعن هستید؟")) {
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/ManageProducts/ShowProduct', // controller and action
+                data: { productId: id }, 
+                dataType: 'json',
+                success: function (response) {
+                    var myobj = document.getElementById('show_' + id);
+                    if (!response.resault) {
+                        myobj.textContent = "مخفی شده";
+                    } else {
+                        myobj.textContent = "خیر";
+                    }
+                }
+            });
+        }
+    }
+
+</script>
+
+<script>
+    function LoadProductByFilter() {
+
+        var filterElement = document.getElementById("filter-select");
+
+        let id1 = filterElement.value;
+
+
+        $.ajax({
+            url: '/Admin/ManageProducts/AllProductsOfFilter/', //controller and action
+            data: {  _filterId: id1 }, // Send the product ID as a parameter
+            dataType: 'html',
+            success: function (data) {
+                $('#tableofproductcontent').html(data); // Insert the received HTML into the container
+            }
+        });
+    }
+</script>

@@ -22,6 +22,8 @@ namespace ZedShop.DataLayer.Entities
 
         public bool IsBan { get; set; }
 
+        public bool IsShow { get; set; }
+
         public short OpinionRate { get; set; }
 
         public DateTime OpinionDate { get; set; }

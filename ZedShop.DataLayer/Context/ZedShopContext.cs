@@ -8,32 +8,41 @@ using ZedShop.DataLayer.Entities;
 
 namespace ZedShop.DataLayer.Context
 {
-    public class ZedShopContext:DbContext
+    public class ZedShopContext : DbContext
     {
-        public ZedShopContext(DbContextOptions<ZedShopContext> options):base(options)
+        public ZedShopContext(DbContextOptions<ZedShopContext> options) : base(options)
         {
-            
+
         }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
-
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderProduct> OrderProducts { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Opinion> Opinions { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ProductRate> Rates { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<Access> Accesses { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<RoleAccess> RolesAccess { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region EnumGenderUser
             modelBuilder
-            .Entity<User>()
-            .Property(e => e.gender)
-            .HasConversion<int>();
+                .Entity<User>()
+                .Property(e => e.gender)
+                .HasConversion<int>();
             #endregion
 
+            modelBuilder
+                .Entity<Category>()
+                .HasKey(d => d.Id);
+
+            modelBuilder.Entity<Category>().HasOne(b => b.Parent)
+                .WithMany(c => c.ChildCategories).OnDelete(DeleteBehavior.NoAction);
 
             #region ManyToMany ProductCategory
 
@@ -74,5 +83,5 @@ namespace ZedShop.DataLayer.Context
         }
     }
 
-    
+
 }

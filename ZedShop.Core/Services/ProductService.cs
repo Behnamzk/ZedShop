@@ -1,10 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZedShop.Core.Convertors;
 using ZedShop.Core.DTOs.Product;
+using ZedShop.Core.Generator;
+using ZedShop.Core.Security;
 using ZedShop.Core.Services.Interface;
 using ZedShop.DataLayer.Context;
 using ZedShop.DataLayer.Entities;
@@ -14,12 +20,10 @@ namespace ZedShop.Core.Services
     public class ProductService : IProductService
     {
         private readonly ZedShopContext _context;
-        private readonly IUserService _userService;
 
-        public ProductService(ZedShopContext context, IUserService userService)
+        public ProductService(ZedShopContext context)
         {
             _context = context;
-            _userService = userService;
         }
 
         public List<Product> GetAllProducts()
@@ -164,11 +168,379 @@ namespace ZedShop.Core.Services
             return _context.Categories.ToList();
         }
 
+        public int GetAllProductsCount(int filterId)
+        {
 
+            switch (filterId)
+            {
+                case -1:
+                    // All products except Deleted products
+                    return _context.Products.Where(u => u.IsDelete == false).Count();
 
+                case 0:
+                    // Deleted products 
+                    return _context.Products.Where(u => u.IsDelete == true).Count();
 
+                case 1:
+                    // Count == 0
+                    return _context.Products.Where(u => u.IsDelete == false && u.Count == 0).Count();
 
+                case 2:
+                    // IsActivate == false
+                    return _context.Products.Where(u => u.IsDelete == false && u.IsActivate == false).Count();
 
+                case 3:
+                    // IsShow == false
+                    return _context.Products.Where(u => u.IsDelete == false && u.IsShow == false).Count();
+
+                default:
+                    return _context.Products.Where(u => u.IsDelete == false).Count();
+
+            }
+        }
+
+        public List<Product> GetAllProductsPaged(int page, int pageSize, int filterId)
+        {
+            switch (filterId)
+            {
+                case -1:
+                    // All products except Deleted products
+                    return _context.Products.Where(u => u.IsDelete == false).ToPaged(page, pageSize).ToList();
+
+                case 0:
+                    // Deleted products 
+                    return _context.Products.Where(u => u.IsDelete == true).ToPaged(page, pageSize).ToList();
+
+                case 1:
+                    // Count == 0
+                    return _context.Products.Where(u => u.IsDelete == false && u.Count == 0).ToPaged(page, pageSize).ToList();
+
+                case 2:
+                    // IsActivate == false
+                    return _context.Products.Where(u => u.IsDelete == false && u.IsActivate == false).ToPaged(page, pageSize).ToList();
+
+                case 3:
+                    // IsShow == false
+                    return _context.Products.Where(u => u.IsDelete == false && u.IsShow == false).ToPaged(page, pageSize).ToList();
+
+                default:
+                    return _context.Products.Where(u => u.IsDelete == false).ToPaged(page, pageSize).ToList();
+
+            }
+        }
+
+        public bool DeleteProduct(int productId)
+        {
+            if (_context.OrderProducts.Any(u => u.ProductId == productId))
+            {
+                return false;
+            }
+            else
+            {
+                var product = GetProduct(productId);
+                if (product != null)
+                {
+                    product.IsDelete = !product.IsDelete;
+                    _context.Products.Update(product);
+                    _context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+        }
+
+        public bool CompleteDeleteProduct(int productId)
+        {
+            if (_context.OrderProducts.Any(u => u.ProductId == productId))
+            {
+                return false;
+            }
+            else
+            {
+                var product = GetProduct(productId);
+                if (product != null)
+                {
+                    product.IsDelete = true;
+                    _context.Products.Remove(product);
+                    _context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+        }
+
+        public bool ShowProduct(int productId)
+        {
+            var product = GetProduct(productId);
+
+            product.IsShow = !product.IsShow;
+            _context.Products.Update(product);
+            _context.SaveChanges();
+            return product.IsShow;
+
+        }
+
+        public bool IsProductExist(int productId)
+        {
+            return _context.Products.Any(p => p.ProductId == productId);
+        }
+
+        public bool UpdateProduct(Product product)
+        {
+            if (product == null)
+            {
+                return false;
+            }
+            else
+            {
+                _context.Products.Update(product);
+                _context.SaveChanges();
+                return true;
+            }
+        }
+
+        public bool UpdateProduct(Product product, IFormFile imgProduct)
+        {
+            if (product == null)
+            {
+                return false;
+            }
+            else
+            {
+                if (imgProduct != null && imgProduct.IsImage())
+                {
+                    if (product.ProductImageName != "noimage_product.png")
+                    {
+                        string deleteimagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Products/Image", product.ProductImageName);
+                        if (File.Exists(deleteimagePath))
+                        {
+                            File.Delete(deleteimagePath);
+                        }
+                    }
+                    product.ProductImageName = NameGenerator.GenerateUniqueCode() + Path.GetExtension(imgProduct.FileName);
+
+                    ImageConvertor imgResizer = new ImageConvertor();
+                    string thumbPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Products/Image", product.ProductImageName);
+
+                    imgResizer.ResizeImage(imgProduct, thumbPath, 750, 500);
+                }
+                _context.Products.Update(product);
+                _context.SaveChanges();
+                return true;
+            }
+        }
+
+        public bool AddProduct(Product product, IFormFile imgProduct)
+        {
+            if (product == null)
+            {
+                return false;
+            }
+            else
+            {
+                if (imgProduct != null && imgProduct.IsImage())
+                {
+                    if (product.ProductImageName != "noimage_product.png")
+                    {
+                        string deleteimagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Products/Image", product.ProductImageName);
+                        if (File.Exists(deleteimagePath))
+                        {
+                            File.Delete(deleteimagePath);
+                        }
+                    }
+                    product.ProductImageName = NameGenerator.GenerateUniqueCode() + Path.GetExtension(imgProduct.FileName);
+
+                    ImageConvertor imgResizer = new ImageConvertor();
+                    string thumbPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Products/Image", product.ProductImageName);
+
+                    imgResizer.ResizeImage(imgProduct, thumbPath, 750, 500);
+                }
+                _context.Products.Add(product);
+                _context.SaveChanges();
+                return true;
+            }
+        }
         #endregion
+
+
+        public int GetAllCommentsCount(int filterId)
+        {
+            switch (filterId)
+            {
+                case -1:
+                    // All products except Deleted products
+                    return _context.Comments.Count();
+
+                case 0:
+                    // IsShow == false
+                    return _context.Comments.Where(u => u.IsShow == false).Count();
+
+                default:
+                    return _context.Comments.Count();
+
+            }
+        }
+
+        public List<Comment> GetAllCommentsPaged(int page, int pageSize, int filterId)
+        {
+            switch (filterId)
+            {
+                case -1:
+                    // All products except Deleted products
+                    return _context.Comments.Include(c=>c.User).Include(c => c.Product).ToPaged(page, pageSize).ToList();
+
+                case 0:
+                    // IsShow == false
+                    return _context.Comments.Include(c => c.User).Include(c => c.Product).Where(u => u.IsShow == false).ToPaged(page, pageSize).ToList();
+
+                default:
+                    return _context.Comments.Include(c => c.User).Include(c => c.Product).ToPaged(page, pageSize).ToList();
+
+            }
+        }
+
+        public bool DeleteComment(int commentId)
+        {
+
+            var comment = GetComment(commentId);
+            if (comment != null)
+            {
+                _context.Comments.Remove(comment);
+                _context.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        public bool ShowComment(int commentId)
+        {
+            var comment = GetComment(commentId);
+
+            comment.IsShow = !comment.IsShow;
+            _context.Comments.Update(comment);
+            _context.SaveChanges();
+            return comment.IsShow;
+        }
+
+        public bool IsCommentExist(int commentId)
+        {
+            return _context.Comments.Any(p => p.Id == commentId);
+        }
+
+        public Comment GetComment(int commentId)
+        {
+            return _context.Comments.Include(c => c.User).Include(c => c.Product).SingleOrDefault(c => c.Id == commentId);
+
+        }
+
+        public int GetAllCategoriesCount(int filterId)
+        {
+            switch (filterId)
+            {
+                case -1:
+                    return _context.Categories.Count();
+
+                case 0:
+                    // IsShow == false
+                    return _context.Categories.Where(c => c.IsRoot == true).Count();
+
+                default:
+                    return _context.Categories.Count();
+
+            }
+        }
+
+        public List<Category> GetAllCategoriesPaged(int page, int pageSize, int filterId)
+        {
+            switch (filterId)
+            {
+                case -1:
+                    return _context.Categories.Include(c => c.Parent).ToPaged(page, pageSize).ToList();
+
+                case 0:
+                    // IsShow == false
+                    return _context.Categories.Include(c => c.Parent).Where(c => c.IsRoot == true).ToPaged(page, pageSize).ToList();
+
+                default:
+                    return _context.Categories.Include(c => c.Parent).ToPaged(page, pageSize).ToList();
+
+            }
+        }
+
+        public bool DeleteCategory(int categoryId)
+        {
+            var category = GetCategory(categoryId);
+            if (category != null)
+            {
+                if(!_context.ProductCategories.Any(c =>c.CategoryId == categoryId))
+                {
+                    _context.Categories.Remove(category);
+                    _context.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool IsCategoryExist(int categoryId)
+        {
+            return _context.Categories.Any(p => p.Id == categoryId);
+        }
+
+        public Category GetCategory(int categoryId)
+        {
+            return _context.Categories.Include(c=>c.Parent).SingleOrDefault(c => c.Id == categoryId);
+
+        }
+
+        public bool AddCategory(Category category)
+        {
+            if (category != null)
+            {
+                _context.Categories.Add(category);
+                _context.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        public bool UpdateCategory(Category category)
+        {
+            if (category == null)
+            {
+                return false;
+            }
+            else
+            {
+                _context.Categories.Update(category);
+                _context.SaveChanges();
+                return true;
+            }
+        }
+
+        public bool IsCategoryNameExist(string categoryName, int categoryId)
+        {
+            return _context.Categories.Any(c=>c.Name == categoryName && c.Id != categoryId);
+        }
     }
 }

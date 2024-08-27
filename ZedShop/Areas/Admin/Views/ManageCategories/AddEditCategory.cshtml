@@ -1,0 +1,106 @@
+﻿@model ZedShop.Web.Areas.Admin.Models.CategoryViewModel.CategoryAddEditViewModel
+
+@{
+    @if (ViewBag.EditMode)
+    {
+        ViewData["Title"] = "ویرایش دسته‌بندی";
+    }
+    else
+    {
+        ViewData["Title"] = "افزودن دسته‌بندی";
+    }
+
+    Layout = "~/areas/admin/views/shared/_AdminLayout.cshtml";
+
+}
+
+<div class="col-12">
+    <div class="card">
+        <div class="card-body">
+
+            @if (ViewBag.EditMode)
+            {
+                <h4 class="card-title"><strong> ویرایش دسته‌بندی </strong></h4>
+
+            }
+            else
+            {
+                <h4 class="card-title"><strong> افزودن دسته‌بندی </strong></h4>
+
+            }
+            <form asp-action="@ViewBag.ActionName" asp-controller="ManageCategories" method="post" enctype="multipart/form-data">
+
+                <div class="row-form-container">
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" class="form-control" />
+
+                    <div class="row-form">
+                        <div class="left" style="width: 50%;">
+                            <div class="form-group">
+                                <label asp-for="Name" class="control-label"></label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+
+                        </div>
+
+                        <div class="right" style="width: 50%; margin-top:30px;">
+
+
+                            <div class="form-auth-row">
+                                <label for="IsRoot" class="ui-checkbox">
+                                    <input asp-for="IsRoot" type="checkbox">
+                                    <span class="ui-checkbox-check"></span>
+                                </label>
+                                <label for="IsRoot">دسته‌بندی والد</label>
+                            </div>
+
+                            <div class="form-group" style="display: flex; margin-top:30px;">
+                                <p><strong> نام‌ والد:</strong></p>
+                                <div class="access-scrollable-list">
+                                    <ul>
+                                        @for (int i = 0; i < Model.ParentCategory.Count; i++)
+                                        {
+                                            <li>
+                                                <div class="form-auth-row">
+                                                    <input type="hidden" asp-for="@Model.ParentCategory[i].Name" />
+                                                    <input type="hidden" asp-for="@Model.ParentCategory[i].Id" />
+                                                    <label class="ui-checkbox">
+                                                        <input asp-for="@Model.ParentCategory[i].IsActive" type="checkbox" id="checkparent" onclick="selectOneCheckbox(this)">
+                                                        <span class="ui-checkbox-check"></span>
+                                                    </label>
+                                                    <label>@Model.ParentCategory[i].Name</label>
+                                                </div>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="simple-center-div" style="margin-top:20px; margin-bottom:20px;">
+                    <div class="form-group">
+                        <input type="submit" value="ذخیره" class="btn btn-success" />
+                        <button class="btn btn-warning btn-sm" asp-action="Index">انصراف</button>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+<script>
+    function selectOneCheckbox(checkbox) {
+        var checkboxes = document.querySelectorAll('.ui-checkbox input[id="checkparent"]');
+
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i] !== checkbox) {
+                checkboxes[i].checked = false;
+            }
+        }
+    }
+</script>

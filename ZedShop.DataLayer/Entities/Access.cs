@@ -16,6 +16,10 @@ namespace ZedShop.DataLayer.Entities
         [MaxLength(100)]
         public string Name { get; set; }
 
+        [Required]
+        [MaxLength(100)]
+        public string DisplayName { get; set; } = string.Empty;
+
         public ICollection<RoleAccess> RoleAccesses { get; set; }
     }
 }

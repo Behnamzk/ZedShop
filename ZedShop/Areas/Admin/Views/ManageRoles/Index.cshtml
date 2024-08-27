@@ -1,0 +1,76 @@
+﻿@model List<ZedShop.Web.Areas.Admin.Models.UserViewModel.RoleAccessViewModel>
+@{
+    ViewData["Title"] = "مدیریت نقش‌ها";
+    Layout = "~/areas/admin/views/shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div style="display:flex;">
+
+                    <p class="card-title"> <strong>نقش‌ها</strong> </p>
+
+                    <a style="margin-right:5%;" class="btn btn-primary btn-sm" href="/Admin/ManageRoles/AddRole">افزودن نقش <strong>+</strong></a>
+
+                </div>
+
+                <div class="row" style="display:flex">
+                    <div class="column left" style="width: 30%;"> </div>
+                    <div class="column middle" style="width: 50%; text-align:center;">
+                        <div id="basicgrid" class="m-t-40 jsgrid" style="position: relative; height: 750px; width: 100%;">
+                            <div  class="jsgrid-grid-header jsgrid-header-scrollbar">
+                                <table class="jsgrid-table table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:30%">
+                                                نام نقش
+                                            </th>
+                                            <th style="width:70%; text-align:center;">
+                                                اقدامات
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div id="tableofusercontent">
+                                @Html.Partial("_RolesTable")
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column right" style="width: 30%;"> </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<script>
+    function DeleteRole(id) {
+        if (confirm("آیا از تغیر وضعیت حذف کاربر مطمین هستید؟")) {
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/ManageRoles/DeleteRole', // controller and action
+                data: { roleId: id }, // Send the userInput as a parameter
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        alert("نقش حذف شد!");
+                        var myobj = document.getElementById(id);
+                        myobj.remove();
+                    } else {
+                        alert("کاربری با این نقش وجود دارد بنابراین نمی‌توان این نقش را حذف کرد!");
+                    }
+                }
+            });
+        }
+
+    
+    }
+
+</script>

@@ -24,7 +24,9 @@ namespace ZedShop.DataLayer.Entities
 		[ForeignKey("Product")]
 		public int ProductId { get; set; }
 
-		public DateTime CommentDate { get; set; }
+		public bool IsShow { get; set; } = false;
+
+        public DateTime CommentDate { get; set; }
 
 		public User User { get; set; }
 

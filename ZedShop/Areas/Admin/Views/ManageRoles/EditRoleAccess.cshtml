@@ -1,0 +1,73 @@
+﻿@model ZedShop.Web.Areas.Admin.Models.UserViewModel.RoleAccessViewModel
+
+@{
+    ViewData["Title"] = "ویرایش نقش";
+    Layout = "~/areas/admin/views/shared/_AdminLayout.cshtml";
+
+}
+
+<div class="col-12">
+    <div class="card">
+        <div class="card-body">
+
+            <h4 class="card-title"><strong> ویرایش سطح دسترسی نقش </strong></h4>
+            <form asp-action="EditRoleAccess" asp-controller="ManageRoles" method="post" enctype="multipart/form-data">
+
+
+
+                <div class="row-form-container">
+
+
+                    <input type="hidden" asp-for="Id" class="form-control" />
+                    <input type="hidden" asp-for="Name" class="form-control" />
+
+                    <div class="row-form">
+                        <div class="left" style="width: 40%; text-align:left;">
+                            <div class="form-group">
+                                <p><strong> نام نقش: @Model.Name</strong></p>
+                            </div>
+                        </div>
+
+                        <div class="right" style="width: 60%;">
+                            <div class="form-group" style="display: flex;">
+                                <p ><strong> دسترسی‌ها:</strong></p>
+                                <div class="access-scrollable-list">
+
+                                    <ul id="aceessCheckboxList">
+                                        @for (int i = 0; i < Model.Access.Count; i++)
+                                        {
+                                            <li>
+                                                <div class="form-auth-row">
+                                                    <input type="hidden" asp-for="@Model.Access[i].Name" />
+                                                    <input type="hidden" asp-for="@Model.Access[i].Id" />
+                                                    <label class="ui-checkbox">
+                                                        <input asp-for="@Model.Access[i].IsActive" type="checkbox">
+                                                        <span class="ui-checkbox-check"></span>
+                                                    </label>
+                                                    <label>@Model.Access[i].Name</label>
+                                                </div>
+
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="simple-center-div" style="margin-top:20px; margin-bottom:20px;">
+                        <div class="form-group">
+                            <input type="submit" value="ذخیره" class="btn btn-success" />
+                            <button class="btn btn-warning btn-sm" asp-action="Index">انصراف</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
