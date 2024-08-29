@@ -90,7 +90,7 @@ namespace ZedShop.Web.Controllers
                         ProdcutCount = item.Count,
                         SellPrice = item.Price * item.Count,
                         ProductId = item.ProductId,
-                        ProductName = item.Product.ProductImageName,
+                        ProductName = item.Product.Name,
                         ProductImageName = item.Product.ProductImageName
                     };
                     total_price += item.Price * item.Count;
