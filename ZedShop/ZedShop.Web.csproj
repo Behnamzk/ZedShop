@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Admin\Data\**" />
+    <Content Remove="Areas\Admin\Data\**" />
+    <EmbeddedResource Remove="Areas\Admin\Data\**" />
+    <None Remove="Areas\Admin\Data\**" />
+    <TypeScriptCompile Remove="Areas\Admin\Data\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="wwwroot\AdminLTE\bower_components\bootstrap-colorpicker\.bower.json" />
     <Content Include="wwwroot\AdminLTE\bower_components\bootstrap-colorpicker\bower.json" />
     <Content Include="wwwroot\AdminLTE\bower_components\bootstrap-colorpicker\composer.json" />
@@ -2641,7 +2649,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Views\Shared\Components\" />
     <Folder Include="wwwroot\Products\thumb\" />
   </ItemGroup>

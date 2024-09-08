@@ -11,7 +11,7 @@ using ZedShop.DataLayer.Entities;
 
 namespace ZedShop.Web.Controllers
 {
-   
+
     public class OrderController : Controller
     {
         private readonly IOrderService _orderService;
@@ -32,11 +32,11 @@ namespace ZedShop.Web.Controllers
             {
                 Order order = _orderService.GetOpenOrder(username);
 
-                List<OrderProductViewModel> OrderProductList= new List<OrderProductViewModel>();
+                List<OrderProductViewModel> OrderProductList = new List<OrderProductViewModel>();
 
                 double total_price = 0;
-                
-                if(order != null)
+
+                if (order != null)
                 {
                     foreach (var item in order.OrderProducts)
                     {
@@ -54,15 +54,16 @@ namespace ZedShop.Web.Controllers
                         OrderProductList.Add(model);
                     }
 
+                    OPTableViewModel oPTable = new OPTableViewModel()
+                    {
+                        Items = OrderProductList,
+                        TotalPrice = total_price,
+                        OrderId = order.Id
+                    };
+
+                    return View(oPTable);
+
                 }
-
-                OPTableViewModel oPTable = new OPTableViewModel()
-                {
-                    Items = OrderProductList,
-                    TotalPrice = total_price
-                };
-
-                return View(oPTable);
 
             }
             return RedirectToAction("Index", "Home");
@@ -81,8 +82,8 @@ namespace ZedShop.Web.Controllers
             if (_orderService.DeleteProductFromOrder(order_id, product_id))
             {
                 var data = _orderService.GetProductsOfOrder(order_id);
-                
-                foreach ( var item in data)
+
+                foreach (var item in data)
                 {
                     OrderProductViewModel model = new OrderProductViewModel()
                     {
@@ -103,14 +104,15 @@ namespace ZedShop.Web.Controllers
             OPTableViewModel oPTable = new OPTableViewModel()
             {
                 Items = OrderProductList,
-                TotalPrice = total_price
+                TotalPrice = total_price,
+                OrderId = orderProduct.OrdrId
             };
 
 
             return Json(oPTable);
         }
 
-            [Authorize]
+        [Authorize]
         public ActionResult BuyProduct(OrderViewModel orderViewModel)
         {
             var username = User.Identity.Name;
@@ -119,7 +121,7 @@ namespace ZedShop.Web.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            
+
             int orderId = -1;
 
             Product product = _productService.GetProduct(orderViewModel.ProductId);
@@ -129,48 +131,144 @@ namespace ZedShop.Web.Controllers
             if (order == null)
             {
                 orderId = _orderService.AddOrder(username);
+
+                order = _orderService.GetOpenOrder(username);
+            }
+
+            orderId = order.Id;
+
+            // check if product is exist in Order or not 
+            if (order.OrderProducts.Any(o => o.ProductId == orderViewModel.ProductId))
+            {
+                // if we have enough products decrease count and
+                // update db and return true
+                // else return false
+                if (_productService.DecreaseProductCount(product.ProductId, orderViewModel.Count))
+                {
+                    _orderService.IncreaseProductCountOfOrder(product.ProductId, orderId, orderViewModel.Count);
+                }
             }
             else
             {
-                orderId = order.Id;
-                
-                // check if product is exist in Order or not 
-                if(order.OrderProducts.Any(o => o.ProductId == orderViewModel.ProductId))
+                if (orderId != -1 && product != null)
                 {
+                    OrderProduct orderProduct = new OrderProduct()
+                    {
+                        OrdrId = orderId,
+                        ProductId = product.ProductId,
+                        Count = orderViewModel.Count,
+                        Price = product.SellPrice
+                    };
+
                     // if we have enough products decrease count and
                     // update db and return true
                     // else return false
                     if (_productService.DecreaseProductCount(product.ProductId, orderViewModel.Count))
                     {
-                        _orderService.IncreaseProductCountOfOrder(product.ProductId, orderId, orderViewModel.Count);
+                        _orderService.AddProductToOrder(orderProduct);
                     }
+
                 }
-                else
-                {
-                    if (orderId != -1 && product != null)
-                    {
-                        OrderProduct orderProduct = new OrderProduct()
-                        {
-                            OrdrId = orderId,
-                            ProductId = product.ProductId,
-                            Count = orderViewModel.Count,
-                            Price = product.SellPrice
-                        };
-
-                        // if we have enough products decrease count and
-                        // update db and return true
-                        // else return false
-                        if (_productService.DecreaseProductCount(product.ProductId, orderViewModel.Count))
-                        {
-                            _orderService.AddProductToOrder(orderProduct);
-                        }
-
-                    }
-                }
-
             }
-            
+
+
+
             return RedirectToAction("Index");
+        }
+
+
+        [Authorize]
+        [Route("/MyOrders/CompletePurchase/{order_id}")]
+        public ActionResult CompletePurchase(int order_id)
+        {
+            var username = User.Identity.Name;
+
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            Order order = _orderService.GetOpenOrder(username);
+
+            if (order != null)
+            {
+                if (order.Id == order_id)
+                {
+                    OrderPurchaseViewModel orderPVM = new OrderPurchaseViewModel()
+                    {
+                        Id = order_id,
+                        OrderProducts = order.OrderProducts
+                    };
+
+                    // ViewBag province and cities
+                    ViewBag.Provinces = _orderService.GetAllProvinceWithCities();
+                    return View(orderPVM);
+                }
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        void func()
+        {
+            //var username = User.Identity.Name;
+
+            //if (string.IsNullOrEmpty(username))
+            //{
+            //    return RedirectToAction("Index", "Home");
+            //}
+
+            //int orderId = -1;
+
+            //Product product = _productService.GetProduct(orderViewModel.ProductId);
+
+            //Order order = _orderService.GetOpenOrder(username);
+
+            //if (order == null)
+            //{
+            //    orderId = _orderService.AddOrder(username);
+            //}
+            //else
+            //{
+            //    orderId = order.Id;
+
+            //    // check if product is exist in Order or not 
+            //    if (order.OrderProducts.Any(o => o.ProductId == orderViewModel.ProductId))
+            //    {
+            //        // if we have enough products decrease count and
+            //        // update db and return true
+            //        // else return false
+            //        if (_productService.DecreaseProductCount(product.ProductId, orderViewModel.Count))
+            //        {
+            //            _orderService.IncreaseProductCountOfOrder(product.ProductId, orderId, orderViewModel.Count);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        if (orderId != -1 && product != null)
+            //        {
+            //            OrderProduct orderProduct = new OrderProduct()
+            //            {
+            //                OrdrId = orderId,
+            //                ProductId = product.ProductId,
+            //                Count = orderViewModel.Count,
+            //                Price = product.SellPrice
+            //            };
+
+            //            // if we have enough products decrease count and
+            //            // update db and return true
+            //            // else return false
+            //            if (_productService.DecreaseProductCount(product.ProductId, orderViewModel.Count))
+            //            {
+            //                _orderService.AddProductToOrder(orderProduct);
+            //            }
+
+            //        }
+            //    }
+
+            //}
+
+            //return RedirectToAction("Index");
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZedShop.Core.DTOs.Order;
 using ZedShop.Core.Services.Interface;
 using ZedShop.DataLayer.Context;
 using ZedShop.DataLayer.Entities;
@@ -33,9 +34,9 @@ namespace ZedShop.Core.Services
                     {
                         User = user,
                         Status = false,
-                        Province = "",
+                        Province = null,
                         Address = "",
-                        City = "",
+                        City = null,
                         FinalDate = DateTime.Now
                     };
 
@@ -106,5 +107,35 @@ namespace ZedShop.Core.Services
             return _context.OrderProducts.Include(p=>p.Product).Where(o=>o.OrdrId == orderId).ToList();
         }
 
+        public List<ProvinceViewModel> GetAllProvinceWithCities()
+        {
+            List<ProvinceViewModel> provincesWithCities = new List<ProvinceViewModel>();
+
+            var provinces = _context.Provinces.ToList();
+
+            foreach (var p in provinces)
+            {
+                ProvinceViewModel province = new ProvinceViewModel()
+                {
+                    Id = p.Id,
+                    Name = p.Name
+                };
+
+                foreach (var c in p.Cities) {
+                    CityViewModel city = new CityViewModel()
+                    {
+                        Id = c.Id,
+                        Name = c.Name
+                    };
+                    province.Cities.Add(city);
+                }
+
+                provincesWithCities.Add(province);
+
+            }
+
+            return provincesWithCities;
+
+        }
     }
 }

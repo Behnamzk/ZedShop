@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZedShop.DataLayer.Context;
 
@@ -11,9 +12,10 @@ using ZedShop.DataLayer.Context;
 namespace ZedShop.DataLayer.Migrations
 {
     [DbContext(typeof(ZedShopContext))]
-    partial class ZedShopContextModelSnapshot : ModelSnapshot
+    [Migration("20240908140944_AddCityAndProvinceTables")]
+    partial class AddCityAndProvinceTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -228,14 +230,18 @@ namespace ZedShop.DataLayer.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<int?>("CityId")
-                        .HasColumnType("int");
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<DateTime>("FinalDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ProvinceId")
-                        .HasColumnType("int");
+                    b.Property<string>("Province")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
@@ -244,10 +250,6 @@ namespace ZedShop.DataLayer.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("ProvinceId");
 
                     b.HasIndex("UserId");
 
@@ -592,7 +594,7 @@ namespace ZedShop.DataLayer.Migrations
             modelBuilder.Entity("ZedShop.DataLayer.Entities.City", b =>
                 {
                     b.HasOne("ZedShop.DataLayer.Entities.Province", "Province")
-                        .WithMany("Cities")
+                        .WithMany("cities")
                         .HasForeignKey("ProvinceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -632,25 +634,11 @@ namespace ZedShop.DataLayer.Migrations
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Order", b =>
                 {
-                    b.HasOne("ZedShop.DataLayer.Entities.City", "City")
-                        .WithMany("Orders")
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("ZedShop.DataLayer.Entities.Province", "Province")
-                        .WithMany("Orders")
-                        .HasForeignKey("ProvinceId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.HasOne("ZedShop.DataLayer.Entities.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("City");
-
-                    b.Navigation("Province");
 
                     b.Navigation("User");
                 });
@@ -787,11 +775,6 @@ namespace ZedShop.DataLayer.Migrations
                     b.Navigation("ProductCategories");
                 });
 
-            modelBuilder.Entity("ZedShop.DataLayer.Entities.City", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Order", b =>
                 {
                     b.Navigation("OrderProducts");
@@ -812,9 +795,7 @@ namespace ZedShop.DataLayer.Migrations
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Province", b =>
                 {
-                    b.Navigation("Cities");
-
-                    b.Navigation("Orders");
+                    b.Navigation("cities");
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Role", b =>

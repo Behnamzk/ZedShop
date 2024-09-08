@@ -3,75 +3,84 @@
 @{
     ViewData["Title"] = "سفارشات";
 }
-<v class="orders-div">
-    <h2>سبد خرید شما</h2>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="orders-div">
+    <div class="orders-header">
+        <a class="orders-history-link" href="#"><strong>تاریخچه خرید <i class="fa fa-file-text-o" style="font-size:20px"></i></strong></a>
+        <div style="text-align:center">
+        <h2>سبد خرید شما</h2>
+        </div>
+    </div>
+    
+
 <div class="orders-grid-container">
-        <table>
-            <thead>
+    <table>
+        <thead>
+            <tr>
+                <th>تصویر کالا</th>
+                <th>نام کالا</th>
+                <th>تعداد</th>
+                <th>قیمت</th>
+                <th>حذف</th>
+            </tr>
+        </thead>
+        <tbody id="cart-items">
+            @foreach (var item in Model.Items)
+            {
                 <tr>
-                    <th>تصویر کالا</th>
-                    <th>نام کالا</th>
-                    <th>تعداد</th>
-                    <th>قیمت</th>
-                    <th>حذف</th>
+                    <td><img src="/Products/Image/@item.ProductImageName" alt="Product Image"></td>
+                    <td>@item.ProductName</td>
+                    <td>@item.ProdcutCount</td>
+                    <td>@item.SellPrice.ToString("N0") تومان</td>
+                    <td><button id="updateButton" onclick="updateTableData(@item.OrderId, @item.ProductId)">×</button></td>
                 </tr>
-            </thead>
-            <tbody id="cart-items">
-                @foreach (var item in Model.Items)
-                {
-                    <tr>
-                        <td><img src="/Products/Image/@item.ProductImageName" alt="Product Image"></td>
-                        <td>@item.ProductName</td>
-                        <td>@item.ProdcutCount</td>
-                        <td>@item.SellPrice.ToString("N0") تومان</td>
-                        <td><button id="updateButton" onclick="updateTableData(@item.OrderId, @item.ProductId)">×</button></td>
-                    </tr>
-                }
-
-
-            </tbody>
-        </table>
-        <p class="p-total-price" id="total-price">مجموع: <span id="total-value">@Model.TotalPrice.ToString("N0")</span> تومان</p>
-        <button class="button-submit" type="button" onclick="location.href='@Url.Action("BuyProduct", "Order", new { id = 1 })'">تکمیل خرید و پرداخت</button>
-
-        <script>
-            function updateTableData(id1, id2) {
-
-                const url = "/MyOrders/delete/"+id1+"/"+id2; // Add IDs to URL
-
-                const xhr = new XMLHttpRequest();
-                xhr.open("GET", url, true);
-
-                xhr.onload = function () {
-                    if (xhr.status === 200) {
-
-                        const receivedData = JSON.parse(xhr.responseText); // Parse JSON data
-
-                        // Update table body with parsed data
-                        let tableBodyContent = "";
-
-
-                        for (const model of receivedData.items) {
-                            tableBodyContent += `<tr><td><img src="/Products/Image/${model.productImageName}" alt="Product Image"></td> <td>${model.productName}</td><td>${model.prodcutCount}</td> <td>${model.sellPrice}</td> <td><button id="updateButton" onclick="updateTableData(${model.orderId}, ${model.productId} )">×</button></td></td></tr>`;
-                        }
-
-                        console.log("datea", receivedData.totalPrice);
-
-                        document.getElementById("total-price").innerHTML = `مجموع: ${receivedData.totalPrice} تومان`;
-                        document.getElementById("cart-items").innerHTML = tableBodyContent;
-                    } else {
-                        // Handle errors (optional)
-                        console.error("Error fetching data:", xhr.statusText);
-                    }
-                };
-
-                xhr.send();
             }
 
-        </script>
+
+        </tbody>
+    </table>
+    <p class="p-total-price" id="total-price">مجموع: <span id="total-value">@Model.TotalPrice.ToString("N0")</span> تومان</p>
+        <button class="button-submit" type="button" onclick="location.href='@Url.Action("CompletePurchase", "Order", new { id = @Model.OrderId })'">تکمیل خرید و پرداخت</button>
+
+    <script>
+        function updateTableData(id1, id2) {
+
+            const url = "/MyOrders/delete/" + id1 + "/" + id2; // Add IDs to URL
+
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", url, true);
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+
+                    const receivedData = JSON.parse(xhr.responseText); // Parse JSON data
+
+                    // Update table body with parsed data
+                    let tableBodyContent = "";
 
 
-        <script src="script.js"></script>
+                    for (const model of receivedData.items) {
+                        tableBodyContent += `<tr><td><img src="/Products/Image/${model.productImageName}" alt="Product Image"></td> <td>${model.productName}</td><td>${model.prodcutCount}</td> <td>${model.sellPrice}</td> <td><button id="updateButton" onclick="updateTableData(${model.orderId}, ${model.productId} )">×</button></td></td></tr>`;
+                    }
+
+                    console.log("datea", receivedData.totalPrice);
+
+                    document.getElementById("total-price").innerHTML = `مجموع: ${receivedData.totalPrice} تومان`;
+                    document.getElementById("cart-items").innerHTML = tableBodyContent;
+                } else {
+                    // Handle errors (optional)
+                    console.error("Error fetching data:", xhr.statusText);
+                }
+            };
+
+            xhr.send();
+        }
+
+    </script>
+
+
+    <script src="script.js"></script>
 </div>
 
-  
+</div>

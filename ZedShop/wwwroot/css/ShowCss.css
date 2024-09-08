@@ -2,6 +2,21 @@
     margin: auto;
     text-align: center;
 }
+    .orders-div div[class=orders-header] {
+        width: 100%;
+        text-align: right;
+        margin-right: 5%;
+        margin-top:2%;
+    }
+
+    .orders-div a[class=orders-history-link] {
+        font-size: 20px;
+        color: lightslategray;
+    }
+    .orders-div a[class=orders-history-link]:hover {
+
+        color: #1f9ede;
+    }
 
     .orders-div div[class=orders-grid-container] {
         padding: 20px 5% 20px 5%;

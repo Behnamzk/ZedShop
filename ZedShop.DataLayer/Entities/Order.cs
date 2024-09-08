@@ -22,13 +22,19 @@ namespace ZedShop.DataLayer.Entities
         [AllowNull]
         public string Address { get; set; }
 
-        [MaxLength(300)]
         [AllowNull]
-        public string City { get; set; }
+        [ForeignKey("City")]
+        public int? CityId { get; set; }
 
-        [MaxLength(300)]
         [AllowNull]
-        public string Province { get; set; }
+        public City? City { get; set; }
+
+        [AllowNull]
+        [ForeignKey("Province")]
+        public int? ProvinceId { get; set; }
+
+        [AllowNull]
+        public Province? Province { get; set; }
 
         [Required]
         public bool Status { get; set; }
