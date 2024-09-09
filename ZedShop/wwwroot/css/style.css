@@ -2782,3 +2782,32 @@ h1, h2, h3, h4, h5,
         margin-right: 10px;
         font-family: "B Yekan";
     }
+
+.card-body {
+    margin: 10px;
+}
+
+    .card-body p[class = card-title] {
+        margin-right: 10px;
+        font-family: 'Vazir';
+        font-size: 20px;
+    }
+
+.row-form-container {
+    margin-left: 10%;
+    margin-right: 10%;
+    border-radius: 15px;
+    padding: 2%;
+    border: 1px solid white;
+    background-color: #f5f5f5;
+}
+
+.row-form {
+    display: flex;
+    justify-content: space-between;
+}
+
+    .row-form .left, .right {
+        margin-right: 10px;
+        margin-left: 10px;
+    }

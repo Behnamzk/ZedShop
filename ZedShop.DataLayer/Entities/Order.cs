@@ -18,23 +18,10 @@ namespace ZedShop.DataLayer.Entities
         [AllowNull]
         public DateTime FinalDate { get; set; }
 
-        [MaxLength(1000)]
         [AllowNull]
-        public string Address { get; set; }
-
-        [AllowNull]
-        [ForeignKey("City")]
-        public int? CityId { get; set; }
-
-        [AllowNull]
-        public City? City { get; set; }
-
-        [AllowNull]
-        [ForeignKey("Province")]
-        public int? ProvinceId { get; set; }
-
-        [AllowNull]
-        public Province? Province { get; set; }
+        [ForeignKey("Address")]
+        public int? AddressId { get; set; }
+        public Address? Address { get; set; }
 
         [Required]
         public bool Status { get; set; }

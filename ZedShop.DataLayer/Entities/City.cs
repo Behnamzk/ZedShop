@@ -28,7 +28,6 @@ namespace ZedShop.DataLayer.Entities
 
         public Province Province { get; set; }
 
-        public ICollection<Order> Orders { get; set; }
 
     }
 }

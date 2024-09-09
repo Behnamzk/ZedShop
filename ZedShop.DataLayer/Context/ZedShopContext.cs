@@ -28,6 +28,7 @@ namespace ZedShop.DataLayer.Context
         public DbSet<Role> Roles { get; set; }
         public DbSet<Province> Provinces { get; set; }
         public DbSet<City> Cities { get; set; }
+        public DbSet<Address> Addresses { get; set; }
         public DbSet<RoleAccess> RolesAccess { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -46,12 +47,8 @@ namespace ZedShop.DataLayer.Context
             modelBuilder.Entity<Category>().HasOne(b => b.Parent)
                 .WithMany(c => c.ChildCategories).OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<Order>().HasOne(b => b.Province)
-                .WithMany(c => c.Orders).OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<Order>().HasOne(b => b.City)
-                .WithMany(c => c.Orders).OnDelete(DeleteBehavior.NoAction);
-
+            modelBuilder.Entity<Address>().HasOne(b => b.Province)
+               .WithMany(c => c.Addresses).OnDelete(DeleteBehavior.NoAction);
 
             #region ManyToMany ProductCategory
 

@@ -34,9 +34,7 @@ namespace ZedShop.Core.Services
                     {
                         User = user,
                         Status = false,
-                        Province = null,
-                        Address = "",
-                        City = null,
+                        Address = null,
                         FinalDate = DateTime.Now
                     };
 
@@ -107,35 +105,15 @@ namespace ZedShop.Core.Services
             return _context.OrderProducts.Include(p=>p.Product).Where(o=>o.OrdrId == orderId).ToList();
         }
 
-        public List<ProvinceViewModel> GetAllProvinceWithCities()
+        public List<Province> GetAllProvince()
         {
-            List<ProvinceViewModel> provincesWithCities = new List<ProvinceViewModel>();
+            return _context.Provinces.ToList();
 
-            var provinces = _context.Provinces.ToList();
+        }
 
-            foreach (var p in provinces)
-            {
-                ProvinceViewModel province = new ProvinceViewModel()
-                {
-                    Id = p.Id,
-                    Name = p.Name
-                };
-
-                foreach (var c in p.Cities) {
-                    CityViewModel city = new CityViewModel()
-                    {
-                        Id = c.Id,
-                        Name = c.Name
-                    };
-                    province.Cities.Add(city);
-                }
-
-                provincesWithCities.Add(province);
-
-            }
-
-            return provincesWithCities;
-
+        public List<City> GetCitiesOfProvince(int provinceId)
+        {
+            return _context.Cities.Where(c=>c.ProvinceId == provinceId).ToList();
         }
     }
 }

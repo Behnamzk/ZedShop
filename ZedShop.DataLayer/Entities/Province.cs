@@ -26,6 +26,6 @@ namespace ZedShop.DataLayer.Entities
         public string Tel_Prefix { get; set; }
 
         public ICollection<City> Cities { get; set; }
-        public ICollection<Order> Orders { get; set; }
+        public ICollection<Address> Addresses { get; set; }
     }
 }

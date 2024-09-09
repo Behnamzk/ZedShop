@@ -41,12 +41,12 @@
         </tbody>
     </table>
     <p class="p-total-price" id="total-price">مجموع: <span id="total-value">@Model.TotalPrice.ToString("N0")</span> تومان</p>
-        <button class="button-submit" type="button" onclick="location.href='@Url.Action("CompletePurchase", "Order", new { id = @Model.OrderId })'">تکمیل خرید و پرداخت</button>
+        <button class="button-submit" type="button" onclick="location.href='@Url.Action("CompletePurchase", "Orders", new { id = @Model.OrderId })'">تکمیل خرید و پرداخت</button>
 
     <script>
         function updateTableData(id1, id2) {
 
-            const url = "/MyOrders/delete/" + id1 + "/" + id2; // Add IDs to URL
+            const url = "/Orders/delete/" + id1 + "/" + id2; // Add IDs to URL
 
             const xhr = new XMLHttpRequest();
             xhr.open("GET", url, true);
@@ -63,8 +63,6 @@
                     for (const model of receivedData.items) {
                         tableBodyContent += `<tr><td><img src="/Products/Image/${model.productImageName}" alt="Product Image"></td> <td>${model.productName}</td><td>${model.prodcutCount}</td> <td>${model.sellPrice}</td> <td><button id="updateButton" onclick="updateTableData(${model.orderId}, ${model.productId} )">×</button></td></td></tr>`;
                     }
-
-                    console.log("datea", receivedData.totalPrice);
 
                     document.getElementById("total-price").innerHTML = `مجموع: ${receivedData.totalPrice} تومان`;
                     document.getElementById("cart-items").innerHTML = tableBodyContent;

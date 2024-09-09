@@ -54,7 +54,8 @@ namespace ZedShop.Core.Services.Interface
 
         List<OrderProduct> GetProductsOfOrder(int orderId);
 
-        List<ProvinceViewModel> GetAllProvinceWithCities();
+        List<Province> GetAllProvince();
+        List<City> GetCitiesOfProvince(int provinceId);
 
     }
 }

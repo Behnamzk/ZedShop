@@ -2,29 +2,31 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ZedShop.Core.DTOs.Order;
 using ZedShop.Core.Services;
 using ZedShop.Core.Services.Interface;
 using ZedShop.DataLayer.Entities;
+using ZedShop.Web.Areas.Admin.Models.ProductViewModel;
 
 namespace ZedShop.Web.Controllers
 {
 
-    public class OrderController : Controller
+    public class OrdersController : Controller
     {
         private readonly IOrderService _orderService;
         private readonly IProductService _productService;
 
-        public OrderController(IOrderService orderService, IProductService productService)
+        public OrdersController(IOrderService orderService, IProductService productService)
         {
             _orderService = orderService;
             _productService = productService;
         }
 
         [Authorize]
-        [Route("/MyOrders")]
+        [Route("/Orders")]
         public IActionResult Index()
         {
             var username = User.Identity.Name;
@@ -70,7 +72,7 @@ namespace ZedShop.Web.Controllers
         }
 
         [Authorize]
-        [Route("/MyOrders/delete/{order_id}/{product_id}")]
+        [Route("/Orders/delete/{order_id}/{product_id}")]
         public JsonResult Index(int order_id, int product_id)
         {
             List<OrderProductViewModel> OrderProductList = new List<OrderProductViewModel>();
@@ -178,7 +180,7 @@ namespace ZedShop.Web.Controllers
 
 
         [Authorize]
-        [Route("/MyOrders/CompletePurchase/{order_id}")]
+        [Route("/Orders/CompletePurchase/{order_id}")]
         public ActionResult CompletePurchase(int order_id)
         {
             var username = User.Identity.Name;
@@ -197,11 +199,28 @@ namespace ZedShop.Web.Controllers
                     OrderPurchaseViewModel orderPVM = new OrderPurchaseViewModel()
                     {
                         Id = order_id,
-                        OrderProducts = order.OrderProducts
+                        OrderProducts = order.OrderProducts,
+                        AddressVM = new AddressViewModel()
                     };
 
-                    // ViewBag province and cities
-                    ViewBag.Provinces = _orderService.GetAllProvinceWithCities();
+                    // ViewBag province
+                    var provinces =  _orderService.GetAllProvince();
+
+                    List<ProvinceViewModel> provincesVM = new List<ProvinceViewModel>();
+                    foreach (var p in provinces)
+                    {
+                        ProvinceViewModel province = new ProvinceViewModel()
+                        {
+                            Id = p.Id,
+                            Name = p.Name
+                        };
+
+                        provincesVM.Add(province);
+
+                    }
+
+                    ViewBag.Provinces = provincesVM;
+
                     return View(orderPVM);
                 }
             }
@@ -209,66 +228,27 @@ namespace ZedShop.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        void func()
+        [HttpGet]
+        public IActionResult AllCitiesOfProvince(int _provinceId)
         {
-            //var username = User.Identity.Name;
+            var cities = _orderService.GetCitiesOfProvince(_provinceId);
 
-            //if (string.IsNullOrEmpty(username))
-            //{
-            //    return RedirectToAction("Index", "Home");
-            //}
+            List < CityViewModel > citiesVM = new List<CityViewModel>();
 
-            //int orderId = -1;
+            foreach (var c in cities)
+            {
+                CityViewModel city = new CityViewModel()
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                };
 
-            //Product product = _productService.GetProduct(orderViewModel.ProductId);
+                citiesVM.Add(city);
+            }
 
-            //Order order = _orderService.GetOpenOrder(username);
-
-            //if (order == null)
-            //{
-            //    orderId = _orderService.AddOrder(username);
-            //}
-            //else
-            //{
-            //    orderId = order.Id;
-
-            //    // check if product is exist in Order or not 
-            //    if (order.OrderProducts.Any(o => o.ProductId == orderViewModel.ProductId))
-            //    {
-            //        // if we have enough products decrease count and
-            //        // update db and return true
-            //        // else return false
-            //        if (_productService.DecreaseProductCount(product.ProductId, orderViewModel.Count))
-            //        {
-            //            _orderService.IncreaseProductCountOfOrder(product.ProductId, orderId, orderViewModel.Count);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        if (orderId != -1 && product != null)
-            //        {
-            //            OrderProduct orderProduct = new OrderProduct()
-            //            {
-            //                OrdrId = orderId,
-            //                ProductId = product.ProductId,
-            //                Count = orderViewModel.Count,
-            //                Price = product.SellPrice
-            //            };
-
-            //            // if we have enough products decrease count and
-            //            // update db and return true
-            //            // else return false
-            //            if (_productService.DecreaseProductCount(product.ProductId, orderViewModel.Count))
-            //            {
-            //                _orderService.AddProductToOrder(orderProduct);
-            //            }
-
-            //        }
-            //    }
-
-            //}
-
-            //return RedirectToAction("Index");
+            return PartialView("_CitiesDropDown", citiesVM);
         }
+
+
     }
 }
