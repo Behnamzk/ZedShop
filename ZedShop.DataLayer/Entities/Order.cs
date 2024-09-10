@@ -23,6 +23,11 @@ namespace ZedShop.DataLayer.Entities
         public int? AddressId { get; set; }
         public Address? Address { get; set; }
 
+        [AllowNull]
+        [ForeignKey("Discount")]
+        public int? DiscountId { get; set; }
+        public Discount? Discount { get; set; }
+
         [Required]
         public bool Status { get; set; }
 

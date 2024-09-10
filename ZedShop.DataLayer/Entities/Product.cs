@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,6 +43,11 @@ namespace ZedShop.DataLayer.Entities
 
         [MaxLength(50)]
         public string ProductImageName { get; set; }
+
+        [ForeignKey("ProductSize")]
+        public int? ProductSizeId { get; set; }
+
+        public ProductSize? ProductSize { get; set; }
 
         public ICollection<ProductCategory> ProductCategories { get; set; }
         public ICollection<ProductOldPrice> ProductOldPrices { get; set; }

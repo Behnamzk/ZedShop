@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZedShop.DataLayer.Context;
 
@@ -11,9 +12,10 @@ using ZedShop.DataLayer.Context;
 namespace ZedShop.DataLayer.Migrations
 {
     [DbContext(typeof(ZedShopContext))]
-    partial class ZedShopContextModelSnapshot : ModelSnapshot
+    [Migration("20240910120124_AddUserToAddress2")]
+    partial class AddUserToAddress2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -441,15 +443,10 @@ namespace ZedShop.DataLayer.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("ProductSizeId")
-                        .HasColumnType("int");
-
                     b.Property<double>("SellPrice")
                         .HasColumnType("float");
 
                     b.HasKey("ProductId");
-
-                    b.HasIndex("ProductSizeId");
 
                     b.ToTable("Products");
                 });
@@ -517,31 +514,6 @@ namespace ZedShop.DataLayer.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Rates");
-                });
-
-            modelBuilder.Entity("ZedShop.DataLayer.Entities.ProductSize", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("Heigth")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Length")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Weight")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Width")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ProductSizes");
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Province", b =>
@@ -829,15 +801,6 @@ namespace ZedShop.DataLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Wallet");
-                });
-
-            modelBuilder.Entity("ZedShop.DataLayer.Entities.Product", b =>
-                {
-                    b.HasOne("ZedShop.DataLayer.Entities.ProductSize", "ProductSize")
-                        .WithMany()
-                        .HasForeignKey("ProductSizeId");
-
-                    b.Navigation("ProductSize");
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.ProductCategory", b =>

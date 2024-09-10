@@ -15,6 +15,10 @@ namespace ZedShop.Core.DTOs.Order
         public int Id { get; set; }
 
         public AddressViewModel AddressVM { get; set; }
+
+        [Display(Name = "کد تخفیف")]
+        [MaxLength(20, ErrorMessage = "{0} نمیتواند بیشتر از {1} باشد")]
+        public string NameCode { get; set; }
         public ICollection<OrderProduct> OrderProducts { get; set; }
     }
 }

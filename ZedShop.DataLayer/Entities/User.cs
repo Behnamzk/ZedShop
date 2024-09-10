@@ -62,7 +62,7 @@ namespace ZedShop.DataLayer.Entities
         public Wallet? Wallet { get; set; }
 
         public ICollection<Order> Orders { get; set; }
-
+        public ICollection<Address> Addresses { get; set; }
 		public ICollection<Comment> Comments { get; set; }
 
 	}

@@ -28,6 +28,8 @@ namespace ZedShop.DataLayer.Context
         public DbSet<Role> Roles { get; set; }
         public DbSet<Province> Provinces { get; set; }
         public DbSet<City> Cities { get; set; }
+        public DbSet<Discount> Discounts { get; set; }
+        public DbSet<ProductSize> ProductSizes { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<RoleAccess> RolesAccess { get; set; }
 

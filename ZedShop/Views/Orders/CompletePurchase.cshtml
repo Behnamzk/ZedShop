@@ -32,12 +32,29 @@
                             </div>
                            
 
-                            <div class="form-group">
+                            <div class="form-group" style="margin-top:5%;">
                                 <div class="form-group">
                                     <label asp-for="AddressVM.Address" class="control-label"></label>
-                                    <textarea asp-for="AddressVM.Address" rows="2" class="form-control"></textarea>
+                                    <textarea asp-for="AddressVM.Address" rows="5" class="form-control"></textarea>
                                     <span asp-validation-for="AddressVM.Address" class="text-danger"></span>
                                 </div>
+                            </div>
+
+                            <div class="form-group" style="margin-top:4%;">
+                                <label asp-for="AddressVM.PostalCode" class="control-label"></label>
+                                <input asp-for="AddressVM.PostalCode" class="form-control" />
+                                <span asp-validation-for="AddressVM.PostalCode" class="text-danger"></span>
+                            </div>
+
+                            <div class="d-flex mb-4">
+                                <div class="form-group" style="width:50%;">
+                                    <label asp-for="NameCode" class="control-label"></label>
+                                    <input asp-for="NameCode" class="form-control" />
+                                    <span asp-validation-for="NameCode" class="text-danger"></span>
+
+                                </div>
+                                <button type="button" class="btn btn-primary" style="height:50%; margin-top:4%;margin-right:2%; align-self:center" onclick="checkNameCode()">بررسی</button>
+                                <label style=" margin-top:4%;margin-right:2%; align-self:center">بدون کد تخفیف</label>
                             </div>
 
                         </div>
@@ -48,6 +65,32 @@
                                 <select id="cities-select" class="chosen-select" asp-for="AddressVM.CityId" style="width:50%">
                                     <option value="-1">انتخاب شهر</option>
                                 </select>
+                            </div>
+
+                            <div class="form-group" style="margin-top:5%;">
+                                <label asp-for="AddressVM.CustomerFullName" class="control-label"></label>
+                                <input asp-for="AddressVM.CustomerFullName" class="form-control" />
+                                <span asp-validation-for="AddressVM.CustomerFullName" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group" >
+                                <label asp-for="AddressVM.CustomerPhoneNum" class="control-label"></label>
+                                <input asp-for="AddressVM.CustomerPhoneNum" class="form-control" />
+                                <span asp-validation-for="AddressVM.CustomerPhoneNum" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="AddressVM.HouseNumber" class="control-label"></label>
+                                <input asp-for="AddressVM.HouseNumber" class="form-control" />
+                                <span asp-validation-for="AddressVM.HouseNumber" class="text-danger"></span>
+                            </div>
+
+                            <div style="margin-top:5%;">
+                                <p><strong>مبلغ خرید:200000</strong></p>
+                                <p><strong>هزینه پست:200000</strong></p>
+                                <p><strong>مبلغ نهایی:200000</strong></p>
+
+
                             </div>
 
                         </div>
@@ -82,6 +125,14 @@
                     $('#cities-select').html(data); // Insert the received HTML into the container
                 }
             });
+        }else{
+            console.log("aksjhfjkasdhfkjhsdakjfhaskdjhk");
+            const citiesSelect = document.getElementById("cities-select");
+            citiesSelect.innerHTML = "";
+            const option = document.createElement("option");
+            option.value = -1;
+            option.text = "انتخاب شهر";
+            citiesSelect.appendChild(option);
         }
 
     }

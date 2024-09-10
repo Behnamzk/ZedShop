@@ -12,9 +12,9 @@ namespace ZedShop.Core.DTOs.Order
     {
         public int Id { get; set; }
 
-        [MaxLength(1000)]
         [Required]
         [Display(Name = "آدرس")]
+        [MaxLength(1000, ErrorMessage = "{0} نمیتواند بیشتر از {1} باشد")]
         public string Address { get; set; } = string.Empty;
 
         public int? CityId { get; set; }
@@ -25,22 +25,26 @@ namespace ZedShop.Core.DTOs.Order
 
         public ProvinceViewModel? ProvinceVM { get; set; } 
 
-        [MaxLength(100)]
         [Required]
         [Display(Name = "نام و نام خانوادگی گیرنده")]
-
+        [MaxLength(100, ErrorMessage = "{0} نمیتواند بیشتر از {1} باشد")]
         public string CustomerFullName { get; set; } = string.Empty;
 
 
-        [MaxLength(20)]
         [Required]
         [Display(Name = "تلفن گیرنده")]
-
+        [MaxLength(20, ErrorMessage = "{0} نمیتواند بیشتر از {1} باشد")]
         public string CustomerPhoneNum { get; set; } = string.Empty;
 
-        [MaxLength(30)]
         [Required]
         [Display(Name ="کد پستی")]
+        [MaxLength(30, ErrorMessage = "{0} نمیتواند بیشتر از {1} باشد")]
+
         public string PostalCode { get; set; } = string.Empty;
+        
+        [Required]
+        [Display(Name ="پلاک خانه")]
+        [MaxLength(30, ErrorMessage = "{0} نمیتواند بیشتر از {1} باشد")]
+        public string HouseNumber { get; set; } = string.Empty;
     }
 }

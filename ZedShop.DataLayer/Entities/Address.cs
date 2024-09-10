@@ -22,6 +22,10 @@ namespace ZedShop.DataLayer.Entities
         [Required]
         public string PostalCode { get; set; } = string.Empty;
 
+        [MaxLength(20)]
+        [Required]
+        public string HouseNumber { get; set; } = string.Empty;
+
         [Required]
         [ForeignKey("City")]
         public int CityId { get; set; }
@@ -33,6 +37,13 @@ namespace ZedShop.DataLayer.Entities
         public int ProvinceId { get; set; }
 
         public Province Province { get; set; }
+
+
+        [AllowNull]
+        [ForeignKey("User")]
+        public int? UserId { get; set; }
+
+        public User? User { get; set; }
 
         [MaxLength(100)]
         [Required]

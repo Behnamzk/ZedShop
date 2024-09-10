@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZedShop.DataLayer.Context;
 
@@ -11,9 +12,10 @@ using ZedShop.DataLayer.Context;
 namespace ZedShop.DataLayer.Migrations
 {
     [DbContext(typeof(ZedShopContext))]
-    partial class ZedShopContextModelSnapshot : ModelSnapshot
+    [Migration("20240910105145_AddDiscount")]
+    partial class AddDiscount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,11 +73,6 @@ namespace ZedShop.DataLayer.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("HouseNumber")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
                     b.Property<string>("PostalCode")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -84,16 +81,11 @@ namespace ZedShop.DataLayer.Migrations
                     b.Property<int>("ProvinceId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CityId");
 
                     b.HasIndex("ProvinceId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Addresses");
                 });
@@ -261,11 +253,6 @@ namespace ZedShop.DataLayer.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("NameCode")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
@@ -441,15 +428,10 @@ namespace ZedShop.DataLayer.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("ProductSizeId")
-                        .HasColumnType("int");
-
                     b.Property<double>("SellPrice")
                         .HasColumnType("float");
 
                     b.HasKey("ProductId");
-
-                    b.HasIndex("ProductSizeId");
 
                     b.ToTable("Products");
                 });
@@ -517,31 +499,6 @@ namespace ZedShop.DataLayer.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Rates");
-                });
-
-            modelBuilder.Entity("ZedShop.DataLayer.Entities.ProductSize", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("Heigth")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Length")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Weight")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Width")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ProductSizes");
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Province", b =>
@@ -707,15 +664,9 @@ namespace ZedShop.DataLayer.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("ZedShop.DataLayer.Entities.User", "User")
-                        .WithMany("Addresses")
-                        .HasForeignKey("UserId");
-
                     b.Navigation("City");
 
                     b.Navigation("Province");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Admin", b =>
@@ -829,15 +780,6 @@ namespace ZedShop.DataLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Wallet");
-                });
-
-            modelBuilder.Entity("ZedShop.DataLayer.Entities.Product", b =>
-                {
-                    b.HasOne("ZedShop.DataLayer.Entities.ProductSize", "ProductSize")
-                        .WithMany()
-                        .HasForeignKey("ProductSizeId");
-
-                    b.Navigation("ProductSize");
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.ProductCategory", b =>
@@ -976,8 +918,6 @@ namespace ZedShop.DataLayer.Migrations
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.User", b =>
                 {
-                    b.Navigation("Addresses");
-
                     b.Navigation("Admin");
 
                     b.Navigation("Comments");
