@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -8,46 +9,21 @@ using System.Threading.Tasks;
 
 namespace ZedShop.DataLayer.Entities
 {
-
-    // TODO: Complete this part ...
     public class PostDelivery
     {
+        [Key]
         public int Id { get; set; }
 
+        [Required]
         public double TotalPrice { get; set; }
 
-
-        [ForeignKey("PostBox")]
         [AllowNull]
-        public int? PostBoxId { get; set; }
-
-        [AllowNull]
-        public PostBox? PostBox { get; set; }
-
-
-        [ForeignKey("PostWeight")]
-        [AllowNull]
-        public int? PostWeightId { get; set; }
+        [MaxLength(500)]
+        public string? Description { get; set; }
 
         [AllowNull]
-        public PostWeight? PostWeight { get; set; }
-
-
-        [ForeignKey("PostDistance")]
-        [AllowNull]
-        public int? PostDistanceId { get; set; }
-        
-        [AllowNull]
-        public PostDistance? PostDistance { get; set; }
-
-        
-        [ForeignKey("PostBasic")]
-        [AllowNull]
-        public int? PostBasicId { get; set; }
-
-        [AllowNull]
-        public PostBasic? PostBasic { get; set; }
-
-        // type , box size 
+        [ForeignKey("Order")]
+        public int? OrderId { get; set; }
+        public Order? Order { get; set; }
     }
 }

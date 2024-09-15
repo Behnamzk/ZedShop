@@ -18,11 +18,14 @@ namespace ZedShop.Web.Controllers
     {
         private readonly IOrderService _orderService;
         private readonly IProductService _productService;
+        private readonly List<ProvinceViewModel> provincesViewModel;
 
         public OrdersController(IOrderService orderService, IProductService productService)
         {
             _orderService = orderService;
             _productService = productService;
+
+            provincesViewModel = GetAllProvince();
         }
 
         [Authorize]
@@ -203,23 +206,9 @@ namespace ZedShop.Web.Controllers
                         AddressVM = new AddressViewModel()
                     };
 
-                    // ViewBag province
-                    var provinces =  _orderService.GetAllProvince();
+                    
 
-                    List<ProvinceViewModel> provincesVM = new List<ProvinceViewModel>();
-                    foreach (var p in provinces)
-                    {
-                        ProvinceViewModel province = new ProvinceViewModel()
-                        {
-                            Id = p.Id,
-                            Name = p.Name
-                        };
-
-                        provincesVM.Add(province);
-
-                    }
-
-                    ViewBag.Provinces = provincesVM;
+                    ViewBag.Provinces = this.provincesViewModel;
 
                     return View(orderPVM);
                 }
@@ -227,6 +216,64 @@ namespace ZedShop.Web.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [Authorize]
+        [Route("/Orders/CompletePurchase/{order_id}")]
+        [HttpPost]
+        public ActionResult CompletePurchase(OrderPurchaseViewModel orderPurchase)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Provinces = this.provincesViewModel;
+                return View(orderPurchase);
+            }
+
+            if(orderPurchase != null)
+            {
+                if (orderPurchase.AddressVM.ProvinceId != -1)
+                {
+                    if (orderPurchase.AddressVM.CityId != -1)
+                    {
+                        // Save Data
+                        //
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("AddressVM.CityId", "فیلد شهر اجباری است");
+
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("AddressVM.ProvinceId", "فیلد استان اجباری است");
+
+                }
+            }
+
+            ViewBag.Provinces = this.provincesViewModel;
+            return View(orderPurchase);
+        }
+
+        private List<ProvinceViewModel> GetAllProvince()
+        {
+            // ViewBag province
+            var provinces = _orderService.GetAllProvince();
+
+            List<ProvinceViewModel> provincesVM = new List<ProvinceViewModel>();
+            foreach (var p in provinces)
+            {
+                ProvinceViewModel province = new ProvinceViewModel()
+                {
+                    Id = p.Id,
+                    Name = p.Name
+                };
+
+                provincesVM.Add(province);
+
+            }
+            return provincesVM;
+        }
+
 
         [HttpGet]
         public IActionResult AllCitiesOfProvince(int _provinceId)

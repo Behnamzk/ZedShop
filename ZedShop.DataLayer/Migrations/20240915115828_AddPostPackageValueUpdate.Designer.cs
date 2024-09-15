@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ZedShop.DataLayer.Context;
 
@@ -11,9 +12,10 @@ using ZedShop.DataLayer.Context;
 namespace ZedShop.DataLayer.Migrations
 {
     [DbContext(typeof(ZedShopContext))]
-    partial class ZedShopContextModelSnapshot : ModelSnapshot
+    [Migration("20240915115828_AddPostPackageValueUpdate")]
+    partial class AddPostPackageValueUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -405,6 +407,65 @@ namespace ZedShop.DataLayer.Migrations
                     b.ToTable("Payment");
                 });
 
+            modelBuilder.Entity("ZedShop.DataLayer.Entities.PostBasic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<double>("BasePrice")
+                        .HasColumnType("float");
+
+                    b.Property<int>("PostTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostTypeId");
+
+                    b.ToTable("PostBasics");
+                });
+
+            modelBuilder.Entity("ZedShop.DataLayer.Entities.PostBox", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("BoxName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<double>("BoxPrice")
+                        .HasColumnType("float");
+
+                    b.Property<double>("EffectOnPrice")
+                        .HasColumnType("float");
+
+                    b.Property<float>("Height")
+                        .HasColumnType("real");
+
+                    b.Property<float>("Lenght")
+                        .HasColumnType("real");
+
+                    b.Property<int>("PostTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Width")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostTypeId");
+
+                    b.ToTable("PostBoxes");
+                });
+
             modelBuilder.Entity("ZedShop.DataLayer.Entities.PostDelivery", b =>
                 {
                     b.Property<int>("Id")
@@ -413,11 +474,19 @@ namespace ZedShop.DataLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                    b.Property<int?>("PostBasicId")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("OrderId")
+                    b.Property<int?>("PostBoxId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PostDistanceId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PostPackageValueId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PostWeightId")
                         .HasColumnType("int");
 
                     b.Property<double>("TotalPrice")
@@ -425,9 +494,124 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("PostBasicId");
+
+                    b.HasIndex("PostBoxId");
+
+                    b.HasIndex("PostDistanceId");
+
+                    b.HasIndex("PostPackageValueId");
+
+                    b.HasIndex("PostWeightId");
 
                     b.ToTable("PostDeliveries");
+                });
+
+            modelBuilder.Entity("ZedShop.DataLayer.Entities.PostDistance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<double>("EffectOnPrice")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("PostTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostTypeId");
+
+                    b.ToTable("PostDistances");
+                });
+
+            modelBuilder.Entity("ZedShop.DataLayer.Entities.PostPackageValue", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<double>("EffectOnPrice")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<int>("PostTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("ToValue")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostTypeId");
+
+                    b.ToTable("PostPackageValues");
+                });
+
+            modelBuilder.Entity("ZedShop.DataLayer.Entities.PostType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Descripton")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PostTypes");
+                });
+
+            modelBuilder.Entity("ZedShop.DataLayer.Entities.PostWeight", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<double>("EffectOnPrice")
+                        .HasColumnType("float");
+
+                    b.Property<int>("PostTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UntilWeightName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UntilWeightNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostTypeId");
+
+                    b.ToTable("PostWeights");
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Product", b =>
@@ -867,13 +1051,92 @@ namespace ZedShop.DataLayer.Migrations
                     b.Navigation("Wallet");
                 });
 
+            modelBuilder.Entity("ZedShop.DataLayer.Entities.PostBasic", b =>
+                {
+                    b.HasOne("ZedShop.DataLayer.Entities.PostType", "PostType")
+                        .WithMany()
+                        .HasForeignKey("PostTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PostType");
+                });
+
+            modelBuilder.Entity("ZedShop.DataLayer.Entities.PostBox", b =>
+                {
+                    b.HasOne("ZedShop.DataLayer.Entities.PostType", "PostType")
+                        .WithMany()
+                        .HasForeignKey("PostTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PostType");
+                });
+
             modelBuilder.Entity("ZedShop.DataLayer.Entities.PostDelivery", b =>
                 {
-                    b.HasOne("ZedShop.DataLayer.Entities.Order", "Order")
+                    b.HasOne("ZedShop.DataLayer.Entities.PostBasic", "PostBasic")
                         .WithMany()
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("PostBasicId");
 
-                    b.Navigation("Order");
+                    b.HasOne("ZedShop.DataLayer.Entities.PostBox", "PostBox")
+                        .WithMany()
+                        .HasForeignKey("PostBoxId");
+
+                    b.HasOne("ZedShop.DataLayer.Entities.PostDistance", "PostDistance")
+                        .WithMany()
+                        .HasForeignKey("PostDistanceId");
+
+                    b.HasOne("ZedShop.DataLayer.Entities.PostPackageValue", "PostPackageValue")
+                        .WithMany()
+                        .HasForeignKey("PostPackageValueId");
+
+                    b.HasOne("ZedShop.DataLayer.Entities.PostWeight", "PostWeight")
+                        .WithMany()
+                        .HasForeignKey("PostWeightId");
+
+                    b.Navigation("PostBasic");
+
+                    b.Navigation("PostBox");
+
+                    b.Navigation("PostDistance");
+
+                    b.Navigation("PostPackageValue");
+
+                    b.Navigation("PostWeight");
+                });
+
+            modelBuilder.Entity("ZedShop.DataLayer.Entities.PostDistance", b =>
+                {
+                    b.HasOne("ZedShop.DataLayer.Entities.PostType", "PostType")
+                        .WithMany()
+                        .HasForeignKey("PostTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PostType");
+                });
+
+            modelBuilder.Entity("ZedShop.DataLayer.Entities.PostPackageValue", b =>
+                {
+                    b.HasOne("ZedShop.DataLayer.Entities.PostType", "PostType")
+                        .WithMany()
+                        .HasForeignKey("PostTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PostType");
+                });
+
+            modelBuilder.Entity("ZedShop.DataLayer.Entities.PostWeight", b =>
+                {
+                    b.HasOne("ZedShop.DataLayer.Entities.PostType", "PostType")
+                        .WithMany()
+                        .HasForeignKey("PostTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PostType");
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Product", b =>

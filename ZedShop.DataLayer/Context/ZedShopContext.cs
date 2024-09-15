@@ -33,11 +33,6 @@ namespace ZedShop.DataLayer.Context
         public DbSet<Address> Addresses { get; set; }
         public DbSet<RoleAccess> RolesAccess { get; set; }
         public DbSet<PostDelivery> PostDeliveries { get; set; }
-        public DbSet<PostBox> PostBoxes { get; set; }
-        public DbSet<PostBasic> PostBasics { get; set; }
-        public DbSet<PostDistance> PostDistances { get; set; }
-        public DbSet<PostType> PostTypes { get; set; }
-        public DbSet<PostWeight> PostWeights { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

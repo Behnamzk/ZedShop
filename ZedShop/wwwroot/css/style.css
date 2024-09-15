@@ -2713,16 +2713,16 @@ h1, h2, h3, h4, h5,
     max-height: 170px;
     width: 84%;
     overflow-y: scroll;
-    text-align:right;
-    margin-top:-20px;
+    text-align: right;
+    margin-top: -20px;
     /* other styles for results container */
 }
 
     .searchResults p[class=pResaults] {
         color: black;
-        margin-top:5px;
-        margin-right:10px;
-        font-family:"B Yekan";
+        margin-top: 5px;
+        margin-right: 10px;
+        font-family: "B Yekan";
     }
 
 
@@ -2757,10 +2757,9 @@ h1, h2, h3, h4, h5,
     }
 
     .usi-container p[class=usi-text] {
-        color:black;
+        color: black;
         width: 80%;
-        font-size:12px;
-        
+        font-size: 12px;
     }
 
 .searchResultsHeader {
@@ -2770,7 +2769,7 @@ h1, h2, h3, h4, h5,
     color: black;
     max-height: 150px;
     width: 31%;
-    margin-right:60px;
+    margin-right: 60px;
     overflow-y: scroll;
     z-index: 9999;
     text-align: right;
@@ -2810,4 +2809,38 @@ h1, h2, h3, h4, h5,
     .row-form .left, .right {
         margin-right: 10px;
         margin-left: 10px;
+    }
+
+input[class=input-submit] {
+    border: none;
+    outline: 0;
+    padding: 12px;
+    color: white;
+    background-color: #1f9ede;
+    text-align: center;
+    cursor: pointer;
+    width: 20%;
+    font-size: 16px;
+    border-radius: 3px;
+}
+
+    input[class=input-submit]:hover {
+        background-color: #1888c3;
+    }
+
+button[class=button-cancel] {
+    border: none;
+    outline: 0;
+    padding: 12px;
+    color: white;
+    background-color: #e88817;
+    text-align: center;
+    cursor: pointer;
+    width: 10%;
+    font-size: 16px;
+    border-radius: 3px;
+}
+
+    button[class=button-cancel]:hover {
+        background-color: #d77f1a;
     }

@@ -7,8 +7,8 @@
     <div class="card">
         <div class="card-body">
 
-            <h4 class="card-title"><strong> ثبت آدرس و پرداخت </strong></h4>
-            <form asp-action="EditUserRole" asp-controller="ManageUsers" method="post">
+            <h4 class="card-title"><strong> ثبت آدرس و نهایی کردن سبد خرید </strong></h4>
+            <form asp-action="CompletePurchase" asp-controller="Orders" method="post">
 
 
                 <div class="row-form-container">
@@ -21,6 +21,7 @@
 
                             <div class="form-group" style="display: flex;">
                                 <p style="margin-left:5%"><strong> استان محل سکونت:</strong></p>
+
                                 <select id="province-select" class="chosen-select" asp-for="AddressVM.ProvinceId" style="width:50%" onclick="LoadCitiesByProvince()">
                                     <option value="-1">انتخاب استان</option>
 
@@ -30,7 +31,8 @@
                                     }
                                 </select>
                             </div>
-                           
+                            <span asp-validation-for="AddressVM.ProvinceId" class="text-danger"></span>
+
 
                             <div class="form-group" style="margin-top:5%;">
                                 <div class="form-group">
@@ -46,7 +48,7 @@
                                 <span asp-validation-for="AddressVM.PostalCode" class="text-danger"></span>
                             </div>
 
-                            <div class="d-flex mb-4">
+@*                             <div class="d-flex mb-4">
                                 <div class="form-group" style="width:50%;">
                                     <label asp-for="NameCode" class="control-label"></label>
                                     <input asp-for="NameCode" class="form-control" />
@@ -55,17 +57,20 @@
                                 </div>
                                 <button type="button" class="btn btn-primary" style="height:50%; margin-top:4%;margin-right:2%; align-self:center" onclick="checkNameCode()">بررسی</button>
                                 <label style=" margin-top:4%;margin-right:2%; align-self:center">بدون کد تخفیف</label>
-                            </div>
+                            </div> *@
 
                         </div>
 
                         <div class="right" style="width: 50%;">
                             <div class="form-group" style="display: flex;">
                                 <p style="margin-left:5%"><strong> شهر محل سکونت:</strong></p>
+
                                 <select id="cities-select" class="chosen-select" asp-for="AddressVM.CityId" style="width:50%">
                                     <option value="-1">انتخاب شهر</option>
                                 </select>
                             </div>
+                            <span asp-validation-for="AddressVM.CityId" class="text-danger"></span>
+
 
                             <div class="form-group" style="margin-top:5%;">
                                 <label asp-for="AddressVM.CustomerFullName" class="control-label"></label>
@@ -85,22 +90,22 @@
                                 <span asp-validation-for="AddressVM.HouseNumber" class="text-danger"></span>
                             </div>
 
-                            <div style="margin-top:5%;">
+@*                             <div style="margin-top:5%;">
                                 <p><strong>مبلغ خرید:200000</strong></p>
                                 <p><strong>هزینه پست:200000</strong></p>
                                 <p><strong>مبلغ نهایی:200000</strong></p>
 
 
-                            </div>
+                            </div> *@
 
                         </div>
                     </div>
 
 
-                    <div class="simple-center-div" style="margin-top:20px; margin-bottom:20px;">
+                    <div class="simple-center-div" style="margin-top:20px; margin-bottom:20px; text-align:center;">
                         <div class="form-group">
-                            <input type="submit" value="ذخیره" class="btn btn-success" />
-                            <button class="btn btn-warning btn-sm" asp-action="Index">انصراف</button>
+                            <input type="submit" value="نهایی کردن سبد خرید" class="input-submit" />
+                            <button class="button-cancel" asp-action="Index">انصراف</button>
                         </div>
                     </div>
                 </div>

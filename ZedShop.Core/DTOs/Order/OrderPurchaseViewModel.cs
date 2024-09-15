@@ -18,7 +18,10 @@ namespace ZedShop.Core.DTOs.Order
 
         [Display(Name = "کد تخفیف")]
         [MaxLength(20, ErrorMessage = "{0} نمیتواند بیشتر از {1} باشد")]
-        public string NameCode { get; set; }
-        public ICollection<OrderProduct> OrderProducts { get; set; }
+        [AllowNull]
+        public string? NameCode { get; set; }
+
+        [AllowNull]
+        public ICollection<OrderProduct>? OrderProducts { get; set; }
     }
 }
