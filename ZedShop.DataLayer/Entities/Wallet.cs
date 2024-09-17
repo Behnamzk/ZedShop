@@ -23,5 +23,7 @@ namespace ZedShop.DataLayer.Entities
         public double Value { get; set; }
 
         public ICollection<Payment> Payments { get; set; }
+        public ICollection<OrderWallet> OrderWallets { get; set; }
+
     }
 }

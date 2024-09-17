@@ -1,34 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ZedShop.DataLayer.Entities
 {
-    public class Payment
+    public class OrderWallet
     {
         [Key]
-        public int Id { get; set; }
+        [ForeignKey("Order")]
+        public int OrderId { get; set; }
 
-        [Required]
-        public int Type { get; set; }
+        public Order Order { get; set; }
 
-        [MaxLength(500)]
-        public string Detail { get; set; }
-
-        [Required]
-        public DateTime Date { get; set; }
-
-        [Required]
-        public double Value { get; set; }
-
-
+        [Key]
         [ForeignKey("Wallet")]
+
         public int WalletId { get; set; }
 
         public Wallet Wallet { get; set; }
+
+        [Required]
+        public double price { get; set; }
+
+        [Required]
+        public DateTime TransactionDate { get; set; }
     }
 }

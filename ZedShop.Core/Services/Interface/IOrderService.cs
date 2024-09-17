@@ -43,6 +43,8 @@ namespace ZedShop.Core.Services.Interface
         /// </returns>
         Order GetOpenOrder(User user);
 
+        void UpdateOrder(Order order);
+
         Order GetOrderById(int orderId);
         void AddProductToOrder(OrderProduct orderProduct);
 
@@ -57,5 +59,15 @@ namespace ZedShop.Core.Services.Interface
         List<Province> GetAllProvince();
         List<City> GetCitiesOfProvince(int provinceId);
 
+        List<OrderStatus> GetOrderStatuses();
+
+        OrderStatus GetOrderStatus(string orderStatusName);
+        OrderStatus GetOrderStatus(int orderStatusId);
+
+        City GetCity(int id);
+        Province GetProvince(int id);
+        bool IsCityInProvince(int provinceId, int cityId);
+
+        Address AddAddress(Address address);
     }
 }

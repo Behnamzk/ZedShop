@@ -18,12 +18,14 @@ namespace ZedShop.Web.Controllers
     {
         private readonly IOrderService _orderService;
         private readonly IProductService _productService;
+        private readonly IUserService _userService;
         private readonly List<ProvinceViewModel> provincesViewModel;
 
-        public OrdersController(IOrderService orderService, IProductService productService)
+        public OrdersController(IOrderService orderService, IProductService productService, IUserService userService)
         {
             _orderService = orderService;
             _productService = productService;
+            _userService = userService;
 
             provincesViewModel = GetAllProvince();
         }
@@ -234,8 +236,63 @@ namespace ZedShop.Web.Controllers
                 {
                     if (orderPurchase.AddressVM.CityId != -1)
                     {
-                        // Save Data
-                        //
+                        try
+                        {
+                            City city = _orderService.GetCity((int)orderPurchase.AddressVM.CityId);
+                            Province province = _orderService.GetProvince((int)orderPurchase.AddressVM.ProvinceId);
+                            var currentuser = User.Identity.Name;
+
+                            User user = _userService.GetUserByUserName(currentuser);
+
+                            if (city != null && province != null && user !=null)
+                            {
+                                if(_orderService.IsCityInProvince(province.Id, city.Id))
+                                {
+                                    // Save Data
+                                    Address address = new Address()
+                                    {
+                                        City = city,
+                                        Province = province,
+                                        AddressContent = orderPurchase.AddressVM.Address,
+                                        PostalCode = orderPurchase.AddressVM.PostalCode,
+                                        CustomerFullName = orderPurchase.AddressVM.CustomerFullName,
+                                        HouseNumber = orderPurchase.AddressVM.HouseNumber,
+                                        CustomerPhoneNum = orderPurchase.AddressVM.CustomerPhoneNum,
+                                        User = user
+                                    };
+
+                                    Address savedAddress = _orderService.AddAddress(address);
+
+                                    if (savedAddress != null)
+                                    {
+                                        Order order = _orderService.GetOrderById(orderPurchase.Id);
+
+                                        if (order != null)
+                                        {
+                                            order.Address = savedAddress;
+
+                                            OrderStatus orderStatus = _orderService.GetOrderStatus("UnderReview");
+                                            order.OrderStatus = orderStatus;
+
+                                            _orderService.UpdateOrder(order);
+                                            return RedirectToAction("ShowOrderMessageToUser", "Orders", new { messageId = 1 });
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+                            return RedirectToAction("ShowOrderMessageToUser", "Orders", new { messageId = 2 });
+
+
+                        }
+                        catch
+                        {
+                            return RedirectToAction("ShowOrderMessageToUser", "Orders", new { messageId = 2 });
+                        }
+
+
                     }
                     else
                     {
@@ -252,6 +309,28 @@ namespace ZedShop.Web.Controllers
 
             ViewBag.Provinces = this.provincesViewModel;
             return View(orderPurchase);
+        }
+
+        [Authorize]
+        [Route("/Orders/ShowOrderMessageToUser/{messageId}")]
+
+        public IActionResult ShowOrderMessageToUser(int messageId)
+        {
+            switch (messageId)
+            {
+                case 1:
+                    ViewBag.Message = "درخواست خرید شما با موفقیت ثبت شد. پس از تایید سبد خرید، شما می‌توانید به ادامه روال خرید بپردازید.";
+                    break;
+                case 2:
+                    ViewBag.Message = "درخواست خرید شما ثبت نشد. لطفا دیرتر اقدام کنید!"; ;
+                    break;
+                default:
+                    ViewBag.Message = "درخواست خرید شما ثبت نشد. لطفا دیرتر اقدام کنید!"; ;
+                    break;
+
+            }
+
+            return View();
         }
 
         private List<ProvinceViewModel> GetAllProvince()

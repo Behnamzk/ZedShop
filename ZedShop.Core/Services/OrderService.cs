@@ -26,15 +26,16 @@ namespace ZedShop.Core.Services
         {
             User user = _userService.GetUserByUserName(userName);
 
-            if (user != null) 
+            if (user != null)
             {
                 if (GetOpenOrder(user) == null)
                 {
+                    OrderStatus orderStatus = GetOrderStatus("Open");
                     Order order = new Order()
                     {
                         User = user,
-                        Status = false,
                         Address = null,
+                        OrderStatus = orderStatus,
                         FinalDate = DateTime.Now
                     };
 
@@ -58,7 +59,7 @@ namespace ZedShop.Core.Services
         {
             var orderProduct = GetOrderProduct(orderId, productId);
 
-            if(orderProduct != null)
+            if (orderProduct != null)
             {
                 orderProduct.Count += count;
                 _context.OrderProducts.Update(orderProduct);
@@ -86,23 +87,25 @@ namespace ZedShop.Core.Services
 
         public Order GetOpenOrder(string userName)
         {
+            OrderStatus orderStatus = GetOrderStatus("Open");
             User user = _userService.GetUserByUserName(userName);
-            return _context.Orders.Include(p => p.OrderProducts).SingleOrDefault(c => c.UserId == user.UserId && c.Status == false);
+            return _context.Orders.Include(p => p.OrderProducts).SingleOrDefault(c => c.UserId == user.UserId && c.OrderStatusId == orderStatus.Id);
         }
 
         public Order GetOpenOrder(User user)
         {
-            return _context.Orders.Include(p => p.OrderProducts).SingleOrDefault(c => c.UserId == user.UserId && c.Status == false);
+            OrderStatus orderStatus = GetOrderStatus("Open");
+            return _context.Orders.Include(p => p.OrderProducts).SingleOrDefault(c => c.UserId == user.UserId && c.OrderStatusId == orderStatus.Id);
         }
 
         public Order GetOrderById(int orderId)
         {
-            return _context.Orders.SingleOrDefault(c=>c.Id == orderId);
+            return _context.Orders.SingleOrDefault(c => c.Id == orderId);
         }
 
         public List<OrderProduct> GetProductsOfOrder(int orderId)
         {
-            return _context.OrderProducts.Include(p=>p.Product).Where(o=>o.OrdrId == orderId).ToList();
+            return _context.OrderProducts.Include(p => p.Product).Where(o => o.OrdrId == orderId).ToList();
         }
 
         public List<Province> GetAllProvince()
@@ -113,7 +116,74 @@ namespace ZedShop.Core.Services
 
         public List<City> GetCitiesOfProvince(int provinceId)
         {
-            return _context.Cities.Where(c=>c.ProvinceId == provinceId).ToList();
+            return _context.Cities.Where(c => c.ProvinceId == provinceId).ToList();
+        }
+
+        public List<OrderStatus> GetOrderStatuses()
+        {
+            return _context.OrderStatuses.ToList();
+        }
+
+        public OrderStatus GetOrderStatus(string orderStatusName)
+        {
+            return _context.OrderStatuses.SingleOrDefault(c => c.Name == orderStatusName);
+        }
+
+        public OrderStatus GetOrderStatus(int orderStatusId)
+        {
+            return _context.OrderStatuses.SingleOrDefault(c => c.Id == orderStatusId);
+
+        }
+
+        public City GetCity(int id)
+        {
+            return _context.Cities.SingleOrDefault(c => c.Id == id);
+        }
+
+        public Province GetProvince(int id)
+        {
+            return _context.Provinces.SingleOrDefault(p => p.Id == id);
+        }
+
+        public bool IsCityInProvince(int provinceId, int cityId)
+        {
+            Province province = _context.Provinces.Include(p => p.Cities).SingleOrDefault(p => p.Id == provinceId);
+
+            if (province != null)
+            {
+                foreach (var c in province.Cities)
+                {
+                    if (c.Id == cityId)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public void UpdateOrder(Order order)
+        {
+            if(order != null)
+            {
+                _context.Orders.Update(order);
+                _context.SaveChanges();
+            }
+        }
+
+        public Address AddAddress(Address address)
+        {
+
+            if (address != null) {
+                _context.Addresses.Add(address);
+                _context.SaveChanges();
+
+                return address;
+            }
+
+            return null;
+
         }
     }
 }

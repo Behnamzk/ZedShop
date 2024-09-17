@@ -33,14 +33,16 @@ namespace ZedShop.DataLayer.Entities
         public int? DiscountId { get; set; }
         public Discount? Discount { get; set; }
 
-        [Required]
-        public bool Status { get; set; }
+        [ForeignKey("OrderStatus")]
+        public int OrderStatusId { get; set; }
+        public OrderStatus OrderStatus { get; set; }
 
         [ForeignKey("User")]
         public int UserId { get; set; }
         public User User { get; set; }
 
         public ICollection<OrderProduct> OrderProducts { get; set; }
+        public ICollection<OrderWallet> OrderWallets { get; set; }
 
 
     }

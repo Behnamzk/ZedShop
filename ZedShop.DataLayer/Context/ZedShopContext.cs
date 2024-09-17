@@ -18,6 +18,8 @@ namespace ZedShop.DataLayer.Context
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderStatus> OrderStatuses { get; set; }
+
         public DbSet<OrderProduct> OrderProducts { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Opinion> Opinions { get; set; }
@@ -33,6 +35,9 @@ namespace ZedShop.DataLayer.Context
         public DbSet<Address> Addresses { get; set; }
         public DbSet<RoleAccess> RolesAccess { get; set; }
         public DbSet<PostDelivery> PostDeliveries { get; set; }
+        public DbSet<Wallet> Wallets { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<OrderWallet> OrderWallets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -52,6 +57,24 @@ namespace ZedShop.DataLayer.Context
 
             modelBuilder.Entity<Address>().HasOne(b => b.Province)
                .WithMany(c => c.Addresses).OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Wallet>().HasOne(b => b.User)
+                .WithOne(c => c.Wallet).OnDelete(DeleteBehavior.NoAction);
+
+
+            #region ManyToMany OrderWallets
+
+            modelBuilder.Entity<OrderWallet>().HasKey(b => new { b.OrderId, b.WalletId });
+
+            modelBuilder.Entity<OrderWallet>().HasOne(b => b.Order)
+                .WithMany(b => b.OrderWallets).HasForeignKey(b => b.OrderId);
+
+            modelBuilder.Entity<OrderWallet>().HasOne(b => b.Wallet)
+                .WithMany(b => b.OrderWallets).HasForeignKey(b => b.WalletId);
+
+            #endregion
+
+
 
             #region ManyToMany ProductCategory
 

@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "نتیجه خرید";
+}
+
+<div class="row">
+    <div class="column left" style="width: 25%;"> </div>
+    <div class="column middle" style="width: 50%;">
+        <div class="siteguide-text">
+            <br />
+            <br />
+
+            <p style="text-align:center;">
+                @ViewBag.Message
+            </p>
+            <br />
+            <br />
+            <input value="بازگشت"  class="input-submit" style="margin-bottom:20px;" onclick="location.href='@Url.Action("Index", "Orders")'" />
+
+        </div>
+    </div>
+    <div class="column right" style="width: 25%;"> </div>
+</div>

@@ -10,6 +10,8 @@
             <h4 class="card-title"><strong> ثبت آدرس و نهایی کردن سبد خرید </strong></h4>
             <form asp-action="CompletePurchase" asp-controller="Orders" method="post">
 
+                <input type="hidden" asp-for="Id" class="form-control" />
+
 
                 <div class="row-form-container">
 
