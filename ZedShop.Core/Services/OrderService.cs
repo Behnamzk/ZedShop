@@ -122,7 +122,7 @@ namespace ZedShop.Core.Services
 
             if (user != null)
             {
-                return _context.Orders.Where(o => o.UserId == user.UserId).ToList();
+                return _context.Orders.Include(o=>o.OrderStatus).Where(o => o.UserId == user.UserId).ToList();
             }
 
             return null;

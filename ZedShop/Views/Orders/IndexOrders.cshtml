@@ -1,5 +1,5 @@
 ﻿@using ZedShop.Core.DTOs.Order
-@model List<OrderindexViewModel>
+@model List<OrderIndexViewModel>
 @{
     ViewData["Title"] = "تاریخچه سفارشات";
 }
@@ -17,26 +17,20 @@
 
                 <div id="basicgrid" class="m-t-40 jsgrid" style="position: relative; height: 750px; width: 100%;">
                     <div class="jsgrid-grid-header jsgrid-header-scrollbar">
-                        <table class="jsgrid-table table table-striped table-hover">
+                        <table class="showtable">
                             <thead>
                                 <tr>
                                     <th style="width:10%">
-                                        نام کالا
+                                        شناسه سفارش
                                     </th>
-                                    <th style="width:5%; text-align:center;">
-                                        تعداد
+                                    <th style="width:10%; text-align:center;">
+                                        وضعیت
                                     </th>
                                     <th style="width:8%; text-align:center;">
-                                        تاریخ ورود
+                                        تاریخ 
                                     </th>
-                                    <th style="width:5%; text-align:center;">
-                                        قیمت فروش
-                                    </th>
-                                    <th style="width:5%; text-align:center;">
-                                        مخفی شده
-                                    </th>
-                                    <th style="width:5%; text-align:center;">
-                                        فعال شده
+                                    <th style="width:15%; text-align:center;">
+                                        توضیحات
                                     </th>
                                     <th style="width:20%; text-align:center;">
                                         اقدامات

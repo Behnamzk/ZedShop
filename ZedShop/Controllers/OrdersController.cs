@@ -81,11 +81,11 @@ namespace ZedShop.Web.Controllers
 
                     if(orders != null)
                     {
-                        List<OrderindexViewModel> orderIndexes = new List<OrderindexViewModel>();
+                        List<OrderIndexViewModel> orderIndexes = new List<OrderIndexViewModel>();
 
                         foreach (var orderItem in orders)
                         {
-                            OrderindexViewModel orderVM = new OrderindexViewModel()
+                            OrderIndexViewModel orderVM = new OrderIndexViewModel()
                             {
                                 Id= orderItem.Id,
                                 OrderStatus = orderItem.OrderStatus,

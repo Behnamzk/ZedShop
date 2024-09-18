@@ -1,5 +1,100 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using ZedShop.Core.DTOs.Order
+@model List<OrderIndexViewModel>
+
+<div class="jsgrid-grid-body">
+   
+    <table class="showtable">
+        <tbody id="userstable">
+            @if (Model != null)
+            {
+                @foreach (var item in Model)
+                {
+                    <tr id="@item.Id">
+
+                        <td style="width:10%">
+                            @item.Id
+                        </td>
+                        <td style="width:10%; text-align:center">
+                            @item.OrderStatus.DisplayName
+                        </td>
+                        <td style="width:8%; text-align:center">
+                            @item.OrderDate
+                        </td>
+                        <td style="width:15%; text-align:center">
+                            @item.OrderDescription
+                        </td>
+                       
+                        <td style="width:20%; text-align:center">
+                            <a class="btn btn-table-primary btn-sm" href="/Admin/ManageProducts/EditProduct/@item.Id">ویرایش</a>
+                            <a class="btn btn-table-primary btn-sm" href="/Admin/ManageProducts/EditProductCategory/@item.Id">ویرایش دسته</a>
+                            <button class="btn btn-warning btn-sm" onclick="ShowProduct(@item.Id)">مخفی کردن </button>
+                            <button class="btn btn-danger btn-sm" onclick="DeleteProduct(@item.Id)">حذف </button>
+
+
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<div class="jsgrid-pager-container">
+    <div class="jsgrid-pager">
+        صفحه:
+
+
+        @if (ViewBag.CurrentPage == 1 || ViewBag.NumberOfPage == 0)
+        {
+            <span class="jsgrid-pager-nav-button-off jsgrid-pager-nav-inactive-button">
+                <a class="disabled">اولین</a>
+            </span>
+            <span class="jsgrid-pager-nav-button-off jsgrid-pager-nav-inactive-button">
+                <a class="disabled">قبلی</a>
+            </span>
+        }
+        else
+        {
+            <span class="jsgrid-pager-nav-button jsgrid-pager-nav-inactive-button">
+                <a href="javascript:updateTableData(@ViewBag.FilterId,1);">اولین</a>
+            </span>
+            <span class="jsgrid-pager-nav-button jsgrid-pager-nav-inactive-button">
+                <a href="javascript:updateTableData(@ViewBag.FilterId,@ViewBag.CurrentPage-1);">قبلی</a>
+            </span>
+        }
+
+
+        @if (ViewBag.CurrentPage > 1)
+        {
+            <span class="jsgrid-pager-page"><a href="javascript:updateTableData(@ViewBag.FilterId,@ViewBag.CurrentPage-1);">@((ViewBag.CurrentPage - 1))</a></span>
+        }
+
+        <span class="jsgrid-pager-page jsgrid-pager-current-page">@ViewBag.CurrentPage</span>
+
+        @if (ViewBag.CurrentPage < ViewBag.NumberOfPage)
+        {
+            <span class="jsgrid-pager-page"><a href="javascript:updateTableData(@ViewBag.FilterId,@ViewBag.CurrentPage+1);">@((ViewBag.CurrentPage + 1))</a></span>
+        }
+
+
+        @if (ViewBag.CurrentPage == ViewBag.NumberOfPage || ViewBag.NumberOfPage == 0)
+        {
+            <span class="jsgrid-pager-nav-button-off jsgrid-pager-nav-inactive-button">
+                <a class="disabled">بعدی</a>
+            </span>
+            <span class="jsgrid-pager-nav-button-off jsgrid-pager-nav-inactive-button">
+                <a class="disabled">آخرین</a>
+            </span>
+
+        }
+        else
+        {
+            <span class="jsgrid-pager-nav-button jsgrid-pager-nav-inactive-button">
+                <a href="javascript:updateTableData(@ViewBag.FilterId, @ViewBag.CurrentPage+1);">بعدی</a>
+            </span>
+            <span class="jsgrid-pager-nav-button"><a href="javascript:updateTableData( @ViewBag.FilterId,@ViewBag.NumberOfPage);">آخرین</a></span>
+        }
+
+
+        &nbsp;&nbsp; @ViewBag.CurrentPage از @ViewBag.NumberOfPage
+    </div>
+</div> 

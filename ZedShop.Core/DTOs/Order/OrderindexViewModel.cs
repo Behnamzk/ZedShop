@@ -9,7 +9,7 @@ using ZedShop.DataLayer.Entities;
 
 namespace ZedShop.Core.DTOs.Order
 {
-    public class OrderindexViewModel
+    public class OrderIndexViewModel
     {
         public int Id { get; set; }
 
