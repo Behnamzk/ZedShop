@@ -35,16 +35,18 @@ namespace ZedShop.Web.Controllers
         public IActionResult Index()
         {
             var username = User.Identity.Name;
+
             if (!string.IsNullOrEmpty(username))
             {
                 Order order = _orderService.GetOpenOrder(username);
 
-                List<OrderProductViewModel> OrderProductList = new List<OrderProductViewModel>();
-
-                double total_price = 0;
-
                 if (order != null)
                 {
+                    // Show Open order to user
+                    List<OrderProductViewModel> OrderProductList = new List<OrderProductViewModel>();
+
+                    double total_price = 0;
+
                     foreach (var item in order.OrderProducts)
                     {
                         var pro = _productService.GetProduct(item.ProductId);
@@ -70,6 +72,38 @@ namespace ZedShop.Web.Controllers
 
                     return View(oPTable);
 
+                }
+                else if(_orderService.DoesUserHasOrders(username))
+                {
+                    // User Doesnt have Open order so Show orders list
+
+                    List<Order> orders = _orderService.GetAllOrdersOfUser(username);
+
+                    if(orders != null)
+                    {
+                        List<OrderindexViewModel> orderIndexes = new List<OrderindexViewModel>();
+
+                        foreach (var orderItem in orders)
+                        {
+                            OrderindexViewModel orderVM = new OrderindexViewModel()
+                            {
+                                Id= orderItem.Id,
+                                OrderStatus = orderItem.OrderStatus,
+                                OrderDate = orderItem.FinalDate,
+                                OrderDescription = orderItem.Description
+                            };
+
+                            orderIndexes.Add(orderVM);
+                        }
+
+                        return View("IndexOrders", orderIndexes);
+
+                    }
+
+                }
+                else
+                {
+                    // User Doesnt have any orders so Show user Message
                 }
 
             }

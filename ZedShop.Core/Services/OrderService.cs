@@ -103,6 +103,31 @@ namespace ZedShop.Core.Services
             return _context.Orders.SingleOrDefault(c => c.Id == orderId);
         }
 
+        public bool DoesUserHasOrders(string userName)
+        {
+            User user = _userService.GetUserByUserName(userName);
+            
+            if(user != null)
+            {
+                return _context.Orders.Any(o=>o.UserId == user.UserId);
+            }
+
+            return false;
+
+        }
+
+        public List<Order> GetAllOrdersOfUser(string userName)
+        {
+            User user = _userService.GetUserByUserName(userName);
+
+            if (user != null)
+            {
+                return _context.Orders.Where(o => o.UserId == user.UserId).ToList();
+            }
+
+            return null;
+        }
+
         public List<OrderProduct> GetProductsOfOrder(int orderId)
         {
             return _context.OrderProducts.Include(p => p.Product).Where(o => o.OrdrId == orderId).ToList();
@@ -185,5 +210,7 @@ namespace ZedShop.Core.Services
             return null;
 
         }
+
+
     }
 }

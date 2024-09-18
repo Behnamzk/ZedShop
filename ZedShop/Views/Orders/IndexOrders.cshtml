@@ -1,0 +1,71 @@
+﻿@using ZedShop.Core.DTOs.Order
+@model List<OrderindexViewModel>
+@{
+    ViewData["Title"] = "تاریخچه سفارشات";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div style="display:flex;">
+
+                    <p class="card-title"> <strong>تاریخچه سفارشات</strong> </p>
+
+                </div>
+
+
+                <div id="basicgrid" class="m-t-40 jsgrid" style="position: relative; height: 750px; width: 100%;">
+                    <div class="jsgrid-grid-header jsgrid-header-scrollbar">
+                        <table class="jsgrid-table table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width:10%">
+                                        نام کالا
+                                    </th>
+                                    <th style="width:5%; text-align:center;">
+                                        تعداد
+                                    </th>
+                                    <th style="width:8%; text-align:center;">
+                                        تاریخ ورود
+                                    </th>
+                                    <th style="width:5%; text-align:center;">
+                                        قیمت فروش
+                                    </th>
+                                    <th style="width:5%; text-align:center;">
+                                        مخفی شده
+                                    </th>
+                                    <th style="width:5%; text-align:center;">
+                                        فعال شده
+                                    </th>
+                                    <th style="width:20%; text-align:center;">
+                                        اقدامات
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div id="tableofproductcontent">
+                        @Html.Partial("_OrdersTable")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function updateTableData(filterId, pageNum) {
+        $.ajax({
+            url: '/Admin/ManageProducts/ChangePage/', // controller and action
+            data: { _filterId: filterId, pageNumber: pageNum }, // Send the userInput as a parameter
+            dataType: 'html',
+            success: function (data) {
+
+                $('#tableofproductcontent').html(data); // Insert the received HTML into the container
+            }
+        });
+    }
+
+</script>
