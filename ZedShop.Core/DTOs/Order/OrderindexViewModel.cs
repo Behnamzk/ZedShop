@@ -17,7 +17,7 @@ namespace ZedShop.Core.DTOs.Order
         public OrderStatus OrderStatus { get; set; }
 
         [Display(Name = "تاریخ به‌روزرسانی")]
-        public DateTime OrderDate { get; set; }
+        public string OrderDate { get; set; }
 
         [Display(Name = "توضیحات")]
         public string OrderDescription { get; set; } = string.Empty;

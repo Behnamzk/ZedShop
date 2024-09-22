@@ -14,7 +14,7 @@
             </p>
             <br />
             <br />
-            <input value="بازگشت"  class="input-submit" style="margin-bottom:20px;" onclick="location.href='@Url.Action("Index", "Orders")'" />
+            <input value="بازگشت" class="input-submit" style="margin-bottom:20px;" onclick="location.href='@Url.Action((string)ViewBag.TargetAction, (string)ViewBag.TargetController)'" />
 
         </div>
     </div>

@@ -2910,6 +2910,9 @@ Table-Jsgrid table
 .showtable {
     width: 90%;
     max-width: 90%;
+    margin-left:5%;
+    margin-right:5%;
+    text-align:center;
     margin-bottom: 20px;
     background-color: transparent;
     line-height: 1.42857143;
@@ -2917,8 +2920,9 @@ Table-Jsgrid table
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-    .showtable .td {
+    .showtable .showtabletd {
         vertical-align: inherit;
+        text-align: center;
         unicode-bidi: isolate;
     }
 

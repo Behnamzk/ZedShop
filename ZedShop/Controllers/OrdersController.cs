@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ZedShop.Core.DTOs.Order;
@@ -21,11 +22,16 @@ namespace ZedShop.Web.Controllers
         private readonly IUserService _userService;
         private readonly List<ProvinceViewModel> provincesViewModel;
 
+        private readonly PersianCalendar pc;
+
         public OrdersController(IOrderService orderService, IProductService productService, IUserService userService)
         {
             _orderService = orderService;
             _productService = productService;
             _userService = userService;
+
+            pc = new PersianCalendar();
+
 
             provincesViewModel = GetAllProvince();
         }
@@ -76,34 +82,13 @@ namespace ZedShop.Web.Controllers
                 else if(_orderService.DoesUserHasOrders(username))
                 {
                     // User Doesnt have Open order so Show orders list
-
-                    List<Order> orders = _orderService.GetAllOrdersOfUser(username);
-
-                    if(orders != null)
-                    {
-                        List<OrderIndexViewModel> orderIndexes = new List<OrderIndexViewModel>();
-
-                        foreach (var orderItem in orders)
-                        {
-                            OrderIndexViewModel orderVM = new OrderIndexViewModel()
-                            {
-                                Id= orderItem.Id,
-                                OrderStatus = orderItem.OrderStatus,
-                                OrderDate = orderItem.FinalDate,
-                                OrderDescription = orderItem.Description
-                            };
-
-                            orderIndexes.Add(orderVM);
-                        }
-
-                        return View("IndexOrders", orderIndexes);
-
-                    }
+                    return RedirectToAction("OrdersHistory", "Orders");
 
                 }
                 else
                 {
                     // User Doesnt have any orders so Show user Message
+                    return RedirectToAction("ShowOrderMessageToUser", "Orders", new { messageId = 3 });
                 }
 
             }
@@ -152,6 +137,40 @@ namespace ZedShop.Web.Controllers
 
             return Json(oPTable);
         }
+
+        [Authorize]
+        [Route("/Orders/OrdersHistory")]
+        public IActionResult OrdersHistory()
+        {
+            var username = User.Identity.Name;
+
+            if (!string.IsNullOrEmpty(username))
+            {
+                List<Order> orders = _orderService.GetAllOrdersOfUser(username);
+
+                if (orders != null)
+                {
+                    List<OrderIndexViewModel> orderIndexes = new List<OrderIndexViewModel>();
+
+                    foreach (var orderItem in orders)
+                    {
+                        OrderIndexViewModel orderVM = new OrderIndexViewModel()
+                        {
+                            Id = orderItem.Id,
+                            OrderStatus = orderItem.OrderStatus,
+                            OrderDate = string.Format("{0}/{1}/{2}", pc.GetYear(orderItem.FinalDate), pc.GetMonth(orderItem.FinalDate), pc.GetDayOfMonth(orderItem.FinalDate)),
+                            OrderDescription = orderItem.Description
+                        };
+
+                        orderIndexes.Add(orderVM);
+                    }
+
+                    return View( orderIndexes);
+                }
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
 
         [Authorize]
         public ActionResult BuyProduct(OrderViewModel orderViewModel)
@@ -307,6 +326,7 @@ namespace ZedShop.Web.Controllers
 
                                             OrderStatus orderStatus = _orderService.GetOrderStatus("UnderReview");
                                             order.OrderStatus = orderStatus;
+                                            order.Description = orderStatus.Description;
 
                                             _orderService.UpdateOrder(order);
                                             return RedirectToAction("ShowOrderMessageToUser", "Orders", new { messageId = 1 });
@@ -354,12 +374,23 @@ namespace ZedShop.Web.Controllers
             {
                 case 1:
                     ViewBag.Message = "درخواست خرید شما با موفقیت ثبت شد. پس از تایید سبد خرید، شما می‌توانید به ادامه روال خرید بپردازید.";
+                    ViewBag.TargetController = "Orders";
+                    ViewBag.TargetAction = "Index";
                     break;
                 case 2:
-                    ViewBag.Message = "درخواست خرید شما ثبت نشد. لطفا دیرتر اقدام کنید!"; ;
+                    ViewBag.Message = "درخواست خرید شما ثبت نشد. لطفا دیرتر اقدام کنید!";
+                    ViewBag.TargetController = "Orders";
+                    ViewBag.TargetAction = "Index";
+                    break;
+                case 3:
+                    ViewBag.Message = "سفارشی از سمت شما ثبت نشده است، پس از افزودن کالا به سبد خرید می‌توانید سبد خرید خود را از این بخش مدیریت کنید!";
+                    ViewBag.TargetController = "Home";
+                    ViewBag.TargetAction = "Index";
                     break;
                 default:
-                    ViewBag.Message = "درخواست خرید شما ثبت نشد. لطفا دیرتر اقدام کنید!"; ;
+                    ViewBag.Message = "سفارشی از سمت شما ثبت نشده است، پس از افزودن کالا به سبد خرید می‌توانید سبد خرید خود را از این بخش مدیریت کنید!";
+                    ViewBag.TargetController = "Home";
+                    ViewBag.TargetAction = "Index";
                     break;
 
             }

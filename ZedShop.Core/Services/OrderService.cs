@@ -36,7 +36,8 @@ namespace ZedShop.Core.Services
                         User = user,
                         Address = null,
                         OrderStatus = orderStatus,
-                        FinalDate = DateTime.Now
+                        FinalDate = DateTime.Now,
+                        Description = orderStatus.Description
                     };
 
                     _context.Orders.Add(order);
