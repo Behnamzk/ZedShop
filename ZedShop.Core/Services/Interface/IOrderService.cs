@@ -47,7 +47,9 @@ namespace ZedShop.Core.Services.Interface
 
         bool DoesUserHasOrders(string userName);
 
-        List<Order> GetAllOrdersOfUser(string userName);
+        List<Order> GetAllOrdersOfUserPaged(string userName, int currentPage, int numberPerPage);
+
+        int GetAllOrdersCount(string userName);
 
         void UpdateOrder(Order order);
 

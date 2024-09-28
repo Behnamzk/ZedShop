@@ -27,7 +27,7 @@
                                         وضعیت
                                     </th>
                                     <th style="width:8%; text-align:center;">
-                                        به‌روزرسانی 
+                                        بروزرسانی 
                                     </th>
                                     <th style="width:7%; text-align:center;">
                                         اقدامات
@@ -51,10 +51,10 @@
 </div>
 
 <script>
-    function updateTableData(filterId, pageNum) {
+    function updateTableData( pageNum) {
         $.ajax({
-            url: '/Admin/ManageProducts/ChangePage/', // controller and action
-            data: { _filterId: filterId, pageNumber: pageNum }, // Send the userInput as a parameter
+            url: '/Orders/ChangePage/', // controller and action
+            data: { pageNumber: pageNum }, // Send the userInput as a parameter
             dataType: 'html',
             success: function (data) {
 

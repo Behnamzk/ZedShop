@@ -10,6 +10,7 @@ using ZedShop.Core.DTOs.Order;
 using ZedShop.Core.Services;
 using ZedShop.Core.Services.Interface;
 using ZedShop.DataLayer.Entities;
+using ZedShop.Web.Areas.Admin.Models.OpinionViewModel;
 using ZedShop.Web.Areas.Admin.Models.ProductViewModel;
 
 namespace ZedShop.Web.Controllers
@@ -22,6 +23,9 @@ namespace ZedShop.Web.Controllers
         private readonly IUserService _userService;
         private readonly List<ProvinceViewModel> provincesViewModel;
 
+        private int pageCount, currentPage, allOrdersCount, numberPerPage;
+
+
         private readonly PersianCalendar pc;
 
         public OrdersController(IOrderService orderService, IProductService productService, IUserService userService)
@@ -32,6 +36,11 @@ namespace ZedShop.Web.Controllers
 
             pc = new PersianCalendar();
 
+
+            // paging initialization
+            numberPerPage = 5;
+            currentPage = 1;
+           
 
             provincesViewModel = GetAllProvince();
         }
@@ -79,7 +88,7 @@ namespace ZedShop.Web.Controllers
                     return View(oPTable);
 
                 }
-                else if(_orderService.DoesUserHasOrders(username))
+                else if (_orderService.DoesUserHasOrders(username))
                 {
                     // User Doesnt have Open order so Show orders list
                     return RedirectToAction("OrdersHistory", "Orders");
@@ -146,28 +155,17 @@ namespace ZedShop.Web.Controllers
 
             if (!string.IsNullOrEmpty(username))
             {
-                List<Order> orders = _orderService.GetAllOrdersOfUser(username);
+                allOrdersCount = _orderService.GetAllOrdersCount(username);
+                pageCount = (int)Math.Ceiling((double)allOrdersCount / numberPerPage);
 
-                if (orders != null)
-                {
-                    List<OrderIndexViewModel> orderIndexes = new List<OrderIndexViewModel>();
+                ViewBag.NumberOfPage = pageCount;
+                ViewBag.CurrentPage = currentPage;
 
-                    foreach (var orderItem in orders)
-                    {
-                        OrderIndexViewModel orderVM = new OrderIndexViewModel()
-                        {
-                            Id = orderItem.Id,
-                            OrderStatus = orderItem.OrderStatus,
-                            OrderDate = string.Format("{0}/{1}/{2}", pc.GetYear(orderItem.FinalDate), pc.GetMonth(orderItem.FinalDate), pc.GetDayOfMonth(orderItem.FinalDate)),
-                            OrderDescription = orderItem.Description
-                        };
+                List<OrderIndexViewModel> orderIndexes = GetAllOrdersOfHistory(username);
 
-                        orderIndexes.Add(orderVM);
-                    }
-
-                    return View( orderIndexes);
-                }
+                return View(orderIndexes);
             }
+
             return RedirectToAction("Index", "Home");
         }
 
@@ -261,7 +259,7 @@ namespace ZedShop.Web.Controllers
                         AddressVM = new AddressViewModel()
                     };
 
-                    
+
 
                     ViewBag.Provinces = this.provincesViewModel;
 
@@ -283,7 +281,7 @@ namespace ZedShop.Web.Controllers
                 return View(orderPurchase);
             }
 
-            if(orderPurchase != null)
+            if (orderPurchase != null)
             {
                 if (orderPurchase.AddressVM.ProvinceId != -1)
                 {
@@ -297,9 +295,9 @@ namespace ZedShop.Web.Controllers
 
                             User user = _userService.GetUserByUserName(currentuser);
 
-                            if (city != null && province != null && user !=null)
+                            if (city != null && province != null && user != null)
                             {
-                                if(_orderService.IsCityInProvince(province.Id, city.Id))
+                                if (_orderService.IsCityInProvince(province.Id, city.Id))
                                 {
                                     // Save Data
                                     Address address = new Address()
@@ -418,13 +416,37 @@ namespace ZedShop.Web.Controllers
             return provincesVM;
         }
 
+        private List<OrderIndexViewModel> GetAllOrdersOfHistory(string username)
+        {
+            List<OrderIndexViewModel> orderIndexes = new List<OrderIndexViewModel>();
+
+            List<Order> orders = _orderService.GetAllOrdersOfUserPaged(username, currentPage, numberPerPage);
+
+            if (orders != null)
+            {
+
+                foreach (var orderItem in orders)
+                {
+                    OrderIndexViewModel orderVM = new OrderIndexViewModel()
+                    {
+                        Id = orderItem.Id,
+                        OrderStatus = orderItem.OrderStatus,
+                        OrderDate = string.Format("{0}/{1}/{2}", pc.GetYear(orderItem.FinalDate), pc.GetMonth(orderItem.FinalDate), pc.GetDayOfMonth(orderItem.FinalDate)),
+                        OrderDescription = orderItem.Description
+                    };
+
+                    orderIndexes.Add(orderVM);
+                }
+            }
+            return orderIndexes;
+        }
 
         [HttpGet]
         public IActionResult AllCitiesOfProvince(int _provinceId)
         {
             var cities = _orderService.GetCitiesOfProvince(_provinceId);
 
-            List < CityViewModel > citiesVM = new List<CityViewModel>();
+            List<CityViewModel> citiesVM = new List<CityViewModel>();
 
             foreach (var c in cities)
             {
@@ -440,6 +462,24 @@ namespace ZedShop.Web.Controllers
             return PartialView("_CitiesDropDown", citiesVM);
         }
 
+        [HttpGet]
+        public IActionResult ChangePage(int pageNumber = 1)
+        {
+            var username = User.Identity.Name;
 
+            if (!string.IsNullOrEmpty(username))
+            {
+                currentPage = pageNumber;
+                List<OrderIndexViewModel> orderIndexes = GetAllOrdersOfHistory(username);
+
+                ViewBag.NumberOfPage = pageCount;
+                ViewBag.CurrentPage = currentPage;
+
+                return PartialView("_OrdersTable", orderIndexes);
+            }
+
+            return RedirectToAction("Index", "Home");
+
+        }
     }
 }

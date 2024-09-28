@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZedShop.Core.Convertors;
 using ZedShop.Core.DTOs.Order;
 using ZedShop.Core.Services.Interface;
 using ZedShop.DataLayer.Context;
@@ -117,16 +120,26 @@ namespace ZedShop.Core.Services
 
         }
 
-        public List<Order> GetAllOrdersOfUser(string userName)
+        public List<Order> GetAllOrdersOfUserPaged(string userName, int currentPage,int numberPerPage)
+        {
+            User user = _userService.GetUserByUserName(userName);
+            if (user != null)
+            {
+                return _context.Orders.Include(o=>o.OrderStatus).Where(o => o.UserId == user.UserId).OrderByDescending(o=>o.FinalDate).ToPaged(currentPage, numberPerPage).ToList();
+            }
+            return null;
+        }
+
+        public int GetAllOrdersCount(string userName)
         {
             User user = _userService.GetUserByUserName(userName);
 
             if (user != null)
             {
-                return _context.Orders.Include(o=>o.OrderStatus).Where(o => o.UserId == user.UserId).ToList();
+                return _context.Orders.Where(o => o.UserId == user.UserId).Count();
             }
 
-            return null;
+            return -1;
         }
 
         public List<OrderProduct> GetProductsOfOrder(int orderId)

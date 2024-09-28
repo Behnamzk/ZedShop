@@ -51,24 +51,24 @@
         else
         {
             <span class="jsgrid-pager-nav-button jsgrid-pager-nav-inactive-button">
-                <a href="javascript:updateTableData(@ViewBag.FilterId,1);">اولین</a>
+                <a href="javascript:updateTableData(1);">اولین</a>
             </span>
             <span class="jsgrid-pager-nav-button jsgrid-pager-nav-inactive-button">
-                <a href="javascript:updateTableData(@ViewBag.FilterId,@ViewBag.CurrentPage-1);">قبلی</a>
+                <a href="javascript:updateTableData(@ViewBag.CurrentPage-1);">قبلی</a>
             </span>
         }
 
 
         @if (ViewBag.CurrentPage > 1)
         {
-            <span class="jsgrid-pager-page"><a href="javascript:updateTableData(@ViewBag.FilterId,@ViewBag.CurrentPage-1);">@((ViewBag.CurrentPage - 1))</a></span>
+            <span class="jsgrid-pager-page"><a href="javascript:updateTableData( @ViewBag.CurrentPage-1);">@((ViewBag.CurrentPage - 1))</a></span>
         }
 
         <span class="jsgrid-pager-page jsgrid-pager-current-page">@ViewBag.CurrentPage</span>
 
         @if (ViewBag.CurrentPage < ViewBag.NumberOfPage)
         {
-            <span class="jsgrid-pager-page"><a href="javascript:updateTableData(@ViewBag.FilterId,@ViewBag.CurrentPage+1);">@((ViewBag.CurrentPage + 1))</a></span>
+            <span class="jsgrid-pager-page"><a href="javascript:updateTableData( @ViewBag.CurrentPage+1);">@((ViewBag.CurrentPage + 1))</a></span>
         }
 
 
@@ -85,9 +85,9 @@
         else
         {
             <span class="jsgrid-pager-nav-button jsgrid-pager-nav-inactive-button">
-                <a href="javascript:updateTableData(@ViewBag.FilterId, @ViewBag.CurrentPage+1);">بعدی</a>
+                <a href="javascript:updateTableData( @ViewBag.CurrentPage+1);">بعدی</a>
             </span>
-            <span class="jsgrid-pager-nav-button"><a href="javascript:updateTableData( @ViewBag.FilterId,@ViewBag.NumberOfPage);">آخرین</a></span>
+            <span class="jsgrid-pager-nav-button"><a href="javascript:updateTableData(  @ViewBag.NumberOfPage);">آخرین</a></span>
         }
 
 
