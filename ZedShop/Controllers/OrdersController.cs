@@ -472,6 +472,10 @@ namespace ZedShop.Web.Controllers
                 currentPage = pageNumber;
                 List<OrderIndexViewModel> orderIndexes = GetAllOrdersOfHistory(username);
 
+                allOrdersCount = _orderService.GetAllOrdersCount(username);
+                pageCount = (int)Math.Ceiling((double)allOrdersCount / numberPerPage);
+
+
                 ViewBag.NumberOfPage = pageCount;
                 ViewBag.CurrentPage = currentPage;
 
