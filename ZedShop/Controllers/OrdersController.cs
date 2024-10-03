@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using ZedShop.Core.Convertors;
 using ZedShop.Core.DTOs.Order;
+using ZedShop.Core.DTOs.Product;
 using ZedShop.Core.Services;
 using ZedShop.Core.Services.Interface;
 using ZedShop.DataLayer.Entities;
@@ -25,6 +29,9 @@ namespace ZedShop.Web.Controllers
 
         private int pageCount, currentPage, allOrdersCount, numberPerPage;
 
+        private readonly MapperConfiguration productAEMapperConfig;
+
+        private IMapper productAEMapper;
 
         private readonly PersianCalendar pc;
 
@@ -36,6 +43,9 @@ namespace ZedShop.Web.Controllers
 
             pc = new PersianCalendar();
 
+
+            productAEMapperConfig = new MapperConfiguration(cfg => cfg.AddProfile<ZedMapping>());
+            productAEMapper = productAEMapperConfig.CreateMapper();
 
             // paging initialization
             numberPerPage = 5;
@@ -171,6 +181,47 @@ namespace ZedShop.Web.Controllers
 
 
         [Authorize]
+        [Route("/Orders/OrderDetail/{order_id}")]
+        public IActionResult OrderDetail(int order_id)
+        {
+            var username = User.Identity.Name;
+
+            if (!string.IsNullOrEmpty(username))
+            {
+                if(_orderService.DoesUserHasOrder(username , order_id))
+                {
+                    OrderDetailViewModel orderDetailView = new OrderDetailViewModel();
+
+                    var orderProducts = _orderService.GetProductsOfOrder(order_id);
+
+                    List<OrderDetailProductsViewModel> products = new List<OrderDetailProductsViewModel>();
+
+                    foreach (var item in orderProducts)
+                    {
+                        OrderDetailProductsViewModel pVM = new OrderDetailProductsViewModel()
+                        {
+                            ProductId = item.ProductId,
+                            Name = item.Product.Name,
+                            Count = item.Count,
+                            SellPrice = item.Price * item.Count,
+                            ProductImageName = item.Product.ProductImageName
+                        };
+
+                       
+                        products.Add(pVM);
+                    }
+
+                    orderDetailView.Products = products; 
+
+                    return View(orderDetailView);
+                }
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+
+            [Authorize]
         public ActionResult BuyProduct(OrderViewModel orderViewModel)
         {
             var username = User.Identity.Name;

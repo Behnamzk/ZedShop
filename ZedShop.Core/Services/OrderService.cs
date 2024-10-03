@@ -225,6 +225,16 @@ namespace ZedShop.Core.Services
 
         }
 
+        public bool DoesUserHasOrder(string userName, int order_id)
+        {
+            User user = _userService.GetUserByUserName(userName);
 
+            if (user != null)
+            {
+                return _context.Orders.Any(o => o.Id == order_id && o.UserId == user.UserId);
+            }
+
+            return false;
+        }
     }
 }

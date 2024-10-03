@@ -2910,9 +2910,9 @@ Table-Jsgrid table
 .showtable {
     width: 90%;
     max-width: 90%;
-    margin-left:5%;
-    margin-right:5%;
-    text-align:center;
+    margin-left: 5%;
+    margin-right: 5%;
+    text-align: center;
     margin-bottom: 20px;
     background-color: transparent;
     line-height: 1.42857143;
@@ -2982,3 +2982,44 @@ Table-Jsgrid table
         margin-right: 10px;
         margin-left: 10px;
     }
+
+
+/*OrderDetail start*/
+
+
+div.scrollmenu {
+    background-color: #333;
+    overflow: auto;
+    text-align: center;
+    white-space: nowrap;
+}
+
+    div.scrollmenu div.orderproductbox {
+        color: white;
+        text-align: center;
+        padding: 14px;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        div.scrollmenu div.orderproductbox:hover {
+            background-color: #777;
+        }
+
+div.orderproductframe {
+    padding: 10px;
+    max-width: 30%;
+    max-height: 50%;
+    display: grid;
+}
+
+
+
+    div.orderproductframe img {
+        width: 150px;
+        height: 100px;
+    }
+
+
+
+/*OrderDetail end*/

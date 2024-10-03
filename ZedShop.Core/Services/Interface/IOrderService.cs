@@ -46,6 +46,7 @@ namespace ZedShop.Core.Services.Interface
         Order GetOpenOrder(User user);
 
         bool DoesUserHasOrders(string userName);
+        bool DoesUserHasOrder(string userName , int order_id);
 
         List<Order> GetAllOrdersOfUserPaged(string userName, int currentPage, int numberPerPage);
 

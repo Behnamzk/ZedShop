@@ -1,0 +1,35 @@
+﻿@using ZedShop.Core.DTOs.Order
+@model OrderDetailViewModel
+@{
+    ViewData["Title"] = "جزئیات سفارش";
+}
+
+
+<div class="row">
+    <div class="column left" style="width: 20%;"> </div>
+    <div class="column middle" style="width: 60%;">
+        <div class="scrollmenu">
+            @foreach (var item in Model.Products)
+            {
+                <div class="orderproductbox">
+
+                    <div class="orderproductframe">
+                        <img src="/Products/Image/@item.ProductImageName" alt="Product Image">
+                        <label>@item.Name</label>
+                        <label>@item.Count</label>
+                        <label>@item.SellPrice.ToString("N0") تومان</label>
+
+                    </div>
+
+
+                </div>
+
+            }
+        </div>
+    </div>
+    <div class="column right" style="width: 20%;"> </div>
+</div>
+
+
+<h2>Horizontal Scrollable Menu</h2>
+<p>Resize the browser window to see the effect.</p>
