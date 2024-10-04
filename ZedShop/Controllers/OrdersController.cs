@@ -190,8 +190,10 @@ namespace ZedShop.Web.Controllers
             {
                 if(_orderService.DoesUserHasOrder(username , order_id))
                 {
+                    // Page Model
                     OrderDetailViewModel orderDetailView = new OrderDetailViewModel();
 
+                    // Order Products
                     var orderProducts = _orderService.GetProductsOfOrder(order_id);
 
                     List<OrderDetailProductsViewModel> products = new List<OrderDetailProductsViewModel>();
@@ -207,11 +209,88 @@ namespace ZedShop.Web.Controllers
                             ProductImageName = item.Product.ProductImageName
                         };
 
-                       
+                        orderDetailView.ProductsPrice += item.Price;
+
                         products.Add(pVM);
                     }
 
-                    orderDetailView.Products = products; 
+                    orderDetailView.Products = products;
+
+                    // Order Information
+                    var order = _orderService.GetOrderWithAllDetailById(order_id);
+
+                    orderDetailView.OrderStatus = order.OrderStatus.DisplayName;
+
+                    orderDetailView.OrderDate = string.Format("{0}/{1}/{2}", pc.GetYear(order.FinalDate), pc.GetMonth(order.FinalDate), pc.GetDayOfMonth(order.FinalDate));
+
+                    if(!String.IsNullOrEmpty( order.Description))
+                    {
+                        orderDetailView.OrderDescription = order.Description;
+                    }
+                    else
+                    {
+                        orderDetailView.OrderDescription = "ثبت نشده است";
+                    }
+
+                    // Address Information
+                    if (order.Address != null)
+                    {
+                        var province = _orderService.GetProvince(order.Address.ProvinceId);
+                        var city = _orderService.GetCity(order.Address.CityId);
+
+                        if(province != null)
+                        {
+                            orderDetailView.AddressVM = province.Name +"، ";
+                        }
+
+                        if(city != null)
+                        {
+                            orderDetailView.AddressVM += city.Name + "، ";
+                        }
+
+                        orderDetailView.AddressVM += order.Address.AddressContent + "، ";
+
+                        orderDetailView.AddressVM += "پلاک: " + order.Address.HouseNumber + "، ";
+                        orderDetailView.AddressVM += "کد پستی: " + order.Address.PostalCode + "،  ";
+                        orderDetailView.AddressVM += "نام گیرنده: " + order.Address.CustomerFullName + "،  ";
+                        orderDetailView.AddressVM += "شماره: " + order.Address.CustomerPhoneNum;
+                    }
+                    else
+                    {
+                        orderDetailView.AddressVM = "ثبت نشده است";
+                    }
+
+
+                    // Post Information
+                    if(order.PostDelivery != null)
+                    {
+                        orderDetailView.PostDelivery = order.PostDelivery.Description + " ،";
+                        orderDetailView.PostDelivery += "شماره رهگیری: " + order.PostDelivery.TrackingCode;
+                        orderDetailView.PostPrice = order.PostDelivery.TotalPrice;
+                    }
+                    else
+                    {
+                        orderDetailView.PostDelivery = "ثبت نشده است";
+                        orderDetailView.PostPrice = 0;
+                    }
+
+                    // Discount Information
+                    if (order.Discount != null)
+                    {
+                        if(order.Discount.IsShow && order.Discount.IsActive)
+                        {
+                            orderDetailView.Discount = order.Discount.Name;
+                            orderDetailView.ProductsPrice = orderDetailView.ProductsPrice - (orderDetailView.ProductsPrice * order.Discount.Value);
+                        }
+
+                    }
+                    else
+                    {
+                        orderDetailView.Discount = "ثبت نشده است";
+                    }
+
+                    // Order TotalPrice
+                    orderDetailView.TotalPrice = orderDetailView.ProductsPrice + orderDetailView.PostPrice;
 
                     return View(orderDetailView);
                 }

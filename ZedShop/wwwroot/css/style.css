@@ -3020,6 +3020,10 @@ div.orderproductframe {
         height: 100px;
     }
 
+p.orderdetailp {
+    font-size: 18px;
+    margin-top: 5px;
+}
 
 
 /*OrderDetail end*/
