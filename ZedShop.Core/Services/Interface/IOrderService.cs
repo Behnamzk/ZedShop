@@ -55,6 +55,8 @@ namespace ZedShop.Core.Services.Interface
         void UpdateOrder(Order order);
 
         Order GetOrderById(int orderId);
+
+        Order GetOrderWithAllDetailById(int orderId);
         void AddProductToOrder(OrderProduct orderProduct);
 
         void IncreaseProductCountOfOrder(int productId, int orderId, int count);

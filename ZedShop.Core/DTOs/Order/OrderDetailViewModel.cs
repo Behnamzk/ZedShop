@@ -14,20 +14,34 @@ namespace ZedShop.Core.DTOs.Order
     {
         public int OrderId { get; set; }
 
+        public double TotalPrice { get; set; } = 0;
+        public double ProductsPrice { get; set; } = 0;
+
         public List<OrderDetailProductsViewModel> Products { get; set; }
 
-        public AddressViewModel AddressVM { get; set; }
+        [Display(Name = "آدرس")]
+        [AllowNull]
+        public string? AddressVM { get; set; } = string.Empty;
 
         [Display(Name = "کد تخفیف")]
         [AllowNull]
-        public Discount? Discount { get; set; }
+        public string? Discount { get; set; } = string.Empty;
 
         [Display(Name = "وضعیت")]
         [AllowNull]
-        public OrderStatus OrderStatus { get; set; }
+        public string? OrderStatus { get; set; } = string.Empty;
 
         [Display(Name = "تاریخ به‌روزرسانی")]
-        public string OrderDate { get; set; }
+        [AllowNull]
+        public string? OrderDate { get; set; } = string.Empty;
+
+        [Display(Name = "پست")]
+        [AllowNull]
+        public string? PostDelivery { get; set; } = string.Empty;
+
+        [Display(Name = "هزینه پست")]
+        [AllowNull]
+        public double PostPrice { get; set; } =0;
 
         [Display(Name = "توضیحات")]
         public string OrderDescription { get; set; } = string.Empty;

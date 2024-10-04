@@ -107,6 +107,11 @@ namespace ZedShop.Core.Services
             return _context.Orders.SingleOrDefault(c => c.Id == orderId);
         }
 
+        public Order GetOrderWithAllDetailById(int orderId)
+        {
+            return _context.Orders.Include(o=>o.Address).Include(o=>o.OrderStatus).Include(o=>o.PostDelivery).Include(o=>o.Discount).SingleOrDefault(c => c.Id == orderId);
+        }
+
         public bool DoesUserHasOrders(string userName)
         {
             User user = _userService.GetUserByUserName(userName);

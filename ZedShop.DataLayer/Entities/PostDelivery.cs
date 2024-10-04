@@ -18,6 +18,10 @@ namespace ZedShop.DataLayer.Entities
         public double TotalPrice { get; set; }
 
         [AllowNull]
+        [MaxLength(40)]
+        public string? TrackingCode { get; set; }
+
+        [AllowNull]
         [MaxLength(500)]
         public string? Description { get; set; }
 
