@@ -2713,16 +2713,16 @@ h1, h2, h3, h4, h5,
     max-height: 170px;
     width: 84%;
     overflow-y: scroll;
-    text-align:right;
-    margin-top:-20px;
+    text-align: right;
+    margin-top: -20px;
     /* other styles for results container */
 }
 
     .searchResults p[class=pResaults] {
         color: black;
-        margin-top:5px;
-        margin-right:10px;
-        font-family:"B Yekan";
+        margin-top: 5px;
+        margin-right: 10px;
+        font-family: "B Yekan";
     }
 
 
@@ -2757,10 +2757,9 @@ h1, h2, h3, h4, h5,
     }
 
     .usi-container p[class=usi-text] {
-        color:black;
+        color: black;
         width: 80%;
-        font-size:12px;
-        
+        font-size: 12px;
     }
 
 .searchResultsHeader {
@@ -2770,7 +2769,7 @@ h1, h2, h3, h4, h5,
     color: black;
     max-height: 150px;
     width: 31%;
-    margin-right:60px;
+    margin-right: 60px;
     overflow-y: scroll;
     z-index: 9999;
     text-align: right;
@@ -2782,3 +2781,270 @@ h1, h2, h3, h4, h5,
         margin-right: 10px;
         font-family: "B Yekan";
     }
+
+.card-body {
+    margin: 10px;
+}
+
+    .card-body p[class = card-title] {
+        margin-right: 10px;
+        font-family: 'Vazir';
+        font-size: 20px;
+    }
+
+.row-form-container {
+    margin-left: 10%;
+    margin-right: 10%;
+    border-radius: 15px;
+    padding: 2%;
+    border: 1px solid white;
+    background-color: #f5f5f5;
+}
+
+.row-form {
+    display: flex;
+    justify-content: space-between;
+}
+
+    .row-form .left, .right {
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+input[class=input-submit] {
+    border: none;
+    outline: 0;
+    padding: 12px;
+    color: white;
+    background-color: #1f9ede;
+    text-align: center;
+    cursor: pointer;
+    width: 20%;
+    font-size: 16px;
+    border-radius: 3px;
+}
+
+    input[class=input-submit]:hover {
+        background-color: #1888c3;
+    }
+
+button[class=button-cancel] {
+    border: none;
+    outline: 0;
+    padding: 12px;
+    color: white;
+    background-color: #e88817;
+    text-align: center;
+    cursor: pointer;
+    width: 10%;
+    font-size: 16px;
+    border-radius: 3px;
+}
+
+    button[class=button-cancel]:hover {
+        background-color: #d77f1a;
+    }
+
+.card-body {
+    margin: 10px;
+}
+
+    .card-body p[class = card-title] {
+        margin-right: 10px;
+        font-family: 'B Koodak';
+        font-size: 20px;
+    }
+
+/*******************
+Table-Jsgrid table
+******************/
+.jsgrid-pager-page a,
+.jsgrid-pager-current-page,
+.jsgrid-pager-nav-button a {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: 1.5em;
+    padding: 0.5em 1em;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    color: #67757c;
+    border: 1px solid #ddd;
+}
+
+    .jsgrid-pager-page a:hover,
+    .jsgrid-pager-nav-button a:hover {
+        background-color: #2962FF;
+        color: #fff;
+    }
+
+.jsgrid-pager-nav-button-off a {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: 1.5em;
+    padding: 0.5em 1em;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    color: #67757c;
+    background-color: #cccccc;
+    border: 1px solid #ddd;
+}
+
+.jsgrid-pager-current-page {
+    background-color: #2962FF;
+    color: #fff;
+}
+
+.jsgrid-pager-page,
+.jsgrid-pager-nav-button {
+    padding: 0;
+}
+
+    .jsgrid-pager-page.jsgrid-pager-current-page {
+        padding: 0.5em 1em !important;
+    }
+
+.showtable {
+    width: 90%;
+    max-width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    text-align: center;
+    margin-bottom: 20px;
+    background-color: transparent;
+    line-height: 1.42857143;
+    color: #333;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+    .showtable .showtabletd {
+        vertical-align: inherit;
+        text-align: center;
+        unicode-bidi: isolate;
+    }
+
+
+.btn-table-primary {
+    background-color: #3c8dbc;
+    color: white;
+    border-color: #367fa9;
+    background-image: linear-gradient(to bottom, #337ab7 0, #265a88 100%);
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, .2);
+    background-repeat: repeat-x;
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+    .btn-table-primary:hover,
+    .btn-table-primary:active,
+    .btn-table-primary.hover {
+        background-image: linear-gradient(to bottom,#265a88 0, #337ab7 100%);
+        color: white;
+    }
+
+.btn {
+    border-radius: 3px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border: 1px solid transparent;
+}
+
+.row-form-container {
+    margin-left: 10%;
+    margin-right: 10%;
+    border-radius: 15px;
+    padding: 2%;
+    border: 1px solid white;
+    background-color: #f5f5f5;
+}
+
+.row-form {
+    display: flex;
+    justify-content: space-between;
+}
+
+    .row-form .left, .right {
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+
+/*OrderDetail start*/
+
+
+div.scrollmenu {
+    background-color: #e7e7e7;
+    overflow: auto;
+    text-align: center;
+    border-radius:10px;
+    white-space: nowrap;
+}
+
+    div.scrollmenu div.orderproductbox {
+        color: white;
+        text-align: center;
+        padding: 14px;
+        background-color: #b2b2b2;
+        text-decoration: none;
+        border-radius:5px;
+        display: inline-block;
+        margin-top:5px;
+        margin-bottom:5px;
+    }
+
+        div.scrollmenu div.orderproductbox:hover {
+            background-color: #b0b0b0;
+        }
+
+div.orderproductframe {
+    padding: 10px;
+    max-width: 30%;
+    max-height: 50%;
+    display: grid;
+}
+
+
+
+    div.orderproductframe img {
+        width: 150px;
+        height: 100px;
+        border-radius:5px;
+    }
+
+    div.orderproductframe label.detaillabel {
+        color:black;
+    }
+
+label.outerdivlabeldetail {
+    font-size: 22px;
+    margin-top: 15px;
+}
+div.detailitembox {
+    border: 2px solid #b2b2b2;
+    padding-right: 10px;
+    margin-top:-12px;
+    border-radius: 5px;
+}
+
+p.orderdetailp {
+    font-size: 18px;
+    margin-top: 5px;
+}
+
+
+/*OrderDetail end*/

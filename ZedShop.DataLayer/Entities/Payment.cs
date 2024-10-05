@@ -25,9 +25,10 @@ namespace ZedShop.DataLayer.Entities
         [Required]
         public double Value { get; set; }
 
-        public Wallet Wallet { get; set; }
 
         [ForeignKey("Wallet")]
         public int WalletId { get; set; }
+
+        public Wallet Wallet { get; set; }
     }
 }

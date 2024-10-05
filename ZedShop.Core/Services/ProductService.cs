@@ -56,7 +56,7 @@ namespace ZedShop.Core.Services
 
             if (product != null)
             {
-                if (product.Count - count > 0)
+                if (product.Count - count >= 0)
                 {
                     product.Count -= count;
                     _context.Products.Update(product);

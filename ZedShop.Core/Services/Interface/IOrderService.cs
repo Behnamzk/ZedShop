@@ -11,6 +11,8 @@ namespace ZedShop.Core.Services.Interface
 {
     public interface IOrderService
     {
+        #region Orders
+
         /// <summary>
         /// get username and check if user has an open order
         /// if user has an open order (status == false) or username invalid retrun -1
@@ -43,7 +45,18 @@ namespace ZedShop.Core.Services.Interface
         /// </returns>
         Order GetOpenOrder(User user);
 
+        bool DoesUserHasOrders(string userName);
+        bool DoesUserHasOrder(string userName , int order_id);
+
+        List<Order> GetAllOrdersOfUserPaged(string userName, int currentPage, int numberPerPage);
+
+        int GetAllOrdersCount(string userName);
+
+        void UpdateOrder(Order order);
+
         Order GetOrderById(int orderId);
+
+        Order GetOrderWithAllDetailById(int orderId);
         void AddProductToOrder(OrderProduct orderProduct);
 
         void IncreaseProductCountOfOrder(int productId, int orderId, int count);
@@ -54,5 +67,20 @@ namespace ZedShop.Core.Services.Interface
 
         List<OrderProduct> GetProductsOfOrder(int orderId);
 
+        List<OrderStatus> GetOrderStatuses();
+
+        OrderStatus GetOrderStatus(string orderStatusName);
+        OrderStatus GetOrderStatus(int orderStatusId);
+
+        #endregion
+
+        #region Province and City
+        List<Province> GetAllProvince();
+        List<City> GetCitiesOfProvince(int provinceId);
+        City GetCity(int id);
+        Province GetProvince(int id);
+        bool IsCityInProvince(int provinceId, int cityId);
+        Address AddAddress(Address address);
+        #endregion
     }
 }

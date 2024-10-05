@@ -1,0 +1,96 @@
+﻿@using ZedShop.Core.DTOs.Order
+@model List<OrderIndexViewModel>
+
+<div class="jsgrid-grid-body">
+   
+    <table class="showtable">
+        <tbody id="userstable">
+            @if (Model != null)
+            {
+                @foreach (var item in Model)
+                {
+                    <tr class="showtabletd" id="@item.Id">
+
+                        <td class="showtabletd" style="width:7%">
+                            @item.Id
+                        </td>
+                        <td class="showtabletd" style="width:10%; text-align:center">
+                            @item.OrderStatus.DisplayName
+                        </td>
+                        <td class="showtabletd" style="width:8%; text-align:center">
+                            @item.OrderDate
+                        </td>
+                        <td class="showtabletd" style="width:7%; text-align:center">
+                            <a class="btn btn-table-primary btn-sm" href="/Orders/OrderDetail/@item.Id">مشاهده</a>
+                        </td>
+                        <td class="showtabletd" style="width:25%; text-align:center">
+                            @item.OrderDescription
+                        </td>
+
+
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<div class="jsgrid-pager-container" style="margin-right:5%;">
+    <div class="jsgrid-pager">
+        صفحه:
+
+
+        @if (ViewBag.CurrentPage == 1 || ViewBag.NumberOfPage == 0)
+        {
+            <span class="jsgrid-pager-nav-button-off jsgrid-pager-nav-inactive-button">
+                <a class="disabled">اولین</a>
+            </span>
+            <span class="jsgrid-pager-nav-button-off jsgrid-pager-nav-inactive-button">
+                <a class="disabled">قبلی</a>
+            </span>
+        }
+        else
+        {
+            <span class="jsgrid-pager-nav-button jsgrid-pager-nav-inactive-button">
+                <a href="javascript:updateTableData(1);">اولین</a>
+            </span>
+            <span class="jsgrid-pager-nav-button jsgrid-pager-nav-inactive-button">
+                <a href="javascript:updateTableData(@ViewBag.CurrentPage-1);">قبلی</a>
+            </span>
+        }
+
+
+        @if (ViewBag.CurrentPage > 1)
+        {
+            <span class="jsgrid-pager-page"><a href="javascript:updateTableData( @ViewBag.CurrentPage-1);">@((ViewBag.CurrentPage - 1))</a></span>
+        }
+
+        <span class="jsgrid-pager-page jsgrid-pager-current-page">@ViewBag.CurrentPage</span>
+
+        @if (ViewBag.CurrentPage < ViewBag.NumberOfPage)
+        {
+            <span class="jsgrid-pager-page"><a href="javascript:updateTableData( @ViewBag.CurrentPage+1);">@((ViewBag.CurrentPage + 1))</a></span>
+        }
+
+
+        @if (ViewBag.CurrentPage == ViewBag.NumberOfPage || ViewBag.NumberOfPage == 0)
+        {
+            <span class="jsgrid-pager-nav-button-off jsgrid-pager-nav-inactive-button">
+                <a class="disabled">بعدی</a>
+            </span>
+            <span class="jsgrid-pager-nav-button-off jsgrid-pager-nav-inactive-button">
+                <a class="disabled">آخرین</a>
+            </span>
+
+        }
+        else
+        {
+            <span class="jsgrid-pager-nav-button jsgrid-pager-nav-inactive-button">
+                <a href="javascript:updateTableData( @ViewBag.CurrentPage+1);">بعدی</a>
+            </span>
+            <span class="jsgrid-pager-nav-button"><a href="javascript:updateTableData(  @ViewBag.NumberOfPage);">آخرین</a></span>
+        }
+
+
+        &nbsp;&nbsp; @ViewBag.CurrentPage از @ViewBag.NumberOfPage
+    </div>
+</div> 

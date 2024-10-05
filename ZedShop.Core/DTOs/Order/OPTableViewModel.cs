@@ -10,6 +10,7 @@ namespace ZedShop.Core.DTOs.Order
     {
         public List<OrderProductViewModel> Items {  get; set; }
 
+        public int OrderId { get; set; }
         public double TotalPrice { get; set; } = 0;
     }
 }

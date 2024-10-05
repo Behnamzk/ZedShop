@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,10 +60,16 @@ namespace ZedShop.DataLayer.Entities
 
         public Admin? Admin { get; set; }
 
+
+        [ForeignKey("Wallet")]
+        [AllowNull]
+        public int? WalletId { get; set; }
+        
+        [AllowNull]
         public Wallet? Wallet { get; set; }
 
         public ICollection<Order> Orders { get; set; }
-
+        public ICollection<Address> Addresses { get; set; }
 		public ICollection<Comment> Comments { get; set; }
 
 	}

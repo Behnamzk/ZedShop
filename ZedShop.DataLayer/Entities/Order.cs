@@ -18,26 +18,35 @@ namespace ZedShop.DataLayer.Entities
         [AllowNull]
         public DateTime FinalDate { get; set; }
 
-        [MaxLength(1000)]
         [AllowNull]
-        public string Address { get; set; }
-
         [MaxLength(300)]
-        [AllowNull]
-        public string City { get; set; }
+        public string? Description { get; set; }
 
-        [MaxLength(300)]
         [AllowNull]
-        public string Province { get; set; }
+        [ForeignKey("Address")]
+        public int? AddressId { get; set; }
+        public Address? Address { get; set; }
 
-        [Required]
-        public bool Status { get; set; }
+        [AllowNull]
+        [ForeignKey("PostDelivery")]
+        public int? PostDeliveryId { get; set; }
+        public PostDelivery? PostDelivery { get; set; }
+
+        [AllowNull]
+        [ForeignKey("Discount")]
+        public int? DiscountId { get; set; }
+        public Discount? Discount { get; set; }
+
+        [ForeignKey("OrderStatus")]
+        public int OrderStatusId { get; set; }
+        public OrderStatus OrderStatus { get; set; }
 
         [ForeignKey("User")]
         public int UserId { get; set; }
         public User User { get; set; }
 
         public ICollection<OrderProduct> OrderProducts { get; set; }
+        public ICollection<OrderWallet> OrderWallets { get; set; }
 
 
     }
