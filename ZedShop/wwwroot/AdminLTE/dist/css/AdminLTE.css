@@ -5073,3 +5073,73 @@ Admin Table-Jsgrid table
     width: 60%;
     overflow-y: scroll;
 }
+
+
+/*OrderEdit start*/
+
+div.roweditorder {
+    display: flex;
+}
+
+div.scrollmenu {
+    background-color: #e7e7e7;
+    overflow: auto;
+    text-align: center;
+    border-radius: 10px;
+    white-space: nowrap;
+}
+
+    div.scrollmenu div.orderproductbox {
+        color: white;
+        text-align: center;
+        padding: 14px;
+        background-color: #b2b2b2;
+        text-decoration: none;
+        border-radius: 5px;
+        display: inline-block;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+        div.scrollmenu div.orderproductbox:hover {
+            background-color: #b0b0b0;
+        }
+
+div.orderproductframe {
+    padding: 10px;
+    max-width: 30%;
+    max-height: 50%;
+    display: grid;
+}
+
+
+
+    div.orderproductframe img {
+        width: 150px;
+        height: 100px;
+        border-radius: 5px;
+    }
+
+    div.orderproductframe label.detaillabel {
+        color: black;
+    }
+
+label.outerdivlabeldetail {
+    font-size: 22px;
+    margin-top: 15px;
+}
+
+div.detailitembox {
+    border: 2px solid #b2b2b2;
+    padding-right: 10px;
+    margin-top: -12px;
+    border-radius: 5px;
+}
+
+p.orderdetailp {
+    font-size: 18px;
+    margin-top: 5px;
+}
+
+
+/*OrderEdit end*/

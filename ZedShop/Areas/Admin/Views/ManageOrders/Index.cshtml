@@ -1,0 +1,95 @@
+﻿@model List<ZedShop.Web.Areas.Admin.Models.OrdersViewModel.OrderViewModelAdmin>
+@{
+    ViewData["Title"] = "مدیریت سفارشات";
+    Layout = "~/areas/admin/views/shared/_AdminLayout.cshtml";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div style="display:flex;">
+
+                    <p class="card-title"> <strong>سفارشات</strong> </p>
+
+
+                    <p class="card-title" style="margin-top:15px;margin-right:2%;font-size:16px; "> فیلتر:  </p>
+                    <select id="filter-select" style="margin-right:5px; width:15%" onclick="AllOrdersOfFilter()">
+
+                        @foreach (var item in ViewBag.Filters)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <div id="basicgrid" class="m-t-40 jsgrid" style="position: relative; height: 750px; width: 100%;">
+                    <div class="jsgrid-grid-header jsgrid-header-scrollbar">
+                        <table class="jsgrid-table table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="max-width:4%; width:4%; text-align:center;">
+                                        شناسه
+                                    </th>
+                                    <th style="max-width:5%; width:5%; text-align:center;">
+                                        نام کاربر
+                                    </th>
+                                    <th style="max-width:5%; width:5%; text-align:center;">
+                                        تاریخ
+                                    </th>
+                                    <th style="max-width:5%; width:5%; text-align:center;">
+                                        وضعیت
+                                    </th>
+                                    <th style="max-width:10%; width:10%; text-align:center;">
+                                        اقدامات
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div id="tableofordercontent">
+                        @Html.Partial("_OrdersTable")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function updateTableData(statusId, pageNum) {
+        $.ajax({
+            url: '/Admin/ManageOrders/ChangePage/', // controller and action
+            data: { _statusId: statusId, pageNumber: pageNum }, // Send the userInput as a parameter
+            dataType: 'html',
+            success: function (data) {
+
+                $('#tableofordercontent').html(data); // Insert the received HTML into the container
+            }
+        });
+    }
+
+</script>
+
+
+<script>
+    function AllOrdersOfFilter() {
+
+        var filterElement = document.getElementById("filter-select");
+
+        let id1 = filterElement.value;
+
+
+        $.ajax({
+            url: '/Admin/ManageOrders/AllOrdersOfFilter/', //controller and action
+            data: { _statusId: id1 }, // Send the product ID as a parameter
+            dataType: 'html',
+            success: function (data) {
+                $('#tableofordercontent').html(data); // Insert the received HTML into the container
+            }
+        });
+    }
+</script>

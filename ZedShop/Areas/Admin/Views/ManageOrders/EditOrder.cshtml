@@ -1,0 +1,62 @@
+﻿@using ZedShop.Web.Areas.Admin.Models.OrdersViewModel
+@model EditOrderViewModel
+@{
+    ViewData["Title"] = "مشاهده سفارش";
+    Layout = "~/areas/admin/views/shared/_AdminLayout.cshtml";
+}
+
+<h3 style="margin: 1% 4% 2% 0%">مشاهده سفارش</h3>
+
+<div class="roweditorder" style="width:100%; max-width:100%;">
+    <div class="column left" style="width: 20%; "> </div>
+    <div class="column middle" style="width: 60%; ">
+        <div class="scrollmenu">
+            @foreach (var item in Model.Products)
+            {
+                <div class="orderproductbox">
+
+                    <div class="orderproductframe">
+                        <img src="/Products/Image/@item.ProductImageName" alt="Product Image">
+                        <label class="detaillabel"><strong>@item.Name</strong></label>
+                        <label class="detaillabel">تعداد: @item.Count</label>
+                        <label class="detaillabel">@item.SellPrice.ToString("N0") تومان</label>
+
+                    </div>
+
+
+                </div>
+
+            }
+        </div>
+
+       @*  <div class="outerbox">
+            <label class="outerdivlabeldetail">هزینه‌ها</label>
+            <div class="detailitembox">
+                <p class="orderdetailp">هزینه محصولات با تخفیف: @Model.ProductsPrice.ToString("N0") تومان</p>
+                <p class="orderdetailp">تخفیف: @Model.Discount</p>
+                <p class="orderdetailp">هزینه پست: @Model.PostPrice.ToString("N0") تومان</p>
+                <p class="orderdetailp"><strong>مجموع هزینه‌ها: @Model.TotalPrice.ToString("N0") تومان</strong></p>
+            </div>
+        </div>
+
+        <div class="outerbox">
+            <label class="outerdivlabeldetail">وضعیت سفارش</label>
+            <div class="detailitembox">
+                <p class="orderdetailp" style="margin-top:10px;"><strong>وضعیت سفارش: @Model.OrderStatus</strong></p>
+                <p class="orderdetailp">توضیحات: @Model.OrderDescription</p>
+                <p class="orderdetailp">تاریخ بروزرسانی: @Model.OrderDate</p>
+            </div>
+        </div>
+
+        <div class="outerbox" style="margin-bottom:10px;">
+            <label class="outerdivlabeldetail">ارسال و پست</label>
+            <div class="detailitembox">
+                <p class="orderdetailp">آدرس: @Model.AddressVM</p>
+                <p class="orderdetailp">توضیحات پست: @Model.PostDelivery</p>
+            </div>
+        </div> *@
+
+
+    </div>
+    <div class="column right" style="width: 20%;"> </div>
+</div>

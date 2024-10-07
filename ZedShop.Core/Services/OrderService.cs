@@ -135,6 +135,19 @@ namespace ZedShop.Core.Services
             return null;
         }
 
+        public List<Order> GetAllOrdersPaged(int orderStatusId, int currentPage, int numberPerPage)
+        {
+            if (orderStatusId == -1)
+            {
+                return _context.Orders.Include(o=>o.User).OrderByDescending(o => o.Id).ToPaged(currentPage, numberPerPage).ToList();
+            }
+            else
+            {
+                var dta =  _context.Orders.Include(o => o.User).Where(o => o.OrderStatusId == orderStatusId).OrderByDescending(o => o.Id).ToPaged(currentPage, numberPerPage).ToList();
+                return dta;
+            }
+        }
+
         public int GetAllOrdersCount(string userName)
         {
             User user = _userService.GetUserByUserName(userName);
@@ -145,6 +158,20 @@ namespace ZedShop.Core.Services
             }
 
             return -1;
+        }
+
+        public int GetAllOrdersCount(int orderStatusId)
+        {
+            if (orderStatusId == -1)
+            {
+                return _context.Orders.Count();
+            }
+            else
+            {
+                return _context.Orders.Where(o => o.OrderStatusId == orderStatusId).Count();
+
+            }
+
         }
 
         public List<OrderProduct> GetProductsOfOrder(int orderId)
@@ -241,5 +268,8 @@ namespace ZedShop.Core.Services
 
             return false;
         }
+
+
+       
     }
 }
