@@ -23,6 +23,9 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
         private int pageCount, currentPage, allOrdersCount, numberPerPage, statusId;
 
+        private readonly List<ProvinceViewModel> provincesViewModel;
+
+
         private readonly List<FilterBaseViewModel> filtersBase = new List<FilterBaseViewModel>();
 
         private readonly PersianCalendar pc;
@@ -49,6 +52,8 @@ namespace ZedShop.Web.Areas.Admin.Controllers
             statusId = -1;
             allOrdersCount = _orderService.GetAllOrdersCount(statusId);
             pageCount = (int)Math.Ceiling((double)allOrdersCount / numberPerPage);
+
+            provincesViewModel = GetAllProvince();
 
         }
 
@@ -134,7 +139,9 @@ namespace ZedShop.Web.Areas.Admin.Controllers
                 EditOrderViewModel editOrder = new EditOrderViewModel();
 
                 // Order Detail
-                editOrder.order = order;
+                editOrder.Order = order;
+                editOrder.FinalDate = string.Format("{0}/{1}/{2}", pc.GetYear(order.FinalDate), pc.GetMonth(order.FinalDate), pc.GetDayOfMonth(order.FinalDate));
+
 
                 // Order Products
                 var orderProducts = _orderService.GetProductsOfOrder(_orderId);
@@ -169,6 +176,8 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
                 }
 
+                ViewBag.Discounts = _orderService.GetDiscounts();
+
 
                 // TotalPrice
                 if (order.PostDelivery == null)
@@ -181,6 +190,14 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
                 }
 
+                ViewBag.Provinces = this.provincesViewModel;
+
+                if(order.Address != null)
+                {
+                    ViewBag.Cities = GetAllCity(order.Address.ProvinceId);
+
+                }
+
                 return View(editOrder);
 
             }
@@ -189,6 +206,52 @@ namespace ZedShop.Web.Areas.Admin.Controllers
 
         }
 
+        private List<ProvinceViewModel> GetAllProvince()
+        {
+            // ViewBag province
+            var provinces = _orderService.GetAllProvince();
+
+            List<ProvinceViewModel> provincesVM = new List<ProvinceViewModel>();
+            foreach (var p in provinces)
+            {
+                ProvinceViewModel province = new ProvinceViewModel()
+                {
+                    Id = p.Id,
+                    Name = p.Name
+                };
+
+                provincesVM.Add(province);
+
+            }
+            return provincesVM;
+        }
+
+        private List<CityViewModel> GetAllCity(int _provinceId)
+        {
+            var cities = _orderService.GetCitiesOfProvince(_provinceId);
+
+            List<CityViewModel> citiesVM = new List<CityViewModel>();
+
+            foreach (var c in cities)
+            {
+                CityViewModel city = new CityViewModel()
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                };
+
+                citiesVM.Add(city);
+            }
+            return citiesVM;
+        }
+
+        [HttpGet]
+        public IActionResult AllCitiesOfProvince(int _provinceId)
+        {
+            List<CityViewModel> citiesVM = GetAllCity(_provinceId);
+
+            return PartialView("_CitiesDropDown", citiesVM);
+        }
 
     }
 }

@@ -10,53 +10,267 @@
 <div class="roweditorder" style="width:100%; max-width:100%;">
     <div class="column left" style="width: 20%; "> </div>
     <div class="column middle" style="width: 60%; ">
-        <div class="scrollmenu">
-            @foreach (var item in Model.Products)
-            {
-                <div class="orderproductbox">
+        <form asp-action="EditOrder" asp-controller="ManageOrders" method="post">
+            <input type="hidden" asp-for="Order.Id" class="form-control" />
 
-                    <div class="orderproductframe">
-                        <img src="/Products/Image/@item.ProductImageName" alt="Product Image">
-                        <label class="detaillabel"><strong>@item.Name</strong></label>
-                        <label class="detaillabel">تعداد: @item.Count</label>
-                        <label class="detaillabel">@item.SellPrice.ToString("N0") تومان</label>
+            <div class="scrollmenu">
+                @foreach (var item in Model.Products)
+                {
+                    <div class="orderproductbox">
+
+                        <div class="orderproductframe">
+                            <img src="/Products/Image/@item.ProductImageName" alt="Product Image">
+                            <label class="detaillabel"><strong>@item.Name</strong></label>
+                            <label class="detaillabel">تعداد: @item.Count</label>
+                            <label class="detaillabel">@item.SellPrice.ToString("N0") تومان</label>
+
+                        </div>
+
 
                     </div>
 
+                }
+            </div>
 
+            <div class="outerbox">
+                <label class="outerdivlabeldetail">هزینه‌ها</label>
+                <div class="detailitembox">
+                    <p class="orderdetailp">هزینه محصولات با تخفیف: @Model.ProductsPrice.ToString("N0") تومان</p>
+                    @if (@Model.Order.Discount != null)
+                    {
+                        <p class="orderdetailp">تخفیف: @Model.Order.Discount.Name</p>
+                    }
+                    else
+                    {
+                        <p class="orderdetailp">تخفیف: ثبت نشده است</p>
+                    }
+                    @if (@Model.Order.PostDelivery != null)
+                    {
+                        <p class="orderdetailp">هزینه پست: @Model.Order.PostDelivery.TotalPrice.ToString("N0") تومان</p>
+
+                    }
+                    else
+                    {
+                        <p class="orderdetailp">هزینه پست: ثبت نشده است</p>
+                    }
+                    <p class="orderdetailp"><strong>مجموع هزینه‌ها: @Model.TotalPrice.ToString("N0") تومان</strong></p>
                 </div>
-
-            }
-        </div>
-
-       @*  <div class="outerbox">
-            <label class="outerdivlabeldetail">هزینه‌ها</label>
-            <div class="detailitembox">
-                <p class="orderdetailp">هزینه محصولات با تخفیف: @Model.ProductsPrice.ToString("N0") تومان</p>
-                <p class="orderdetailp">تخفیف: @Model.Discount</p>
-                <p class="orderdetailp">هزینه پست: @Model.PostPrice.ToString("N0") تومان</p>
-                <p class="orderdetailp"><strong>مجموع هزینه‌ها: @Model.TotalPrice.ToString("N0") تومان</strong></p>
             </div>
-        </div>
 
-        <div class="outerbox">
-            <label class="outerdivlabeldetail">وضعیت سفارش</label>
-            <div class="detailitembox">
-                <p class="orderdetailp" style="margin-top:10px;"><strong>وضعیت سفارش: @Model.OrderStatus</strong></p>
-                <p class="orderdetailp">توضیحات: @Model.OrderDescription</p>
-                <p class="orderdetailp">تاریخ بروزرسانی: @Model.OrderDate</p>
+            <div class="outerbox">
+                <label class="outerdivlabeldetail">وضعیت سفارش</label>
+                <div class="detailitembox">
+                    <p class="orderdetailp" style="margin-top:10px;"><strong>وضعیت سفارش: @Model.Order.OrderStatus.DisplayName</strong></p>
+                    <p class="orderdetailp">توضیحات: @Model.Order.Description</p>
+                    <p class="orderdetailp">تاریخ بروزرسانی: @Model.FinalDate</p>
+                </div>
             </div>
-        </div>
 
-        <div class="outerbox" style="margin-bottom:10px;">
-            <label class="outerdivlabeldetail">ارسال و پست</label>
-            <div class="detailitembox">
-                <p class="orderdetailp">آدرس: @Model.AddressVM</p>
-                <p class="orderdetailp">توضیحات پست: @Model.PostDelivery</p>
+            <div class="outerbox" style="margin-bottom:10px;">
+                <label class="outerdivlabeldetail">آدرس</label>
+                <div class="detailitembox">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+
+                                <div class="row-form-container">
+
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                                    <div class="row-form">
+                                        <input type="hidden" asp-for="Order.Address.Id" class="form-control" />
+
+                                        <div class="left" style="width: 50%;">
+
+                                            <div class="form-group" style="display: flex;">
+                                                <p style="margin-left:5%"><strong> استان:</strong></p>
+
+                                                <select id="province-select" class="chosen-select" asp-for="Order.Address.ProvinceId" style="width:50%" onclick="LoadCitiesByProvince()">
+                                                    <option value="-1">انتخاب استان</option>
+
+                                                    @foreach (var item in ViewBag.Provinces)
+                                                    {
+                                                        <option value="@item.Id">@item.Name</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <span asp-validation-for="Order.Address.ProvinceId" class="text-danger"></span>
+
+
+                                            <div class="form-group" style="margin-top:5%;">
+                                                <div class="form-group">
+                                                    <label asp-for="Order.Address.AddressContent" class="control-label"></label>
+                                                    <textarea asp-for="Order.Address.AddressContent" rows="5" class="form-control"></textarea>
+                                                    <span asp-validation-for="Order.Address.AddressContent" class="text-danger"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group" style="margin-top:4%;">
+                                                <label asp-for="Order.Address.PostalCode" class="control-label"></label>
+                                                <input asp-for="Order.Address.PostalCode" class="form-control" />
+                                                <span asp-validation-for="Order.Address.PostalCode" class="text-danger"></span>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="right" style="width: 50%;">
+                                            <div class="form-group" style="display: flex;">
+                                                <p style="margin-left:5%"><strong> شهر:</strong></p>
+
+                                                <select id="cities-select" class="chosen-select" asp-for="Order.Address.CityId" style="width:50%">
+                                                    @if (ViewBag.Cities != null){
+                                                        @foreach (var item in ViewBag.Cities)
+                                                        {
+                                                            <option value="@item.Id">@item.Name</option>
+                                                        }
+                                                    }else{
+                                                        <option value="-1">انتخاب شهر</option>
+
+                                                    }
+
+                                                </select>
+                                            </div>
+                                            <span asp-validation-for="Order.Address.CityId" class="text-danger"></span>
+
+
+                                            <div class="form-group" style="margin-top:5%;">
+                                                <label asp-for="Order.Address.CustomerFullName" class="control-label"></label>
+                                                <input asp-for="Order.Address.CustomerFullName" class="form-control" />
+                                                <span asp-validation-for="Order.Address.CustomerFullName" class="text-danger"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label asp-for="Order.Address.CustomerPhoneNum" class="control-label"></label>
+                                                <input asp-for="Order.Address.CustomerPhoneNum" class="form-control" />
+                                                <span asp-validation-for="Order.Address.CustomerPhoneNum" class="text-danger"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label asp-for="Order.Address.HouseNumber" class="control-label"></label>
+                                                <input asp-for="Order.Address.HouseNumber" class="form-control" />
+                                                <span asp-validation-for="Order.Address.HouseNumber" class="text-danger"></span>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div> *@
 
+            <div class="outerbox" style="margin-bottom:10px;">
+                <label class="outerdivlabeldetail">پست</label>
+                <div class="detailitembox">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+
+                                <div class="row-form-container">
+
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                                    <div class="row-form">
+                                        <input type="hidden" asp-for="Order.PostDelivery.Id" class="form-control" />
+
+                                        <div class="left" style="width: 50%;">
+
+                                            <div class="form-group">
+                                                <div class="form-group">
+                                                    <label asp-for="Order.PostDelivery.TotalPrice" class="control-label"></label>
+                                                    <input asp-for="Order.PostDelivery.TotalPrice" type="number" class="form-control"></input>
+                                                    <span asp-validation-for="Order.PostDelivery.TotalPrice" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="right" style="width: 50%;">
+                                            <div class="form-group">
+                                                <label asp-for="Order.PostDelivery.TrackingCode" class="control-label"></label>
+                                                <input asp-for="Order.PostDelivery.TrackingCode" class="form-control" />
+                                                <span asp-validation-for="Order.PostDelivery.TrackingCode" class="text-danger"></span>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Order.PostDelivery.Description" class="control-label"></label>
+                                        <textarea asp-for="Order.PostDelivery.Description" rows="5" class="form-control"></textarea>
+                                        <span asp-validation-for="Order.PostDelivery.Description" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="outerbox">
+                <label class="outerdivlabeldetail">تخفیف</label>
+                <div class="detailitembox">
+                    <div class="form-group" style="display: flex;">
+                        <p style="margin-left:5%"><strong> تخفیف:</strong></p>
+
+                        <select id="province-select" class="chosen-select" asp-for="Order.DiscountId" style="width:50%" onclick="LoadDiscountDetail()">
+                            <option value="-1">انتخاب</option>
+
+                            @foreach (var item in ViewBag.Discounts)
+                            {
+                                <option value="@item.Id">@item.DisplayName</option>
+                            }
+                        </select>
+                    </div>
+                    <span asp-validation-for="Order.DiscountId" class="text-danger"></span>
+
+                   @*  <p class="orderdetailp">توضیحات: @Model.Order.Description</p>
+                    <p class="orderdetailp">تاریخ بروزرسانی: @Model.FinalDate</p> *@
+                </div>
+            </div>
+
+            <div class="simple-center-div" style="margin-top:20px; margin-bottom:20px; text-align:center;">
+                <div class="form-group">
+                    <input type="submit" value="ثبت تغییرات" class="input-submit" />
+                    <button class="button-cancel" asp-action="Index">انصراف</button>
+                </div>
+            </div>
+        </form>
 
     </div>
     <div class="column right" style="width: 20%;"> </div>
 </div>
+
+<script>
+    function LoadCitiesByProvince() {
+
+        var provinceSelectElement = document.getElementById("province-select");
+        let provinceId = provinceSelectElement.value;
+
+        if (provinceId != -1) {
+            $.ajax({
+                url: '/Admin/ManageOrders/AllCitiesOfProvince/', //controller and action
+                data: { _provinceId: provinceId }, // Send the product ID as a parameter
+                dataType: 'html',
+                success: function (data) {
+                    $('#cities-select').html(data); // Insert the received HTML into the container
+                }
+            });
+        } else {
+            const citiesSelect = document.getElementById("cities-select");
+            citiesSelect.innerHTML = "";
+            const option = document.createElement("option");
+            option.value = -1;
+            option.text = "انتخاب شهر";
+            citiesSelect.appendChild(option);
+        }
+
+    }
+</script>

@@ -11,7 +11,8 @@ namespace ZedShop.Web.Areas.Admin.Models.OrdersViewModel
         public double TotalPrice { get; set; } = 0;
         public double ProductsPrice { get; set; } = 0;
 
-        public Order order { get; set; }
+        public string? FinalDate { get; set; }
+        public Order Order { get; set; }
         public List<OrderDetailProductsViewModel> Products { get; set; }
 
     }

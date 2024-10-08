@@ -42,7 +42,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Accesses");
+                    b.ToTable("Accesses", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Address", b =>
@@ -95,7 +95,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Admin", b =>
@@ -142,7 +142,7 @@ namespace ZedShop.DataLayer.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Admin");
+                    b.ToTable("Admin", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Category", b =>
@@ -168,7 +168,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.City", b =>
@@ -196,7 +196,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasIndex("ProvinceId");
 
-                    b.ToTable("Cities");
+                    b.ToTable("Cities", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Comment", b =>
@@ -230,7 +230,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Discount", b =>
@@ -275,7 +275,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Discounts");
+                    b.ToTable("Discounts", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Opinion", b =>
@@ -310,7 +310,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Opinions");
+                    b.ToTable("Opinions", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Order", b =>
@@ -355,7 +355,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.OrderProduct", b =>
@@ -376,7 +376,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasIndex("OrdrId");
 
-                    b.ToTable("OrderProducts");
+                    b.ToTable("OrderProducts", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.OrderStatus", b =>
@@ -403,7 +403,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OrderStatuses");
+                    b.ToTable("OrderStatuses", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.OrderWallet", b =>
@@ -424,7 +424,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasIndex("WalletId");
 
-                    b.ToTable("OrderWallets");
+                    b.ToTable("OrderWallets", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Payment", b =>
@@ -456,7 +456,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasIndex("WalletId");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.PostDelivery", b =>
@@ -485,7 +485,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("PostDeliveries");
+                    b.ToTable("PostDeliveries", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Product", b =>
@@ -539,7 +539,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasIndex("ProductSizeId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.ProductCategory", b =>
@@ -554,7 +554,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("ProductCategories");
+                    b.ToTable("ProductCategories", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.ProductOldPrice", b =>
@@ -578,7 +578,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductOldPrice");
+                    b.ToTable("ProductOldPrice", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.ProductRate", b =>
@@ -604,7 +604,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Rates");
+                    b.ToTable("Rates", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.ProductSize", b =>
@@ -629,7 +629,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductSizes");
+                    b.ToTable("ProductSizes", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Province", b =>
@@ -657,7 +657,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Provinces");
+                    b.ToTable("Provinces", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Role", b =>
@@ -680,7 +680,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.RoleAccess", b =>
@@ -695,7 +695,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasIndex("AccessId");
 
-                    b.ToTable("RolesAccess");
+                    b.ToTable("RolesAccess", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.User", b =>
@@ -759,7 +759,7 @@ namespace ZedShop.DataLayer.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Wallet", b =>
@@ -781,7 +781,7 @@ namespace ZedShop.DataLayer.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Wallets");
+                    b.ToTable("Wallets", (string)null);
                 });
 
             modelBuilder.Entity("ZedShop.DataLayer.Entities.Address", b =>

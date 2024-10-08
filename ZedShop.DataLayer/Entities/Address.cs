@@ -16,14 +16,18 @@ namespace ZedShop.DataLayer.Entities
 
         [MaxLength(1000)]
         [Required]
+        [Display(Name = "آدرس")]
+
         public string AddressContent { get; set; } = string.Empty;
 
         [MaxLength(30)]
         [Required]
+        [Display(Name = "کد پستی")]
         public string PostalCode { get; set; } = string.Empty;
 
         [MaxLength(20)]
         [Required]
+        [Display(Name = "پلاک خانه")]
         public string HouseNumber { get; set; } = string.Empty;
 
         [Required]
@@ -47,11 +51,14 @@ namespace ZedShop.DataLayer.Entities
 
         [MaxLength(100)]
         [Required]
+        [Display(Name = "نام و نام خانوادگی گیرنده")]
+
         public string CustomerFullName { get; set; } = string.Empty;
 
 
         [MaxLength(20)]
         [Required]
+        [Display(Name = "تلفن گیرنده")]
         public string CustomerPhoneNum { get; set; } = string.Empty;
     }
 }

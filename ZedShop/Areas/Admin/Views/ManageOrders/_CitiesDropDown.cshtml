@@ -1,0 +1,7 @@
+﻿@using ZedShop.Core.DTOs.Order
+@model List<ZedShop.Core.DTOs.Order.CityViewModel>
+
+@foreach (var item in Model)
+{
+    <option value="@item.Id">@item.Name</option>
+}

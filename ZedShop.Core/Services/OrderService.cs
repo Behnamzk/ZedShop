@@ -174,6 +174,33 @@ namespace ZedShop.Core.Services
 
         }
 
+        public List<DiscountViewModel> GetDiscounts()
+        {
+            List<DiscountViewModel> discounts = new List<DiscountViewModel>();
+            
+            var discountItems = _context.Discounts.ToList();
+
+            foreach (var item in discountItems)
+            {
+                DiscountViewModel d = new DiscountViewModel()
+                {
+                    Id = item.Id,
+                    NameCode = item.NameCode,
+                    DisplayName = item.Name,
+                    Value = item.Value,
+                };
+
+                discounts.Add(d);
+            }
+
+            return discounts;
+        }
+
+        public Discount GetDiscount(int discountId)
+        {
+            return _context.Discounts.FirstOrDefault(o => o.Id == discountId);
+        }
+
         public List<OrderProduct> GetProductsOfOrder(int orderId)
         {
             return _context.OrderProducts.Include(p => p.Product).Where(o => o.OrdrId == orderId).ToList();
@@ -270,6 +297,5 @@ namespace ZedShop.Core.Services
         }
 
 
-       
     }
 }

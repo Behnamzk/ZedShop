@@ -15,14 +15,20 @@ namespace ZedShop.DataLayer.Entities
         public int Id { get; set; }
 
         [Required]
+        [Display(Name = "هزینه")]
+
         public double TotalPrice { get; set; }
 
         [AllowNull]
         [MaxLength(40)]
+        [Display(Name = "کد پیگیری")]
+
         public string? TrackingCode { get; set; }
 
         [AllowNull]
         [MaxLength(500)]
+        [Display(Name = "توضیحات")]
+
         public string? Description { get; set; }
 
         [AllowNull]

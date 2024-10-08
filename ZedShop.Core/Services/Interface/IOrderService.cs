@@ -71,6 +71,9 @@ namespace ZedShop.Core.Services.Interface
         List<OrderProduct> GetProductsOfOrder(int orderId);
 
         List<OrderStatus> GetOrderStatuses();
+        List<DiscountViewModel> GetDiscounts();
+
+        Discount GetDiscount(int discountId);
 
         OrderStatus GetOrderStatus(string orderStatusName);
         OrderStatus GetOrderStatus(int orderStatusId);
